@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-const DEBUG = true
+const DEBUG = false
 let params = {}
 params.fs = require('fs')
 const Web3 = require('web3')
@@ -26,6 +26,7 @@ for(let a in args){
   }
   params[args[a]]=process.argv[3+parseInt(a)];
 }
+if(DEBUG) console.log("Running ["+command+"] with params:",params)
 if(command!="init"){
   try{
     params.config = JSON.parse(params.fs.readFileSync("clevis.json").toString())
@@ -36,5 +37,4 @@ if(command!="init"){
   if(DEBUG) console.log("Connecting to "+params.config.provider)
   params.web3 = new Web3(new Web3.providers.HttpProvider(params.config.provider));
 }
-if(DEBUG) console.log("Running ["+command+"] with params:",params)
 require(process.mainModule.filename.replace("index.js","commands/"+command+".js"))(params);
