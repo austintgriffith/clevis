@@ -50,7 +50,7 @@ module.exports = async (params)=>{
 let doContractFunction = (params,scriptname,scriptFunction,contract,txparams)=>{
   const DEBUG = false;
   return new Promise((resolve, reject) => {
-    let scriptPromise = scriptFunction(contract,txparams,process.argv)
+    let scriptPromise = scriptFunction(contract,txparams,params.args)
     if(!scriptPromise || typeof scriptPromise.once != "function"){
       if(DEBUG) console.log(""+scriptname+" (no promise)")
     }else{
@@ -59,7 +59,7 @@ let doContractFunction = (params,scriptname,scriptFunction,contract,txparams)=>{
         let wait = setInterval(()=>{
           params.web3.eth.getTransactionReceipt(transactionHash,(error,result)=>{
             if(result){
-              console.log(result)
+              if(DEBUG) console.log(result)
               clearInterval(wait)
               resolve(result)
             }else{

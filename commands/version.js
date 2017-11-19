@@ -3,6 +3,8 @@ module.exports = (params)=>{
   try{
     pkg = JSON.parse(params.fs.readFileSync(__dirname+"/../package.json").toString())
   }catch(e){console.log(e)}
-  console.log("Clevis: "+pkg.version)
-  console.log("Web3: "+params.web3.version)
+  let version = {}
+  version['clevis'] = pkg.version
+  version['web3'] = params.web3.version
+  return version
 }

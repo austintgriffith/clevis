@@ -51,7 +51,7 @@ module.exports = async (params)=>{
   if(DEBUG) console.log("deploy time: ",duration)
   params.fs.appendFileSync(process.cwd()+"/deploy.log",endSeconds+" "+contractname+"/"+contractname+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*params.config.ethprice)+" "+params.config.gaspricegwei+"\n")
 
-  console.log(result);
+  return result;
 }
 
 function deploy(params,accounts,contractarguments,bytecode,abi) {

@@ -1,5 +1,5 @@
 module.exports = (params)=>{
-  const DEBUG = true;
+  const DEBUG = false;
   let startSeconds = new Date().getTime() / 1000
   let contractname = params["contractname"];
   if(DEBUG) console.log("Compiling "+contractname+"/"+contractname+".sol ["+params.solc.version()+"]...")
@@ -65,7 +65,7 @@ module.exports = (params)=>{
           setterCode = setterCode.split("##contract##").join(params.contractname);
           setterCode = setterCode.split("##method##").join(abiObject[i].name);
           if(DEBUG) console.log("Adding setter ",abiObject[i].name)
-          let argCount = 6
+          let argCount = 4
           let args = ""
           let argstring = ""
           let hintargs = ""
@@ -90,7 +90,7 @@ module.exports = (params)=>{
         }
       }
     }
-
-    console.log("Compile Contract: "+contractname)
+    if(DEBUG) console.log("Compile Contract: "+contractname)
+    return output;
   }
 }

@@ -1,4 +1,4 @@
-const DEBUG = true
+const DEBUG = false
 let params = {}
 params.fs = require('fs')
 const Web3 = require('web3')
@@ -17,6 +17,7 @@ params.commands = {
 }
 
 module.exports = (...args)=>{
+  params.args=args
   let command = "help"
   if(args[0]){ command=args[0]}
   if(!params.commands[command]){
@@ -45,5 +46,5 @@ module.exports = (...args)=>{
   }
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
   let path = "./commands/"+command+".js"
-  require(path)(params)
+  return require(path)(params)
 }
