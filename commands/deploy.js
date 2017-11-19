@@ -1,5 +1,5 @@
 module.exports = async (params)=>{
-  const DEBUG = true;
+  const DEBUG = false;
   let accountindex = params.accountindex
   let startSeconds = new Date().getTime() / 1000
   if(DEBUG) console.log("Unlocking account "+accountindex)
@@ -22,90 +22,43 @@ module.exports = async (params)=>{
   try{
     let path = process.cwd()+"/"+contractname+"/arguments.js"
     if(params.fs.existsSync(path)){
-      console.log("looking for arguments in ",path)
+      if(DEBUG) console.log("looking for arguments in ",path)
       contractarguments=require(path)
     }
   }catch(e){console.log(e)}
 
   if(DEBUG) console.log("Arguments: ",contractarguments)
-
-  
+  console.log(await deploy(params,accounts,contractarguments,bytecode,abi))
 }
 
-
-function deploy(params,contractarguments,bytecode,abi) {
+function deploy(params,accounts,contractarguments,bytecode,abi) {
+  const DEBUG = false;
   return new Promise((resolve, reject) => {
 
+    if(DEBUG) console.log("Creating contract from abi: ",abi)
     let contract = new params.web3.eth.Contract(abi)
 
-
+    if(DEBUG) console.log("Deploying contract with bytecode: ",bytecode)
     let deployed = contract.deploy({
       data: "0x"+bytecode,
       arguments: contractarguments
     }).send({
-      from: accounts[ACCOUNT_INDEX],
-      gas: gas,
-      gasPrice: gaspricegwei
+      from: accounts[params.accountindex],
+      gas: params.config.deploygas,
+      gasPrice: params.config.gaspricegwei
     }, function(error, transactionHash){
-      console.log("CALLBACK",error, transactionHash)
+      if(DEBUG) console.log("CALLBACK",error, transactionHash)
+      let wait = setInterval(()=>{
+        params.web3.eth.getTransactionReceipt(transactionHash,(error,result)=>{
+          if(result&&result.contractAddress){
+            if(DEBUG) console.log(result)
+            clearInterval(wait)
+            resolve(result)
+          }else{
+            if(DEBUG) process.stdout.write(".")
+          }
+        })
+      },1000)
     })
-
   })
 }
-
-/*
-function deployContract(accounts,balance){
-  let etherbalance = web3.utils.fromWei(balance,"ether");
-  console.log(etherbalance+" $"+(etherbalance*ethPrice))
-  console.log("\nLoaded account "+accounts[ACCOUNT_INDEX])
-  console.log("Deploying...",bytecode,abi)
-
-  let gasPrice = fs.readFileSync("gasprice.int").toString().trim()
-  let gas = fs.readFileSync("deploygas.int").toString().trim()
-  let gaspricegwei = gasPrice*10*10**8
-
-
-  console.log("arguments:",contractarguments)
-  let deployed = contract.deploy({
-    data: "0x"+bytecode,
-    arguments: contractarguments
-  }).send({
-    from: accounts[ACCOUNT_INDEX],
-    gas: gas,
-    gasPrice: gaspricegwei
-  }, function(error, transactionHash){
-    console.log("CALLBACK",error, transactionHash)
-    setInterval(()=>{
-      web3.eth.getTransactionReceipt(transactionHash,(error,result)=>{
-        if(result && result.contractAddress && result.cumulativeGasUsed){
-          console.log("Success",result)
-          web3.eth.getBalance(accounts[ACCOUNT_INDEX]).then((balance)=>{
-            let endetherbalance = web3.utils.fromWei(balance,"ether");
-            let etherdiff = etherbalance-endetherbalance
-            console.log("==ETHER COST: "+etherdiff+" $"+(etherdiff*ethPrice))
-            console.log("Saving contract address:",result.contractAddress)
-            let addressPath = contractdir+"/"+contractname+".address"
-            if(fs.existsSync(addressPath)){
-              fs.writeFileSync(contractdir+"/"+contractname+".previous.address",fs.readFileSync(addressPath).toString())
-            }
-            let headAddressPath = contractdir+"/"+contractname+".head.address"
-            if(!fs.existsSync(headAddressPath)){
-              fs.writeFileSync(headAddressPath,result.contractAddress)
-            }
-            fs.writeFileSync(addressPath,result.contractAddress)
-            fs.writeFileSync(contractdir+"/"+contractname+".blockNumber",result.blockNumber)
-
-            let endSeconds = new Date().getTime() / 1000;
-            let duration = Math.floor((endSeconds-startSeconds))
-            console.log("deploy time: ",duration)
-            fs.appendFileSync("./deploy.log",contractdir+"/"+contractname+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*ethPrice)+" "+gaspricegwei+"\n")
-            process.exit(0);
-          })
-        }else{
-          process.stdout.write(".")
-        }
-      })
-    },1000)
-  })
-}
-*/
