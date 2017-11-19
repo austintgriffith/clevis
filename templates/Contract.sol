@@ -1,8 +1,8 @@
 pragma solidity ^0.4.15;
 
-contract Contract {
+contract ##contract## {
 
-  function Contract() public {
+  function ##contract##() public {
 
   }
 

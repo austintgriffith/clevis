@@ -16,7 +16,7 @@
     "url": "https://github.com/austintgriffith/clevis/issues"
   },
   "bin": {
-    "clevis": "index.js"
+    "clevis": "bin.js"
   },
   "homepage": "https://github.com/austintgriffith/clevis#readme",
   "dependencies": {
