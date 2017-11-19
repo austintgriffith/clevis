@@ -13,6 +13,7 @@ module.exports = async (params)=>{
   if(DEBUG) console.log(txparams)
   console.log(await send(params,txparams))
 }
+
 function send(params,txparams) {
   return new Promise((resolve, reject) => {
     if(DEBUG) console.log(txparams)

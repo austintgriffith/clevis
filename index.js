@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-const DEBUG = true
+const DEBUG = false
 let params = {}
 params.fs = require('fs')
 const Web3 = require('web3')
@@ -13,6 +13,7 @@ params.commands = {
   "send":["amount","from","to"],
   "create": ["contractname"],
   "compile": ["contractname"],
+  "deploy": ["contractname","accountindex"],
 }
 let command = "help"
 if(process.argv[2]){ command=process.argv[2]; }
@@ -28,7 +29,6 @@ for(let a in args){
   }
   params[args[a]]=process.argv[3+parseInt(a)];
 }
-
 if(DEBUG) console.log("Running ["+command+"] with params:",params)
 if(command!="init"){
   try{
