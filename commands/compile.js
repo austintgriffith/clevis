@@ -36,7 +36,22 @@ module.exports = (params)=>{
           getterCode = getterCode.split("##contract##").join(params.contractname);
           getterCode = getterCode.split("##method##").join(abiObject[i].name);
           //no inputs for now, I'll have to code this up
-          getterCode = getterCode.split("##inputs##").join("");
+          let inputs = ""
+          let inputCount = 1
+          for(let o in abiObject[i].inputs){
+            if(DEBUG) console.log(" with input ",abiObject[i].inputs[o])
+            if(inputs!=""){
+              inputs+=","
+            }
+            let thisInput = "args["+(inputCount+2)+"]"
+            if(abiObject[i].inputs[o].type=="bytes32"){
+              thisInput="params.web3.utils.fromAscii("+thisInput+")"
+            }
+            inputs+=thisInput
+            inputCount++;
+          }
+          getterCode = getterCode.split("##inputs##").join(inputs);
+
           if(DEBUG) console.log("Adding getter ",abiObject[i].name)
           let results = ""
           let outputs = ""
