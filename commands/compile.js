@@ -19,6 +19,7 @@ module.exports = (params)=>{
     if(!dependencies) dependencies={}
     dependencies[contractname+"/"+contractname+".sol"] = params.fs.readFileSync(contractname+"/"+contractname+".sol", 'utf8');
     const output = params.solc.compile({sources: dependencies}, 1);
+    if(!output.contracts||!output.contracts[contractname+"/"+contractname+".sol:"+contractname]) return output;
     if(DEBUG) console.log(output)
     const bytecode = output.contracts[contractname+"/"+contractname+".sol:"+contractname].bytecode;
     const abi = output.contracts[contractname+"/"+contractname+".sol:"+contractname].interface;
