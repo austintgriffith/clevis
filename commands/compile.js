@@ -28,9 +28,16 @@ module.exports = (params)=>{
     if(DEBUG) console.log("Compiled!")
 
     let abiObject = JSON.parse(abi)
-    if(DEBUG) console.log("Generating Getters and Setters...")
+    if(DEBUG) console.log("Generating Getters, Setters, and Events...")
+    console.log(abiObject)
     for(let i in abiObject){
-      if(abiObject[i].type=="function"){
+      if(abiObject[i].type=="event"){
+        let eventCode = params.fs.readFileSync(__dirname+"/../templates/event.js").toString()
+        eventCode = eventCode.split("##contract##").join(params.contractname);
+        eventCode = eventCode.split("##event##").join(abiObject[i].name);
+        console.log("Adding event ",abiObject[i].name)
+        params.fs.writeFileSync(process.cwd()+"/"+contractname+"/event"+abiObject[i].name+".js",eventCode)
+      }else if(abiObject[i].type=="function"){
         if(abiObject[i].constant){
           let getterCode = params.fs.readFileSync(__dirname+"/../templates/getter.js").toString()
           getterCode = getterCode.split("##contract##").join(params.contractname);
