@@ -13,7 +13,7 @@ module.exports = (params)=>{
       if(params.fs.existsSync(path)){
         if(DEBUG) console.log("File exists")
         if(DEBUG) console.log("looking for dependencies at ",path)
-        let dependencies = require(path)
+        dependencies = require(path)
       }
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
