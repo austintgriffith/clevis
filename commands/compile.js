@@ -30,7 +30,7 @@ module.exports = (params)=>{
 
     let abiObject = JSON.parse(abi)
     if(DEBUG) console.log("Generating Getters, Setters, and Events...")
-    console.log(abiObject)
+    if(DEBUG) console.log(abiObject)
     for(let i in abiObject){
       if(abiObject[i].type=="event"){
         let eventCode = params.fs.readFileSync(__dirname+"/../templates/event.js").toString()
