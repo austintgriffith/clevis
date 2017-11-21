@@ -1,5 +1,6 @@
 module.exports = (params)=>{
-  const DEBUG = false;
+  const DEBUG = params.config.DEBUG;
+  if(DEBUG) console.log(" >>> COMPILE")
   let startSeconds = new Date().getTime() / 1000
   let contractname = params["contractname"];
   if(DEBUG) console.log("Compiling "+contractname+"/"+contractname+".sol ["+params.solc.version()+"]...")

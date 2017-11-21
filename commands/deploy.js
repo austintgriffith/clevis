@@ -1,5 +1,6 @@
 module.exports = async (params)=>{
-  const DEBUG = false;
+  const DEBUG = params.config.DEBUG;
+  if(DEBUG) console.log(" >>> DEPLOY")
   let accountindex = params.accountindex
   let startSeconds = new Date().getTime() / 1000
   if(DEBUG) console.log("Unlocking account "+accountindex)
@@ -55,7 +56,7 @@ module.exports = async (params)=>{
 }
 
 function deploy(params,accounts,contractarguments,bytecode,abi) {
-  const DEBUG = false;
+  const DEBUG = params.config.DEBUG;
   return new Promise((resolve, reject) => {
     if(DEBUG) console.log("Creating contract from abi: ",abi)
     let contract = new params.web3.eth.Contract(abi)
