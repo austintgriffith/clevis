@@ -1,5 +1,6 @@
 module.exports = async (params)=>{
-  const DEBUG = false;
+  const DEBUG = params.config.DEBUG;
+  if(DEBUG) console.log(" >>> CONTRACT")
   let startSeconds = new Date().getTime() / 1000
   let contractname = params["contractname"];
   let scriptname = params["scriptname"];
@@ -48,7 +49,7 @@ module.exports = async (params)=>{
 }
 
 let doContractFunction = (params,scriptname,scriptFunction,contract,txparams)=>{
-  const DEBUG = false;
+  const DEBUG = params.config.DEBUG;
   return new Promise((resolve, reject) => {
     let scriptPromise = scriptFunction(contract,txparams,params.args)
     if(!scriptPromise || typeof scriptPromise.once != "function"){

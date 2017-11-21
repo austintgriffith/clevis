@@ -1,7 +1,7 @@
 
 module.exports = async (params)=>{
-  const DEBUG = false
-  if(DEBUG) console.log(">>>  SEND")
+  const DEBUG = params.config.DEBUG;
+  if(DEBUG) console.log(" >>> SEND")
   let accounts = await params.web3.eth.getAccounts()
   let txparams = {
     from: accounts[params.from],
@@ -16,7 +16,7 @@ module.exports = async (params)=>{
 }
 
 function send(params,txparams) {
-  const DEBUG = false
+  const DEBUG = params.config.DEBUG;
   return new Promise((resolve, reject) => {
     if(DEBUG) console.log(txparams)
     params.web3.eth.sendTransaction(txparams,(error,transactionHash)=>{
