@@ -36,7 +36,7 @@ module.exports = (params)=>{
         let eventCode = params.fs.readFileSync(__dirname+"/../templates/event.js").toString()
         eventCode = eventCode.split("##contract##").join(params.contractname);
         eventCode = eventCode.split("##event##").join(abiObject[i].name);
-        console.log("Adding event ",abiObject[i].name)
+        if(DEBUG) console.log("Adding event ",abiObject[i].name)
         params.fs.writeFileSync(process.cwd()+"/"+contractname+"/event"+abiObject[i].name+".js",eventCode)
       }else if(abiObject[i].type=="function"){
         if(abiObject[i].constant){
