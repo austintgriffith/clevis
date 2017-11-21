@@ -1,11 +1,11 @@
 
 module.exports = async (params)=>{
   const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> SEND")
+  if(DEBUG) console.log(" >>> SENDTO")
   let accounts = await params.web3.eth.getAccounts()
   let txparams = {
     from: accounts[params.fromindex],
-    to: accounts[params.toindex],
+    to: params.toaddress,
     value: params.web3.utils.toWei(params.amount, "ether"),
     gas: params.config.xfergas,
     gasPrice: params.config.gaspricegwei
