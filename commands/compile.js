@@ -62,8 +62,10 @@ module.exports = (params)=>{
 
           if(DEBUG) console.log("Adding getter ",abiObject[i].name)
           let results = ""
+          /*
           let outputs = ""
           let outputCount = 1
+
           for(let o in abiObject[i].outputs){
             if(DEBUG) console.log(" with output ",abiObject[i].outputs[o])
             if(outputs!=""){
@@ -82,7 +84,11 @@ module.exports = (params)=>{
             outputCount++;
           }
           getterCode = getterCode.split("##results##").join(results);
-          getterCode = getterCode.split("##outputs##").join(outputs);
+          if(outputCount<=1){
+            getterCode = getterCode.split("##outputs##").join("let "+outputs);
+          }else{
+            getterCode = getterCode.split("##outputs##").join("("+outputs+")");
+          }*/
           params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+abiObject[i].name+".js",getterCode)
         }else{
           let setterCode = params.fs.readFileSync(__dirname+"/../templates/setter.js").toString()

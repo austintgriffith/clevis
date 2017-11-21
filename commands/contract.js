@@ -54,6 +54,7 @@ let doContractFunction = (params,scriptname,scriptFunction,contract,txparams)=>{
     let scriptPromise = scriptFunction(contract,txparams,params.args)
     if(!scriptPromise || typeof scriptPromise.once != "function"){
       if(DEBUG) console.log(""+scriptname+" (no promise)")
+      resolve(scriptPromise)
     }else{
       let result = scriptPromise.once('transactionHash', function(transactionHash){
         if(DEBUG) console.log("transactionHash:"+transactionHash)
