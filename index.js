@@ -15,6 +15,7 @@ params.commands = {
   "compile": ["contractname"],
   "deploy": ["contractname","accountindex"],
   "contract": ["scriptname","contractname"],
+  "test": ["testname"]
 }
 
 module.exports = (...args)=>{
