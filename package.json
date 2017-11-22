@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/austintgriffith/clevis#readme",
   "dependencies": {
+    "chai": "^4.1.2",
+    "colors": "^1.1.2",
     "mocha": "^4.0.1",
     "scrypt": "^6.0.3",
     "solc": "^0.4.18",
