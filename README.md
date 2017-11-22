@@ -27,7 +27,7 @@ npm install -g clevis
 
 ### demo
 
-[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
+[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
 
 
 
