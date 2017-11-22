@@ -5,11 +5,11 @@ module.exports = (params)=>{
     params.fs.writeFileSync(".gitignore",ignore);
   }
 
-  let accountTest = params.fs.readFileSync(__dirname+"/../templates/accountTest.js").toString()
-  if(!params.fs.existsSync("tests")||!params.fs.existsSync("tests/account.js")) {
+  let exampleTests = params.fs.readFileSync(__dirname+"/../templates/exampleTests.js").toString()
+  if(!params.fs.existsSync("tests")||!params.fs.existsSync("tests/example.js")) {
     try{params.fs.mkdirSync("tests")}catch(e){}
     console.log("Adding example test file")
-    params.fs.writeFileSync("tests/account.js",accountTest);
+    params.fs.writeFileSync("tests/example.js",exampleTests);
   }
 
   console.log("Creating config file: clevis.json")
