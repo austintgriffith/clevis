@@ -52,9 +52,9 @@ module.exports = (params)=>{
               inputs+=","
             }
             let thisInput = "args["+(inputCount+2)+"]"
-            if(abiObject[i].inputs[o].type=="bytes32"){
-              thisInput="params.web3.utils.fromAscii("+thisInput+")"
-            }
+            //if(abiObject[i].inputs[o].type=="bytes32"){
+            //  thisInput="params.web3.utils.fromAscii("+thisInput+")"
+            //}
             inputs+=thisInput
             inputCount++;
           }
@@ -102,11 +102,11 @@ module.exports = (params)=>{
           for(let a in abiObject[i].inputs){
             if(DEBUG) console.log(" with arg ",abiObject[i].inputs[a])
             if(args!="") args+=","
-            if(abiObject[i].inputs[a].type=="bytes32"){
-              args+="params.web3.utils.fromAscii(args["+argCount+"])"
-            }else{
+            //if(abiObject[i].inputs[a].type=="bytes32"){
+            //  args+="params.web3.utils.fromAscii(args["+argCount+"])"
+            //}else{
               args+="args["+argCount+"]"
-            }
+            //}
             if(argstring!="") argstring+=","
             argstring += "\"+args["+argCount+"]+\""
             if(hintargs!="") hintargs+=" "
