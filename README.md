@@ -23,3 +23,11 @@ npm config set unsafe-perm true
 ```
 npm install -g clevis
 ```
+
+
+### demo
+
+[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
+
+
+
