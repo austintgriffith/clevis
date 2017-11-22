@@ -1,3 +1,4 @@
+
 module.exports = (params)=>{
   let ignore = params.fs.readFileSync(__dirname+"/../templates/gitignore").toString()
   if(!params.fs.existsSync(".gitignore")) {
@@ -16,5 +17,9 @@ module.exports = (params)=>{
   let init = params.fs.readFileSync(__dirname+"/../templates/config.json").toString()
   params.fs.writeFileSync("clevis.json",init);
 
+  //installing node module locally//
+  console.log("Installing clevis (this will take a while to compile)...")
+  const { exec } = require('child_process')
+  exec('npm install --save clevis@latest', (err, stdout, stderr) => {})
   return init
 }
