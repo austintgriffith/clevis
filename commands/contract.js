@@ -56,6 +56,12 @@ let doContractFunction = (params,scriptname,scriptFunction,contract,txparams)=>{
       if(DEBUG) console.log(""+scriptname+" (no promise)")
       resolve(scriptPromise)
     }else{
+      scriptPromise.on("error",function(err){
+        if(DEBUG) {
+          console.log("CAUGHT",err,"REJECTING")
+        }
+        reject(err);
+      })
       let result = scriptPromise.once('transactionHash', function(transactionHash){
         if(DEBUG) console.log("transactionHash:"+transactionHash)
         let wait = setInterval(()=>{
