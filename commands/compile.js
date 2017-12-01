@@ -105,7 +105,11 @@ module.exports = (params)=>{
             //if(abiObject[i].inputs[a].type=="bytes32"){
             //  args+="params.web3.utils.fromAscii(args["+argCount+"])"
             //}else{
+            if(abiObject[i].inputs[a].type=="bool"){
+              args+="(args["+argCount+"]===\"true\")"
+            }else{
               args+="args["+argCount+"]"
+            }
             //}
             if(argstring!="") argstring+=","
             argstring += "\"+args["+argCount+"]+\""
