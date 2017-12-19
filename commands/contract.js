@@ -21,7 +21,7 @@ module.exports = async (params)=>{
 
   let scriptFunction
   try{
-    let path = process.cwd()+"/"+contractname+"/"+scriptname+".js"
+    let path = process.cwd()+"/"+contractname+"/.clevis/"+scriptname+".js"
     if(DEBUG) console.log("LOADING:",path)
     if(params.fs.existsSync(path)){
       if(DEBUG) console.log("looking for script at ",path)

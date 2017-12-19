@@ -11,11 +11,15 @@ params.commands = {
   "unlock": ["accountindex"],
   "send":["amount","fromindex","toindex"],
   "sendTo":["amount","fromindex","toaddress"],
+  "sendData":["amount","fromindex","toaddress","data"],
   "create": ["contractname"],
   "compile": ["contractname"],
   "deploy": ["contractname","accountindex"],
   "contract": ["scriptname","contractname"],
   "test": ["testname"],
+  "wei": ["amount","symbol"],
+  "hex": ["asciistring"],
+  "ascii": ["hexstring"]
 }
 
 module.exports = (...args)=>{

@@ -17,5 +17,7 @@ package-lock.json
 */*.run.xml
 */*.log.*
 */*.blockNumber
+*/.clevis
+*/*/.clevis
 */node_modules
 /node_modules

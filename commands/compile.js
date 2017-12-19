@@ -37,7 +37,11 @@ module.exports = (params)=>{
         eventCode = eventCode.split("##contract##").join(params.contractname);
         eventCode = eventCode.split("##event##").join(abiObject[i].name);
         if(DEBUG) console.log("Adding event ",abiObject[i].name)
-        params.fs.writeFileSync(process.cwd()+"/"+contractname+"/event"+abiObject[i].name+".js",eventCode)
+        let dir = process.cwd()+"/"+contractname+"/.clevis/";
+        if (!params.fs.existsSync(dir)){
+          params.fs.mkdirSync(dir);
+        }
+        params.fs.writeFileSync(dir+"event"+abiObject[i].name+".js",eventCode)
       }else if(abiObject[i].type=="function"){
         if(abiObject[i].constant){
           let getterCode = params.fs.readFileSync(__dirname+"/../templates/getter.js").toString()
@@ -89,13 +93,26 @@ module.exports = (params)=>{
           }else{
             getterCode = getterCode.split("##outputs##").join("("+outputs+")");
           }*/
-          params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+abiObject[i].name+".js",getterCode)
+          let dir = process.cwd()+"/"+contractname+"/.clevis/";
+          if (!params.fs.existsSync(dir)){
+            params.fs.mkdirSync(dir);
+          }
+          params.fs.writeFileSync(dir+abiObject[i].name+".js",getterCode)
         }else{
-          let setterCode = params.fs.readFileSync(__dirname+"/../templates/setter.js").toString()
+          let setterCode
+          let argCount
+          if(abiObject[i].payable){
+            setterCode = params.fs.readFileSync(__dirname+"/../templates/setterPayable.js").toString()
+            argCount = 5
+          }else{
+            setterCode = params.fs.readFileSync(__dirname+"/../templates/setter.js").toString()
+            argCount = 4
+          }
+
           setterCode = setterCode.split("##contract##").join(params.contractname);
           setterCode = setterCode.split("##method##").join(abiObject[i].name);
           if(DEBUG) console.log("Adding setter ",abiObject[i].name)
-          let argCount = 4
+
           let args = ""
           let argstring = ""
           let hintargs = ""
@@ -120,7 +137,11 @@ module.exports = (params)=>{
           setterCode = setterCode.split("##args##").join(args);
           setterCode = setterCode.split("##argstring##").join(argstring);
           setterCode = setterCode.split("##hintargs##").join(hintargs);
-          params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+abiObject[i].name+".js",setterCode)
+          let dir = process.cwd()+"/"+contractname+"/.clevis/";
+          if (!params.fs.existsSync(dir)){
+            params.fs.mkdirSync(dir);
+          }
+          params.fs.writeFileSync(dir+abiObject[i].name+".js",setterCode)
         }
       }
     }
