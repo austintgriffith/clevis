@@ -1,4 +1,5 @@
 module.exports = (params)=>{
+
   const DEBUG = params.config.DEBUG;
   if(DEBUG) console.log(" >>> COMPILE")
   let startSeconds = new Date().getTime() / 1000
@@ -19,6 +20,11 @@ module.exports = (params)=>{
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
     dependencies[contractname+"/"+contractname+".sol"] = params.fs.readFileSync(contractname+"/"+contractname+".sol", 'utf8');
+
+
+    let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
+    params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".compiled",finalCode)
+
     const output = params.solc.compile({sources: dependencies}, 1);
     if(!output.contracts||!output.contracts[contractname+"/"+contractname+".sol:"+contractname]) return output;
     if(DEBUG) console.log(output)
@@ -66,33 +72,7 @@ module.exports = (params)=>{
 
           if(DEBUG) console.log("Adding getter ",abiObject[i].name)
           let results = ""
-          /*
-          let outputs = ""
-          let outputCount = 1
 
-          for(let o in abiObject[i].outputs){
-            if(DEBUG) console.log(" with output ",abiObject[i].outputs[o])
-            if(outputs!=""){
-              outputs+=","
-            }
-            let thisOutput = "output"+(outputCount)
-            outputs+=thisOutput
-            if(results!=""){
-              results+=","
-            }
-            if(abiObject[i].outputs[o].type=="bytes32"){
-              results+="params.web3.utils.toAscii("+thisOutput+")"
-            }else{
-              results+=thisOutput
-            }
-            outputCount++;
-          }
-          getterCode = getterCode.split("##results##").join(results);
-          if(outputCount<=1){
-            getterCode = getterCode.split("##outputs##").join("let "+outputs);
-          }else{
-            getterCode = getterCode.split("##outputs##").join("("+outputs+")");
-          }*/
           let dir = process.cwd()+"/"+contractname+"/.clevis/";
           if (!params.fs.existsSync(dir)){
             params.fs.mkdirSync(dir);
@@ -148,4 +128,96 @@ module.exports = (params)=>{
     if(DEBUG) console.log("Compile Contract: "+contractname)
     return output;
   }
+}
+
+function simplifyDeps(dependencies){
+  let simpleDeps = {};
+  for(let d in dependencies){
+    let foundSlash = d.lastIndexOf("/");
+    if(foundSlash>=0){
+      cleanD=d.substring(foundSlash+1)
+    }else{
+      cleanD=d;
+    }
+    simpleDeps[cleanD] = dependencies[d];
+  }
+  return simpleDeps;
+}
+
+
+function loadInImportsForEtherscan(input,dependencies,broughtInDep){
+  let finalCode = "";
+  let splitSourceCode = input.toString().split("\n");
+  for(let line in splitSourceCode){
+    let thisLine = splitSourceCode[line]
+    if(thisLine.indexOf("import")>=0){
+      thisLine = cleanImport(thisLine)
+      let found = false
+      for(let d in dependencies){
+        if(thisLine==d){
+          found=true;
+          //finalCode+=loadInImportsForEtherscan(dependencies[d],dependencies)+"\n";
+          if(!broughtInDep[d]){
+            broughtInDep[d]=true;
+            finalCode+=dependencies[d]+"\n";
+          }
+        }
+      }
+      if(!found){
+        console.log("ERROR, failed to load in dependency for ",thisLine);
+        process.exit();
+      }
+    }else{
+      finalCode+=thisLine+"\n";
+    }
+  }
+
+  let cleanRedundant = ""
+  let foundPragma = false
+  let foundImports = {}
+  let splitSourceCodeAgain = finalCode.toString().split("\n")
+  for(let line in splitSourceCodeAgain){
+    let thisLineAgain = splitSourceCodeAgain[line]
+    //console.log("LINE:",thisLineAgain)
+    if(thisLineAgain.indexOf("pragma")>=0){
+      if(!foundPragma){
+        foundPragma=true;
+        cleanRedundant+=thisLineAgain+"\n";
+      }else{
+        //skip this line, we already have the pragma
+      }
+    }else{
+      if(thisLineAgain.indexOf("import")>=0){
+
+        let cleanedThisLineAgain = cleanImport(thisLineAgain)
+        if(!foundImports[cleanedThisLineAgain]){
+          cleanRedundant+=thisLineAgain+"\n";
+          foundImports[cleanedThisLineAgain]=true;
+        }else{
+          //skip
+        }
+      }else{
+        cleanRedundant+=thisLineAgain+"\n";
+      }
+    }
+  }
+
+  if(cleanRedundant.indexOf("import")>=0){
+    return loadInImportsForEtherscan(cleanRedundant,dependencies,broughtInDep);
+  }else{
+    return cleanRedundant;
+  }
+}
+
+function cleanImport(thisLine){
+  thisLine = thisLine.split("import").join("")
+  thisLine = thisLine.split("\"").join("")
+  thisLine = thisLine.split("'").join("")
+  thisLine = thisLine.split(";").join("")
+  thisLine = thisLine.split(" ").join("")
+  let foundSlash = thisLine.lastIndexOf("/");
+  if(foundSlash>=0){
+    thisLine=thisLine.substring(foundSlash+1)
+  }
+  return thisLine;
 }
