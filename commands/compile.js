@@ -1,4 +1,5 @@
 module.exports = (params)=>{
+
   const DEBUG = params.config.DEBUG;
   if(DEBUG) console.log(" >>> COMPILE")
   let startSeconds = new Date().getTime() / 1000
@@ -19,6 +20,11 @@ module.exports = (params)=>{
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
     dependencies[contractname+"/"+contractname+".sol"] = params.fs.readFileSync(contractname+"/"+contractname+".sol", 'utf8');
+
+
+    let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
+    params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".compiled",finalCode)
+
     const output = params.solc.compile({sources: dependencies}, 1);
     if(!output.contracts||!output.contracts[contractname+"/"+contractname+".sol:"+contractname]) return output;
     if(DEBUG) console.log(output)
@@ -37,7 +43,11 @@ module.exports = (params)=>{
         eventCode = eventCode.split("##contract##").join(params.contractname);
         eventCode = eventCode.split("##event##").join(abiObject[i].name);
         if(DEBUG) console.log("Adding event ",abiObject[i].name)
-        params.fs.writeFileSync(process.cwd()+"/"+contractname+"/event"+abiObject[i].name+".js",eventCode)
+        let dir = process.cwd()+"/"+contractname+"/.clevis/";
+        if (!params.fs.existsSync(dir)){
+          params.fs.mkdirSync(dir);
+        }
+        params.fs.writeFileSync(dir+"event"+abiObject[i].name+".js",eventCode)
       }else if(abiObject[i].type=="function"){
         if(abiObject[i].constant){
           let getterCode = params.fs.readFileSync(__dirname+"/../templates/getter.js").toString()
@@ -62,40 +72,27 @@ module.exports = (params)=>{
 
           if(DEBUG) console.log("Adding getter ",abiObject[i].name)
           let results = ""
-          /*
-          let outputs = ""
-          let outputCount = 1
 
-          for(let o in abiObject[i].outputs){
-            if(DEBUG) console.log(" with output ",abiObject[i].outputs[o])
-            if(outputs!=""){
-              outputs+=","
-            }
-            let thisOutput = "output"+(outputCount)
-            outputs+=thisOutput
-            if(results!=""){
-              results+=","
-            }
-            if(abiObject[i].outputs[o].type=="bytes32"){
-              results+="params.web3.utils.toAscii("+thisOutput+")"
-            }else{
-              results+=thisOutput
-            }
-            outputCount++;
+          let dir = process.cwd()+"/"+contractname+"/.clevis/";
+          if (!params.fs.existsSync(dir)){
+            params.fs.mkdirSync(dir);
           }
-          getterCode = getterCode.split("##results##").join(results);
-          if(outputCount<=1){
-            getterCode = getterCode.split("##outputs##").join("let "+outputs);
-          }else{
-            getterCode = getterCode.split("##outputs##").join("("+outputs+")");
-          }*/
-          params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+abiObject[i].name+".js",getterCode)
+          params.fs.writeFileSync(dir+abiObject[i].name+".js",getterCode)
         }else{
-          let setterCode = params.fs.readFileSync(__dirname+"/../templates/setter.js").toString()
+          let setterCode
+          let argCount
+          if(abiObject[i].payable){
+            setterCode = params.fs.readFileSync(__dirname+"/../templates/setterPayable.js").toString()
+            argCount = 5
+          }else{
+            setterCode = params.fs.readFileSync(__dirname+"/../templates/setter.js").toString()
+            argCount = 4
+          }
+
           setterCode = setterCode.split("##contract##").join(params.contractname);
           setterCode = setterCode.split("##method##").join(abiObject[i].name);
           if(DEBUG) console.log("Adding setter ",abiObject[i].name)
-          let argCount = 4
+
           let args = ""
           let argstring = ""
           let hintargs = ""
@@ -105,7 +102,11 @@ module.exports = (params)=>{
             //if(abiObject[i].inputs[a].type=="bytes32"){
             //  args+="params.web3.utils.fromAscii(args["+argCount+"])"
             //}else{
+            if(abiObject[i].inputs[a].type=="bool"){
+              args+="(args["+argCount+"]===\"true\")"
+            }else{
               args+="args["+argCount+"]"
+            }
             //}
             if(argstring!="") argstring+=","
             argstring += "\"+args["+argCount+"]+\""
@@ -116,11 +117,107 @@ module.exports = (params)=>{
           setterCode = setterCode.split("##args##").join(args);
           setterCode = setterCode.split("##argstring##").join(argstring);
           setterCode = setterCode.split("##hintargs##").join(hintargs);
-          params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+abiObject[i].name+".js",setterCode)
+          let dir = process.cwd()+"/"+contractname+"/.clevis/";
+          if (!params.fs.existsSync(dir)){
+            params.fs.mkdirSync(dir);
+          }
+          params.fs.writeFileSync(dir+abiObject[i].name+".js",setterCode)
         }
       }
     }
     if(DEBUG) console.log("Compile Contract: "+contractname)
     return output;
   }
+}
+
+function simplifyDeps(dependencies){
+  let simpleDeps = {};
+  for(let d in dependencies){
+    let foundSlash = d.lastIndexOf("/");
+    if(foundSlash>=0){
+      cleanD=d.substring(foundSlash+1)
+    }else{
+      cleanD=d;
+    }
+    simpleDeps[cleanD] = dependencies[d];
+  }
+  return simpleDeps;
+}
+
+
+function loadInImportsForEtherscan(input,dependencies,broughtInDep){
+  let finalCode = "";
+  let splitSourceCode = input.toString().split("\n");
+  for(let line in splitSourceCode){
+    let thisLine = splitSourceCode[line]
+    if(thisLine.indexOf("import")>=0){
+      thisLine = cleanImport(thisLine)
+      let found = false
+      for(let d in dependencies){
+        if(thisLine==d){
+          found=true;
+          //finalCode+=loadInImportsForEtherscan(dependencies[d],dependencies)+"\n";
+          if(!broughtInDep[d]){
+            broughtInDep[d]=true;
+            finalCode+=dependencies[d]+"\n";
+          }
+        }
+      }
+      if(!found){
+        console.log("ERROR, failed to load in dependency for ",thisLine);
+        process.exit();
+      }
+    }else{
+      finalCode+=thisLine+"\n";
+    }
+  }
+
+  let cleanRedundant = ""
+  let foundPragma = false
+  let foundImports = {}
+  let splitSourceCodeAgain = finalCode.toString().split("\n")
+  for(let line in splitSourceCodeAgain){
+    let thisLineAgain = splitSourceCodeAgain[line]
+    //console.log("LINE:",thisLineAgain)
+    if(thisLineAgain.indexOf("pragma")>=0){
+      if(!foundPragma){
+        foundPragma=true;
+        cleanRedundant+=thisLineAgain+"\n";
+      }else{
+        //skip this line, we already have the pragma
+      }
+    }else{
+      if(thisLineAgain.indexOf("import")>=0){
+
+        let cleanedThisLineAgain = cleanImport(thisLineAgain)
+        if(!foundImports[cleanedThisLineAgain]){
+          cleanRedundant+=thisLineAgain+"\n";
+          foundImports[cleanedThisLineAgain]=true;
+        }else{
+          //skip
+        }
+      }else{
+        cleanRedundant+=thisLineAgain+"\n";
+      }
+    }
+  }
+
+  if(cleanRedundant.indexOf("import")>=0){
+    return loadInImportsForEtherscan(cleanRedundant,dependencies,broughtInDep);
+  }else{
+    return cleanRedundant;
+  }
+}
+
+function cleanImport(thisLine){
+  thisLine = thisLine.split("import").join("")
+  thisLine = thisLine.split("\"").join("")
+  thisLine = thisLine.split("'").join("")
+  thisLine = thisLine.split(";").join("")
+  thisLine = thisLine.split(" ").join("")
+  let foundSlash = thisLine.lastIndexOf("/");
+  if(foundSlash>=0){
+    thisLine=thisLine.substring(foundSlash+1)
+  }
+  return thisLine;
 }
