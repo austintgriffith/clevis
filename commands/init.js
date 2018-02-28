@@ -20,6 +20,6 @@ module.exports = (params)=>{
   //installing node module locally//
   console.log("Installing clevis (this will take a while to compile)...")
   const { exec } = require('child_process')
-  exec('npm install --save clevis@latest', (err, stdout, stderr) => {})
+  exec('rm -rf node_modules/clevis;npm install --save clevis@latest', (err, stdout, stderr) => {})
   return init
 }
