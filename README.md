@@ -1,5 +1,7 @@
 # clevis
 
+Ethereum blockchain orchestration, testing, and command line interface.
+
 ### install
 ```
 npm install -g clevis
