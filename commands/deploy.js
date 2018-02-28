@@ -6,9 +6,9 @@ module.exports = async (params)=>{
   if(DEBUG) console.log("Unlocking account "+accountindex)
   let accounts = await params.web3.eth.getAccounts();
   let balance = await params.web3.eth.getBalance(accounts[accountindex])
-  if(balance < 10*10**18){
-    let result = await params.web3.eth.personal.unlockAccount(accounts[1])
-  }
+  //if(balance < 10*10**18){
+  //  let result = await params.web3.eth.personal.unlockAccount(accounts[1])
+  //}
   let contractname = params.contractname
   let bytecode = params.fs.readFileSync(contractname+"/"+contractname+".bytecode").toString()
   let abi = JSON.parse(params.fs.readFileSync(contractname+"/"+contractname+".abi"));
