@@ -57,10 +57,16 @@ let doContractFunction = (params,scriptname,scriptFunction,contract,txparams)=>{
       resolve(scriptPromise)
     }else{
       scriptPromise.on("error",function(err){
-        if(DEBUG) {
-          console.log("CAUGHT",err,"REJECTING")
+        if(err.toString().indexOf("Transaction was not mined within 50 blocks")>=0){
+          if(DEBUG) {
+            console.log("IGNORE 'within 50 block' ERROR...")
+          }
+        }else{
+          if(DEBUG) {
+            console.log("CAUGHT",err,"REJECTING")
+          }
+          reject(err);
         }
-        reject(err);
       })
       let result = scriptPromise.once('transactionHash', function(transactionHash){
         if(DEBUG) console.log("transactionHash:"+transactionHash)
