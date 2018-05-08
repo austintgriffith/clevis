@@ -7,6 +7,7 @@ params.commands = {
   "help": [],
   "init": [],
   "version": [],
+  "update": [],
   "accounts": [],
   "unlock": ["accountindex"],
   "send":["amount","fromindex","toindex"],
