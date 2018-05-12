@@ -12,6 +12,7 @@ params.commands = {
   "unlock": ["accountindex"],
   "send":["amount","fromindex","toindex"],
   "sendTo":["amount","fromindex","toaddress"],
+  "balance":["address"],
   "sendData":["amount","fromindex","toaddress","data"],
   "create": ["contractname"],
   "compile": ["contractname"],
