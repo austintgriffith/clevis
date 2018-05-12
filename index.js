@@ -23,7 +23,10 @@ params.commands = {
   "test": ["testname"],
   "wei": ["amount","symbol"],
   "hex": ["asciistring"],
-  "ascii": ["hexstring"]
+  "ascii": ["hexstring"],
+  "block": ["blocknumber"],
+  "blockNumber": [],
+  "transaction": ["hash"]
 }
 
 module.exports = (...args)=>{
