@@ -13,6 +13,8 @@ params.commands = {
   "send":["amount","fromindex","toindex"],
   "sendTo":["amount","fromindex","toaddress"],
   "balance":["address"],
+  "sign":["string","accountindex","password"],
+  "recover":["string","signature"],
   "sendData":["amount","fromindex","toaddress","data"],
   "create": ["contractname"],
   "compile": ["contractname"],
