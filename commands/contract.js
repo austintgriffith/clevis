@@ -80,7 +80,7 @@ let doContractFunction = (params,scriptname,scriptFunction,contract,txparams)=>{
               if(DEBUG) process.stdout.write(".")
             }
           })
-        },1000)
+        },30)
       })
     }
   })

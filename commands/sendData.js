@@ -32,7 +32,7 @@ function send(params,txparams) {
             if(DEBUG) process.stdout.write(".")
           }
         })
-      },1000)
+      },30)
     })
   })
 }

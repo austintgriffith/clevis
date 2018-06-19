@@ -80,7 +80,7 @@ function deploy(params,accounts,contractarguments,bytecode,abi) {
             if(DEBUG) process.stdout.write(".")
           }
         })
-      },1000)
+      },30)
     })
   })
 }

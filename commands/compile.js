@@ -1,5 +1,5 @@
 module.exports = (params)=>{
-
+  params.solc = require('solc')
   const DEBUG = params.config.DEBUG;
   if(DEBUG) console.log(" >>> COMPILE")
   let startSeconds = new Date().getTime() / 1000

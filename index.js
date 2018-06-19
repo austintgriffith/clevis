@@ -1,8 +1,6 @@
 const DEBUG = false
 let params = {}
 params.fs = require('fs')
-const Web3 = require('web3')
-params.solc = require('solc')
 params.commands = {
   "help": [],
   "init": [],
@@ -28,7 +26,6 @@ params.commands = {
   "blockNumber": [],
   "transaction": ["hash"]
 }
-
 module.exports = (...args)=>{
   params.args=args
   let command = "help"
@@ -54,6 +51,7 @@ module.exports = (...args)=>{
       process.exit(1);
     }
     if(DEBUG) console.log("Connecting to "+params.config.provider)
+    let Web3 = require('web3')
     params.web3 = new Web3(new Web3.providers.HttpProvider(params.config.provider));
     params.config.gaspricegwei = params.web3.utils.toWei(""+params.config.gasprice,'gwei')
   }
