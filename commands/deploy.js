@@ -70,17 +70,20 @@ function deploy(params,accounts,contractarguments,bytecode,abi) {
       gasPrice: params.config.gaspricegwei
     }, function(error, transactionHash){
       if(DEBUG) console.log("CALLBACK",error, transactionHash)
-      let wait = setInterval(()=>{
-        params.web3.eth.getTransactionReceipt(transactionHash,(error,result)=>{
-          if(result&&result.contractAddress){
-            if(DEBUG) console.log(result)
-            clearInterval(wait)
-            resolve(result)
-          }else{
-            if(DEBUG) process.stdout.write(".")
-          }
-        })
-      },30)
+      checkForReceipt(2,DEBUG,params,transactionHash,resolve)
     })
+  })
+}
+
+function checkForReceipt(backoffMs,DEBUG,params,transactionHash,resolve){
+  params.web3.eth.getTransactionReceipt(transactionHash,(error,result)=>{
+    if(result&&result.transactionHash){
+      if(DEBUG) console.log(result)
+      resolve(result)
+    }else{
+      if(DEBUG) process.stdout.write(".")
+      backoffMs=Math.min(backoffMs*2,1000)
+      setTimeout(checkForReceipt.bind(this,backoffMs,DEBUG,params,transactionHash,resolve),backoffMs)
+    }
   })
 }
