@@ -11,7 +11,7 @@ function update(params) {
   return new Promise((resolve, reject) => {
      axios.get("https://ethgasstation.info/json/ethgasAPI.json")
    	.then((response)=>{
-       let newgas = response.data.average/10+0.1;
+       let newgas = Math.round(response.data.average*1000)/10000+0.1;
        let clevis = JSON.parse(fs.readFileSync("clevis.json").toString())
        clevis.gasprice = newgas
        axios.get("https://api.coinmarketcap.com/v2/ticker/1027/")
