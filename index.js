@@ -3,6 +3,7 @@ let params = {}
 params.fs = require('fs')
 params.commands = {
   "help": [],
+  "explain": ["contractname"],
   "init": [],
   "version": [],
   "update": [],
@@ -16,6 +17,7 @@ params.commands = {
   "sendData":["amount","fromindex","toaddress","data"],
   "create": ["contractname"],
   "compile": ["contractname"],
+  "all": [], //this is a test script that is supposed to compile all at once but it didn't really work
   "deploy": ["contractname","accountindex"],
   "contract": ["scriptname","contractname"],
   "test": ["testname"],
