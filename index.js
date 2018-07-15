@@ -44,7 +44,7 @@ module.exports = (...args)=>{
     }
     params[reqargs[a]]=args[1+parseInt(a)];
   }
-  if(DEBUG) console.log("Running ["+command+"]")
+  if(DEBUG) console.log("🗜️ Clevis ["+command+"]")
   if(command!="init"){
     try{
       params.config = JSON.parse(params.fs.readFileSync("clevis.json").toString())
