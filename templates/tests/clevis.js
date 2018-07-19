@@ -114,6 +114,7 @@ module.exports = {
           fs.writeFileSync("src/contracts/"+thisContract+".blocknumber.js","module.exports = \""+blockNumber+"\"");
           let abi = fs.readFileSync(thisContract+"/"+thisContract+".abi").toString().trim()
           fs.writeFileSync("src/contracts/"+thisContract+".abi.js","module.exports = "+abi);
+          module.exports.reload()
         }
       });
     });
