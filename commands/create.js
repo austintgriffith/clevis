@@ -1,3 +1,4 @@
+const fs = require('fs')
 module.exports = (params)=>{
   const DEBUG = params.config.DEBUG;
   if(DEBUG) console.log(" >>> CREATE")
@@ -12,5 +13,13 @@ module.exports = (params)=>{
   //args
   let args = params.fs.readFileSync(__dirname+"/../templates/arguments.js").toString()
   params.fs.writeFileSync(params.contractname+"/arguments.js",args)
+
+  let contracts = []
+  try{
+    contracts = fs.readFileSync("contracts.clevis").toString().trim().split("\n")
+  }catch(e){}
+  contracts.push(params.contractname)
+  fs.writeFileSync("contracts.clevis",contracts.join("\n"))
+
   return contract;
 }

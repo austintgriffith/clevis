@@ -23,6 +23,7 @@
     "axios": "^0.18.0",
     "chai": "^4.1.2",
     "colors": "^1.1.2",
+    "copy-dir": "^0.4.0",
     "mocha": "^4.0.1",
     "mocha-parallel-tests": "^2.0.3",
     "scrypt": "^6.0.3",
