@@ -1,8 +1,8 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.24;
 
 contract ##contract## {
 
-  function ##contract##() public {
+  constructor() public {
 
   }
 
