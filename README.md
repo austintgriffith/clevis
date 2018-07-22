@@ -70,6 +70,9 @@ compile a contract
 ### deploy [contractname] [accountindex]
 deploy a contract
 
+### explain [contractname]
+list all contract commands/events etc
+
 ### contract [scriptname] [contractname]
 interact with a contract
 these scripts are generated automatically using the ABI
