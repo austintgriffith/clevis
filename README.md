@@ -1,4 +1,4 @@
-# clevis
+# 🗜️clevis
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
