@@ -1,4 +1,4 @@
-# clevis
+# 🗜️clevis
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
@@ -69,6 +69,9 @@ compile a contract
 
 ### deploy [contractname] [accountindex]
 deploy a contract
+
+### explain [contractname]
+list all contract commands/events etc
 
 ### contract [scriptname] [contractname]
 interact with a contract
