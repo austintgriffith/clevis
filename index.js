@@ -14,6 +14,7 @@ params.commands = {
   "balance":["address"],
   "sign":["string","accountindex","password"],
   "recover":["string","signature"],
+  "sha3":["string"],
   "sendData":["amount","fromindex","toaddress","data"],
   "create": ["contractname"],
   "compile": ["contractname"],
@@ -26,7 +27,10 @@ params.commands = {
   "ascii": ["hexstring"],
   "block": ["blocknumber"],
   "blockNumber": [],
-  "transaction": ["hash"]
+  "transaction": ["hash"],
+  "build": [],//build react site
+  "upload": ['target'],//upload react site to bucket target or target=IPFS
+  "invalidate": ['target']//invalidate cloudfront
 }
 module.exports = (...args)=>{
   params.args=args

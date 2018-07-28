@@ -11,6 +11,9 @@ web3 = new Web3(new Web3.providers.HttpProvider(clevisConfig.provider))
 function localContractAddress(contract){
   return fs.readFileSync(contract+"/"+contract+".address").toString().trim()
 }
+function localContractAbi(contract){
+  return JSON.parse(fs.readFileSync(contract+"/"+contract+".abi").toString().trim())
+}
 function printTxResult(result){
   if(!result||!result.transactionHash){
     console.log("ERROR".red,"MISSING TX HASH".yellow)
@@ -33,6 +36,8 @@ function getPaddedHexFromNumber(num,digits){
 }
 const tab = "\t\t";
 module.exports = {
+
+
   web3:web3,
   localContractAddress,localContractAddress,
   contracts:fs.readFileSync("contracts.clevis").toString().trim().split("\n"),
@@ -114,8 +119,9 @@ module.exports = {
           fs.writeFileSync("src/contracts/"+thisContract+".blocknumber.js","module.exports = \""+blockNumber+"\"");
           let abi = fs.readFileSync(thisContract+"/"+thisContract+".abi").toString().trim()
           fs.writeFileSync("src/contracts/"+thisContract+".abi.js","module.exports = "+abi);
-          module.exports.reload()
         }
+        fs.writeFileSync("src/contracts/contracts.js","module.exports = "+JSON.stringify(module.exports.contracts));
+        module.exports.reload()
       });
     });
   },
@@ -123,7 +129,8 @@ module.exports = {
     describe('#transfer() ', function() {
       it('should give metamask account some ether or tokens to test', async function() {
         this.timeout(600000)
-        await clevis("sendTo","0.1","0","0x2a906694D15Df38F59e76ED3a5735f8AAbccE9cb")
+        const result = await clevis("sendTo","0.1","0","0x2a906694D15Df38F59e76ED3a5735f8AAbccE9cb")
+        printTxResult(result)
         //here is an example of running a funtion from within this object:
         //module.exports.mintTo("Greens",0,"0x2a906694d15df38f59e76ed3a5735f8aabcce9cb",20)
         //view more examples here: https://github.com/austintgriffith/galleass/blob/master/tests/galleass.js
@@ -133,6 +140,33 @@ module.exports = {
 
   ////----------------------------------------------------------------------------///////////////////
 
+  add:(accountIndex)=>{
+    describe('#add() ', function() {
+      it('should call forward on proxy contract which should call add on example contract', async function() {
+        this.timeout(600000)
+        //var abi = require('ethereumjs-abi')
+        // need to have the ABI definition in JSON as per specification
+        //var testAbi = localContractAbi("TEst")
+
+        //var encoded = abi.encode(testAbi, "add()", [])
+        //var encoded = (abi.simpleEncode("balanceOf(address):(uint256)", "0x0000000000000000000000000000000000000000")).toString()
+
+
+        //console.log("Encoded:",encoded)
+
+        const result = await clevis("contract","forward","TEst",accountIndex,localContractAddress("Example"),"0","0x4f2be91f")
+        printTxResult(result)
+        //here is an example of running a funtion from within this object:
+        //module.exports.mintTo("Greens",0,"0x2a906694d15df38f59e76ed3a5735f8aabcce9cb",20)
+        //view more examples here: https://github.com/austintgriffith/galleass/blob/master/tests/galleass.js
+      });
+    });
+  },
+
+
+  ////----------------------------------------------------------------------------///////////////////
+
+
   full:()=>{
     describe(bigHeader('COMPILE'), function() {
       it('should compile all contracts', async function() {
@@ -141,6 +175,16 @@ module.exports = {
         assert(result==0,"deploy ERRORS")
       });
     });
+    describe(bigHeader('FAST'), function() {
+      it('should run the fast test (everything after compile)', async function() {
+        this.timeout(6000000)
+        const result = await clevis("test","fast")
+        assert(result==0,"fast ERRORS")
+      });
+    });
+  },
+
+  fast:()=>{
     describe(bigHeader('DEPLOY'), function() {
       it('should deploy all contracts', async function() {
         this.timeout(6000000)
@@ -152,17 +196,18 @@ module.exports = {
       it('should deploy all contracts', async function() {
         this.timeout(6000000)
         const result = await clevis("test","metamask")
-        assert(result==0,"deploy ERRORS")
+        assert(result==0,"metamask ERRORS")
       });
     });
     describe(bigHeader('PUBLISH'), function() {
       it('should publish all contracts', async function() {
         this.timeout(6000000)
         const result = await clevis("test","publish")
-        assert(result==0,"deploy ERRORS")
+        assert(result==0,"publish ERRORS")
       });
     });
-  }
+
+  },
 
 }
 
