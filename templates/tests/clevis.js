@@ -119,6 +119,8 @@ module.exports = {
           fs.writeFileSync("src/contracts/"+thisContract+".blocknumber.js","module.exports = \""+blockNumber+"\"");
           let abi = fs.readFileSync(thisContract+"/"+thisContract+".abi").toString().trim()
           fs.writeFileSync("src/contracts/"+thisContract+".abi.js","module.exports = "+abi);
+          let bytecode = fs.readFileSync(thisContract+"/"+thisContract+".bytecode").toString().trim()
+          fs.writeFileSync("src/contracts/"+thisContract+".bytecode.js","module.exports = \""+bytecode+"\"");
         }
         fs.writeFileSync("src/contracts/contracts.js","module.exports = "+JSON.stringify(module.exports.contracts));
         module.exports.reload()
