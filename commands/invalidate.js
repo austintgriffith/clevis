@@ -15,11 +15,11 @@ function invalidateSite(params) {
     if(DEBUG) console.log(" ]]] ]]] INVALIDATING "+params.target+"...")
     var cloudfront = new AWS.CloudFront(new AWS.Config(awsCreds));
     var cfparams = {
-      DistributionId: params.target, /* required */
-      InvalidationBatch: { /* required */
-        CallerReference: ''+(new Date()), /* required */
-        Paths: { /* required */
-          Quantity: 1, /* required */
+      DistributionId: params.target,
+      InvalidationBatch: {
+        CallerReference: ''+(new Date()),
+        Paths: {
+          Quantity: 1,
           Items: ["/*"]
         }
       }

@@ -20,12 +20,14 @@
   },
   "homepage": "https://github.com/austintgriffith/clevis#readme",
   "dependencies": {
+    "aws-sdk": "^2.286.2",
     "axios": "^0.18.0",
     "chai": "^4.1.2",
     "colors": "^1.1.2",
     "copy-dir": "^0.4.0",
     "mocha": "^4.0.1",
     "mocha-parallel-tests": "^2.0.3",
+    "s3": "^4.4.0",
     "scrypt": "^6.0.3",
     "solc": "^0.4.24",
     "web3": "^1.0.0-beta.26"

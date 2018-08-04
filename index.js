@@ -29,8 +29,8 @@ params.commands = {
   "blockNumber": [],
   "transaction": ["hash"],
   "build": [],//build react site
-  "upload": ['target'],//upload react site to bucket target or target=IPFS
-  "invalidate": ['target']//invalidate cloudfront
+  "upload": ["[target]"],//upload react site to bucket target or target=IPFS
+  "invalidate": ["[target]"]//invalidate cloudfront
 }
 module.exports = (...args)=>{
   params.args=args
@@ -40,15 +40,28 @@ module.exports = (...args)=>{
     console.log("Unknown command: "+command)
     return
   }
+  let reqargArray = []
   let reqargs = params.commands[command]
+  //count required args
   for(let a in reqargs){
-    if(typeof args[1+parseInt(a)] == "undefined"){
-      console.log("Missing argument "+(parseInt(a)+1)+" \""+reqargs[a]+"\"")
-      return
+    if(reqargs[a].indexOf("[")==0){
+      //this is not required don't add it to the list
+    }else{
+      reqargArray.push(reqargs[a])
     }
-    params[reqargs[a]]=args[1+parseInt(a)];
+    params[reqargs[a].replace("[","").replace("]","")]=args[1+parseInt(a)];
   }
+//  console.log("reqargs",reqargs)
+//  console.log("reqargArray",reqargArray)
+  //console.log("params.args",params.args)
+
+  if(typeof args[parseInt(reqargArray.length)] == "undefined"){
+    console.log("Missing argument "+(reqargArray.length)+" \""+reqargArray[reqargArray.length-1]+"\"")
+    return
+  }
+
   if(DEBUG) console.log("🗜️ Clevis ["+command+"]")
+
   if(command!="init"){
     try{
       params.config = JSON.parse(params.fs.readFileSync("clevis.json").toString())
@@ -64,4 +77,5 @@ module.exports = (...args)=>{
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
   let path = "./commands/"+command+".js"
   return require(path)(params)
+  
 }
