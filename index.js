@@ -30,7 +30,8 @@ params.commands = {
   "transaction": ["hash"],
   "build": [],//build react site
   "upload": ["[target]"],//upload react site to bucket target or target=IPFS
-  "invalidate": ["[target]"]//invalidate cloudfront
+  "invalidate": ["[target]"],//invalidate cloudfront
+  "react": []//run CREATE REACT APP 
 }
 module.exports = (...args)=>{
   params.args=args
@@ -77,5 +78,5 @@ module.exports = (...args)=>{
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
   let path = "./commands/"+command+".js"
   return require(path)(params)
-  
+
 }
