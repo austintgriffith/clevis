@@ -25,7 +25,7 @@
     "chai": "^4.1.2",
     "colors": "^1.1.2",
     "copy-dir": "^0.4.0",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "mocha-parallel-tests": "^2.0.3",
     "s3": "^4.4.0",
     "scrypt": "^6.0.3",

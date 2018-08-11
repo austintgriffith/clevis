@@ -10,6 +10,7 @@ class App extends Component {
       web3: false,
       account: false,
       gwei: 4,
+      broadcastText:""
     }
   }
   handleInput(e){
@@ -41,6 +42,7 @@ class App extends Component {
             }}
          />
          <Transactions
+            config={{DEBUG:true}}
             account={account}
             gwei={gwei}
             web3={web3}
@@ -50,7 +52,7 @@ class App extends Component {
             onReady={(state)=>{
               //loads in tx() function
               // use to send transactions: tx(contracts.YOURCONTRACT.YOURFUNCTION(),GASLIMIT)
-              console.log("Transactions component is ready:",state)
+              console.log("!Transactions component is ready:",state)
               this.setState(state)
             }}
           />
@@ -80,7 +82,7 @@ class App extends Component {
             />
             <Button color={buttonColor} size="2" onClick={()=>{
                 this.setState({doingTransaction:true})
-                tx(contracts.Broadcaster.broadcast(this.state.broadcastText),45000,(receipt)=>{
+                tx(contracts.Broadcaster.broadcast(this.state.broadcastText),45000,"0x00",(receipt)=>{
                   console.log("receipt",receipt)
                   this.setState({broadcastText:""})
                 })
