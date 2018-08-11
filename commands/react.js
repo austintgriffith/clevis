@@ -29,7 +29,7 @@ function cra(params) {
     if(fs.existsSync("./src")){
       reject("ERROR: Can't install react because src dir already exists...")
     }else{
-      let reactAction = exec('mkdir app;cd app;npx create-react-app .;npm i;cp -r * ..;cd ..;rm -rf app;rm -rf src;npm install --save dapparatus', (err, stdout, stderr) => {
+      let reactAction = exec('mkdir app;cd app;npx create-react-app .;npm i;mv * ..;cd ..;rm -rf app;rm -rf src;npm install --save dapparatus', (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           reject(err);
