@@ -140,6 +140,22 @@ module.exports = {
     });
   },
 
+
+  broadcast:(accountIndex,outputString)=>{
+    describe('#broadcast() ', function() {
+      it('should broadcast a string and generate an event', async function() {
+        this.timeout(60000)
+        const result = await clevis("contract","broadcast","Broadcaster",accountIndex,outputString)
+        printTxResult(result)
+        let events = await clevis("contract","eventBroadcast","Broadcaster")
+        let lastEvent = events[events.length-1]
+        console.log(tab,lastEvent)
+        assert(lastEvent.returnValues.output == outputString,"output string is incorrect in the event or the event didn't fire")
+      });
+    });
+  },
+
+
   ////----------------------------------------------------------------------------///////////////////
 
   add:(accountIndex)=>{
