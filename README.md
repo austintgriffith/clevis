@@ -4,11 +4,6 @@ Ethereum blockchain orchestration, testing, and command line interface.
 
 ### install
 ```
-npm install -g clevis
-```
-
-### install from source
-```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
 npm install
