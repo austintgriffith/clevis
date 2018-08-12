@@ -15,7 +15,7 @@ function balance(params) {
     }else if(addr.length<42){
       addr = "0x"+addr
     }
-    params.web3.eth.getBalance(addr,(error,balance)=>{
+    params.web3.eth.getBalance(""+addr,(error,balance)=>{
       if(DEBUG) console.log(error,balance)
       let ether = params.web3.utils.fromWei(balance, "ether")
       resolve({ether:ether,wei:balance,usd:Math.round(params.config.ethprice*ether*100)/100})
