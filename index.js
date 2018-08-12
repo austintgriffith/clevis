@@ -3,12 +3,12 @@ let params = {}
 params.fs = require('fs')
 params.commands = {
   "help": [],
-  "explain": ["contractname"],
   "init": [],
   "version": [],
   "update": [],
   "accounts": [],
-  "unlock": ["accountindex"],
+  "new": ["password"],
+  "unlock": ["accountindex","password"],
   "send":["amount","fromindex","toindex"],
   "sendTo":["amount","fromindex","toaddress"],
   "balance":["address"],
@@ -18,20 +18,19 @@ params.commands = {
   "sendData":["amount","fromindex","toaddress","data"],
   "create": ["contractname"],
   "compile": ["contractname"],
-  "all": [], //this is a test script that is supposed to compile all at once but it didn't really work
   "deploy": ["contractname","accountindex"],
-  "contract": ["scriptname","contractname"],
+  "explain": ["contractname"],
+  "contract": ["scriptname","contractname","[accountIndex]","[contractArguments...]"],
   "test": ["testname"],
   "wei": ["amount","symbol"],
   "hex": ["asciistring"],
   "ascii": ["hexstring"],
-  "block": ["blocknumber"],
   "blockNumber": [],
+  "block": ["blocknumber"],
   "transaction": ["hash"],
   "build": [],//build react site
   "upload": ["[target]"],//upload react site to bucket target or target=IPFS
   "invalidate": ["[target]"],//invalidate cloudfront
-  "react": []//run CREATE REACT APP 
 }
 module.exports = (...args)=>{
   params.args=args
