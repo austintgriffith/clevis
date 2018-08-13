@@ -2,7 +2,18 @@
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
+
+
 ### install
+```
+git clone https://github.com/austintgriffith/clevis.git
+cd clevis
+npm install
+sudo npm link
+```
+
+Still working out some bugs with:
+
 ```
 sudo npm install -g clevis
 ```
@@ -14,16 +25,6 @@ Try:
 rm -rf .node-gyp
 sudo npm install -g clevis
 ```
-
-
-### install from source
-```
-git clone https://github.com/austintgriffith/clevis.git
-cd clevis
-npm install
-sudo npm link
-```
-
 
 ### in docker
 ```
