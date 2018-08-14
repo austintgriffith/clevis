@@ -1,6 +1,6 @@
 {
   "name": "clevis",
-  "version": "0.0.62",
+  "version": "0.0.61",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/austintgriffith/clevis#readme",
   "dependencies": {
+    "scrypt": "^6.0.3",
+    "sha3": "^1.2.2",
+    "web3": "^1.0.0-beta.26",
     "aws-sdk": "^2.286.2",
     "axios": "^0.18.0",
     "chai": "^4.1.2",
@@ -28,9 +31,6 @@
     "mocha": "^4.1.0",
     "mocha-parallel-tests": "^2.0.3",
     "s3": "^4.4.0",
-    "scrypt": "^6.0.3",
-    "sha3": "^1.2.2",
-    "solc": "^0.4.24",
-    "web3": "^1.0.0-beta.26"
+    "solc": "^0.4.24"
   }
 }
