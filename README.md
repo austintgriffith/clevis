@@ -2,6 +2,8 @@
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
+
+
 ### install
 ```
 git clone https://github.com/austintgriffith/clevis.git
@@ -10,6 +12,19 @@ npm install
 sudo npm link
 ```
 
+Still working out some bugs with:
+
+```
+sudo npm install -g clevis
+```
+
+*WARNING* if you get this error: gyp ERR! stack Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/clevis/node_modules/scrypt/build'
+
+Try:
+```
+rm -rf .node-gyp
+sudo npm install -g clevis
+```
 
 ### in docker
 ```
