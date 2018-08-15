@@ -5,17 +5,22 @@ Ethereum blockchain orchestration, testing, and command line interface.
 [![Clevis Demo Video](https://img.youtube.com/vi/lekFaRzma8U/0.jpg)](https://www.youtube.com/watch?v=lekFaRzma8U)
 
 ### install
+
+```
+sudo npm install --unsafe-perm -g clevis@latest
+```
+
+Maybe try it like this first:
+
+```
+sudo npm install -g clevis
+```
+Or install/link for the source:
 ```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
 npm install
 sudo npm link
-```
-
-Still working out some bugs with:
-
-```
-sudo npm install -g clevis
 ```
 
 *WARNING* if you get this error: gyp ERR! stack Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/clevis/node_modules/scrypt/build'
