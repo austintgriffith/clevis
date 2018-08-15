@@ -1,2 +1,3 @@
 #!/bin/bash
-docker build -t clevis .
+rm -rf ../node_modules
+docker build --no-cache -t clevis .

@@ -7,8 +7,8 @@ RUN npm config set unsafe-perm true
 
 RUN npm install -g clevis
 
-#RUN mkdir clevis
+RUN mkdir clevis
 
-#RUN cd clevis && clevis init
+RUN cd clevis && clevis init
 
-CMD cd clevis && clevis init && npm start
+CMD cd clevis && npm start

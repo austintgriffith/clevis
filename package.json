@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/austintgriffith/clevis#readme",
   "dependencies": {
-    "scrypt": "^6.0.3",
     "sha3": "^1.2.2",
+    "scrypt": "^6.0.3",
     "web3": "^1.0.0-beta.26",
     "aws-sdk": "^2.286.2",
     "axios": "^0.18.0",
