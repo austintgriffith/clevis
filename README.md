@@ -2,7 +2,7 @@
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
-[Read rull demo and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
+[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
 
 ### install
 
