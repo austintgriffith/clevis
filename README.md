@@ -2,7 +2,7 @@
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
-
+[![Clevis Demo Video](https://img.youtube.com/vi/lekFaRzma8U/0.jpg)](https://www.youtube.com/watch?v=lekFaRzma8U)
 
 ### install
 ```
@@ -26,14 +26,20 @@ rm -rf .node-gyp
 sudo npm install -g clevis
 ```
 
-### in docker
+### docker
 ```
-npm config set user 0
-npm config set unsafe-perm true
+git clone https://github.com/austintgriffith/clevis.git
+cd clevis
+docker build . -t clevis
+docker run -v app:/clevis -p 3000:3000 clevis
 ```
 
+### docker from source
 ```
-npm install -g clevis
+git clone https://github.com/austintgriffith/clevis.git
+cd clevis
+docker build . -t clevis
+docker run -v app:/clevis -p 3000:3000 clevis
 ```
 
 ## commands/examples
