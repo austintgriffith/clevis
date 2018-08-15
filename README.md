@@ -2,20 +2,30 @@
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
-[![Clevis Demo Video](https://img.youtube.com/vi/lekFaRzma8U/0.jpg)](https://www.youtube.com/watch?v=lekFaRzma8U)
+[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
 
 ### install
+
+```
+sudo npm install --unsafe-perm -g clevis@latest
+```
+
+### Demo
+
+[![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
+
+
+### Install Options
+
+```
+sudo npm install -g clevis
+```
+Or install/link for the source:
 ```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
 npm install
 sudo npm link
-```
-
-Still working out some bugs with:
-
-```
-sudo npm install -g clevis
 ```
 
 *WARNING* if you get this error: gyp ERR! stack Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/clevis/node_modules/scrypt/build'
