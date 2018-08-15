@@ -13,7 +13,8 @@ let copyRecursiveSync = function(src, dest) {
                         path.join(dest, childItemName));
     });
   } else {
-    fs.linkSync(src, dest);
+    //fs.copySync(src, dest);
+    fs.createReadStream(src).pipe(fs.createWriteStream(dest));
   }
 };
 

@@ -26,3 +26,4 @@ package-lock.json
 */*/.clevis
 */node_modules
 /node_modules
+public/reload.txt

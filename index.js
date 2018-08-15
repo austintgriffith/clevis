@@ -29,6 +29,7 @@ params.commands = {
   "block": ["blocknumber"],
   "transaction": ["hash"],
   "build": [],//build react site
+  "start": [],//start react dev site
   "upload": ["[target]"],//upload react site to bucket target or target=IPFS
   "invalidate": ["[target]"],//invalidate cloudfront
 }

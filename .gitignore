@@ -1,2 +1,6 @@
 hugo/aws.json
 node_modules
+hugo
+docker/dapp
+build
+.tar.gz
