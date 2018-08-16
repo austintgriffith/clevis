@@ -22,6 +22,8 @@ RUN npm install -g npx
 RUN npm install -g mocha
 RUN apt-get install git-core -y
 
+RUN echo "Break the cache 1"
+
 RUN git clone https://github.com/austintgriffith/clevis.git
 RUN cd clevis && npm install && npm link
 
