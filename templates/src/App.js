@@ -34,6 +34,7 @@ class App extends Component {
          }}
        />
       )
+      /*
       connectedDisplay.push(
         <ContractLoader
          key="ContractLoader"
@@ -73,7 +74,7 @@ class App extends Component {
             console.log("Transaction Receipt",transaction,receipt)
           }}
         />
-      )
+      )*/
       /*
       if(contracts){
         contractsDisplay.push(
