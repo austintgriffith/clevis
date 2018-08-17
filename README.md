@@ -1,31 +1,15 @@
 # 🗜️clevis
 
-Ethereum blockchain orchestration, testing, and command line interface.
+Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding. 
 
+## install
+
+easiest: use docker (it handles the environment and RPC node for you):
 ```
-docker run -p 3000:3000 -p 8545:8545 -v ~/YOUR-DAPP-LOCATION:/dapp -ti austingriffith/clevis
-```
-
-[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
-
-
-### Demo
-
-[![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
-
-### install
-
-```
-sudo npm install --unsafe-perm -g clevis@latest
+docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp austingriffith/clevis
 ```
 
-
-### Install Options
-
-```
-sudo npm install -g clevis
-```
-Or install/link for the source:
+OR install/link for the source:
 ```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
@@ -33,22 +17,73 @@ npm install
 sudo npm link
 ```
 
-*WARNING* if you get this error: gyp ERR! stack Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/clevis/node_modules/scrypt/build'
-
-Try:
+OR try an npm install:
 ```
-rm -rf .node-gyp
-sudo npm install -g clevis
+sudo npm install --unsafe-perm -g clevis@latest
 ```
 
+[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
 
-### docker from source
+
+## demo
+
+[![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
+
+
+## docker options
+
+### attach to already running clevis container 
+```
+docker exec -ti clevis bash
+```
+
+
+### external RPC
+```
+docker run -ti --rm --name clevis --env network="http://10.0.0.107:8545" \
+  -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp austingriffith/clevis
+```
+
+### Automatic Rinkeby Geth Node
+```
+docker run -ti --rm --name clevis --env network="rinkeby" \
+  -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp austingriffith/clevis
+```
+
+### Automatic Ropsten Geth Node
+```
+docker run -ti --rm --name clevis --env network="ropsten" \
+  -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp austingriffith/clevis
+```
+
+### Automatic Mainnet Geth Node
+```
+docker run -ti --rm --name clevis --env network="mainnet." \
+  -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp austingriffith/clevis
+```
+
+### Docker build from Clevis Repo
 ```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
 docker build . -t clevis
-docker run -v app:/clevis -p 3000:3000 clevis
+docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis
 ```
+
+## troubleshooting
+
+Right now the web3 dependencies are not very well supported and installs can fail on certain machines. 
+
+I would recommend using Docker and the container model because it handles the environment and geth node for you.
+
+*WARNING* if you get this error: gyp ERR! stack Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/clevis/node_modules/scrypt/build'
+```
+rm -rf .node-gyp
+sudo npm install --unsafe-perm -g clevis@latest
+```
+
+If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
+
 
 ## commands/examples
 
