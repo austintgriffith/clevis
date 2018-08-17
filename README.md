@@ -6,7 +6,8 @@ Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding.
 
 easiest: use docker (it handles the environment and RPC node for you):
 ```
-docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp austingriffith/clevis
+docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
+  -v ~/your-dapp-directory:/dapp austingriffith/clevis
 ```
 
 OR install/link for the source:
