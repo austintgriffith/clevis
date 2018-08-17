@@ -2,17 +2,22 @@
 
 Ethereum blockchain orchestration, testing, and command line interface.
 
+```
+docker run -p 3000:3000 -p 8545:8545 -v ~/YOUR-DAPP-LOCATION:/dapp -ti austingriffith/clevis
+```
+
 [Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
+
+
+### Demo
+
+[![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
 
 ### install
 
 ```
 sudo npm install --unsafe-perm -g clevis@latest
 ```
-
-### Demo
-
-[![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
 
 
 ### Install Options
@@ -36,13 +41,6 @@ rm -rf .node-gyp
 sudo npm install -g clevis
 ```
 
-### docker
-```
-git clone https://github.com/austintgriffith/clevis.git
-cd clevis
-docker build . -t clevis
-docker run -v app:/clevis -p 3000:3000 clevis
-```
 
 ### docker from source
 ```
