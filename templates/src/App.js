@@ -44,12 +44,7 @@ class App extends Component {
          onReady={(contracts,customLoader)=>{
            console.log("contracts loaded",contracts)
            this.setState({contracts:contracts},async ()=>{
-             if(this.state.address){
-               console.log("Loading dyamic contract "+this.state.address)
-               let dynamicContract = customLoader("BouncerProxy",this.state.address)//new this.state.web3.eth.Contract(require("./contracts/BouncerProxy.abi.js"),this.state.address)
-               let owner = await dynamicContract.owner().call()
-               this.setState({contract:dynamicContract,owner:owner})
-             }
+             console.log("Contracts Are Ready:",this.state.contracts)
            })
          }}
         />
