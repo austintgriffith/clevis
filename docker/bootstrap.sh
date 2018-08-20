@@ -9,8 +9,8 @@ if [ ! -f /dapp/clevis.json ]; then
   echo "Initializing Clevis..."
   clevis init
 else
-  echo "Updating Clevis..."
-  clevis update
+  echo "Updating..."
+  clevis mocha
 fi
 
 if [ "$network" = "local" ]; then

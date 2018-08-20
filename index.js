@@ -33,6 +33,7 @@ params.commands = {
   "start": [],//start react dev site
   "upload": ["[target]"],//upload react site to bucket target or target=IPFS
   "invalidate": ["[target]"],//invalidate cloudfront
+  "mocha": [],//install/update mocha
 }
 module.exports = (...args)=>{
   params.args=args

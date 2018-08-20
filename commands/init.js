@@ -35,7 +35,7 @@ module.exports = async (params)=>{
   //installing node module locally//
   console.log("Installing clevis (this will take a while to compile)...")
 
-  exec('npm install --save clevis@latest;npm install --save s3;npm install -g mocha;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull', (err, stdout, stderr) => {
+  exec('npm install --save clevis@latest;npm install --save s3;npm install --g mocha;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull', (err, stdout, stderr) => {
     exec('clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
         console.log(data);
     })
@@ -55,7 +55,7 @@ module.exports = async (params)=>{
     fs.writeFileSync("contracts.clevis","")
   }
 
-  return "Clevis installed. Updating npm and current gas/eth prices..."
+  return "Updating Clevis, S3, Mocha, OpenZeppelin, and current gas/eth prices..."
 }
 
 function cra(DEBUG) {
