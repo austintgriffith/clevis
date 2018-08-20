@@ -19,10 +19,9 @@ RUN npm config set user 0
 RUN npm config set unsafe-perm true
 RUN npm install -g ganache-cli
 RUN npm install -g npx
-RUN npm install -g mocha
 RUN apt-get install git-core -y
 
-RUN echo "Break the cache 2"
+RUN echo "Break the cache 3"
 
 RUN git clone https://github.com/austintgriffith/clevis.git
 RUN cd clevis && npm install && npm link

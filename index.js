@@ -6,6 +6,7 @@ params.commands = {
   "init": [],
   "version": [],
   "update": [],
+  "upgrade": [],//upgrade clevis node_modules
   "accounts": [],
   "new": ["password"],
   "unlock": ["accountindex","password"],
