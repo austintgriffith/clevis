@@ -3,16 +3,15 @@ if [ -z "$network" ]; then
   network="local"
 fi
 
-echo "Launching Clevis with network [ $network ]..."
-
+echo "Launching 🗜️ Clevis with network [ $network ]..."
 
 if [ ! -f /dapp/clevis.json ]; then
   echo "Initializing Clevis..."
   clevis init
 else
+  echo "Updating Clevis..."
   clevis update
 fi
-
 
 if [ "$network" = "local" ]; then
   echo "Launching ganache-cli..."
