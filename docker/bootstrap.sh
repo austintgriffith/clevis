@@ -4,7 +4,15 @@ if [ -z "$network" ]; then
 fi
 
 echo "Launching Clevis with network [ $network ]..."
-clevis init
+
+
+if [ ! -f /dapp/clevis.json ]; then
+  echo "Initializing Clevis..."
+  clevis init
+else
+  clevis update
+fi
+
 
 if [ "$network" = "local" ]; then
   echo "Launching ganache-cli..."
@@ -20,7 +28,7 @@ elif [ "$network" = "mainnet" ]; then
   /usr/bin/geth --light --cache 512 --maxpeers 25 --datadir ".geth" --rpc --rpcaddr 0.0.0.0 --rpcapi="db,eth,net,web3,personal" > geth.log 2>&1 &
 else
   echo "Using external RPC network: $network"
-  sed -i "s|http:\/\/localhost:8545|$network|g" clevis.json 
+  sed -i "s|http:\/\/localhost:8545|$network|g" clevis.json
 fi
 
 clevis start > react.log 2>&1 &
