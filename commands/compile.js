@@ -165,7 +165,7 @@ function loadInImportsForEtherscan(input,dependencies,broughtInDep){
       }
       if(!found){
         console.log("ERROR, failed to load in dependency for ",thisLine);
-        process.exit();
+        process.exit(1);
       }
     }else{
       finalCode+=thisLine+"\n";
