@@ -32,12 +32,15 @@ module.exports = async (params)=>{
   let init = params.fs.readFileSync(__dirname+"/../templates/config.json").toString()
   params.fs.writeFileSync("clevis.json",init);
 
+  params.fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
+  params.fs.writeFileSync("attach.sh","#!/bin/bash\ndocker exec -ti clevis bash\n");
+
   //installing node module locally//
   console.log("Installing clevis (this will take a while to compile)...")
 
-  exec('npm install --save clevis@latest;npm install --save s3;npm install --g mocha;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull', (err, stdout, stderr) => {
+  exec('chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;npm install --g mocha;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull', (err, stdout, stderr) => {
     exec('clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
-        console.log(data);
+        console.log(data)
     })
   }).stdout.on('data', function(data) {
       console.log(data);
