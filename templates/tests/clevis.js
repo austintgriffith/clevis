@@ -131,9 +131,9 @@ module.exports = {
     describe('#transfer() ', function() {
       it('should give metamask account some ether or tokens to test', async function() {
         this.timeout(600000)
-        let result = await clevis("sendTo","0.1","0","0x2a906694D15Df38F59e76ED3a5735f8AAbccE9cb")
+        let result = await clevis("sendTo","0.1","0","0x2a906694D15Df38F59e76ED3a5735f8AAbccE9cb")///<<<-------- change this to your metamask accounts
         printTxResult(result)
-        result = await clevis("sendTo","0.1","0","0x9319bbb4e2652411be15bb74f339b7f6218b2508")
+        result = await clevis("sendTo","0.1","0","0x9319bbb4e2652411be15bb74f339b7f6218b2508")///<<<-------- change this to your metamask accounts
         printTxResult(result)
         //here is an example of running a funtion from within this object:
         //module.exports.mintTo("Greens",0,"0x2a906694d15df38f59e76ed3a5735f8aabcce9cb",20)
@@ -141,47 +141,12 @@ module.exports = {
       });
     });
   },
-
-
-  broadcast:(accountIndex,outputString)=>{
-    describe('#broadcast() ', function() {
-      it('should broadcast a string and generate an event', async function() {
-        this.timeout(60000)
-        const result = await clevis("contract","broadcast","Broadcaster",accountIndex,outputString)
-        printTxResult(result)
-        let events = await clevis("contract","eventBroadcast","Broadcaster")
-        let lastEvent = events[events.length-1]
-        console.log(tab,lastEvent)
-        assert(lastEvent.returnValues.output == outputString,"output string is incorrect in the event or the event didn't fire")
-      });
-    });
-  },
-
+  
 
   ////----------------------------------------------------------------------------///////////////////
 
-  add:(accountIndex)=>{
-    describe('#add() ', function() {
-      it('should call forward on proxy contract which should call add on example contract', async function() {
-        this.timeout(600000)
-        //var abi = require('ethereumjs-abi')
-        // need to have the ABI definition in JSON as per specification
-        //var testAbi = localContractAbi("TEst")
 
-        //var encoded = abi.encode(testAbi, "add()", [])
-        //var encoded = (abi.simpleEncode("balanceOf(address):(uint256)", "0x0000000000000000000000000000000000000000")).toString()
-
-
-        //console.log("Encoded:",encoded)
-
-        const result = await clevis("contract","forward","TEst",accountIndex,localContractAddress("Example"),"0","0x4f2be91f")
-        printTxResult(result)
-        //here is an example of running a funtion from within this object:
-        //module.exports.mintTo("Greens",0,"0x2a906694d15df38f59e76ed3a5735f8aabcce9cb",20)
-        //view more examples here: https://github.com/austintgriffith/galleass/blob/master/tests/galleass.js
-      });
-    });
-  },
+  ////    ADD YOUR TESTS HERE <<<<<<<<--------------------------------
 
 
   ////----------------------------------------------------------------------------///////////////////
@@ -239,6 +204,9 @@ checkContractDeployment = async (contract)=>{
   return address
 }
 
+
+
+//example helper function
 /*
 makeSureContractHasTokens = async (contract,contractAddress,token)=>{
   const TokenBalance = await clevis("contract","balanceOf",token,contractAddress)

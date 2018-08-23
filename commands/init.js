@@ -34,6 +34,7 @@ module.exports = async (params)=>{
 
   params.fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
   params.fs.writeFileSync("attach.sh","#!/bin/bash\ndocker exec -ti clevis bash\n");
+  params.fs.writeFileSync("stop.sh","#!/bin/bash\ndocker stop clevis\n");
 
   //installing node module locally//
   console.log("Installing clevis (this will take a while to compile)...")
