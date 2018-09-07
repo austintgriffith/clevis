@@ -23,6 +23,11 @@ OR try an npm install:
 sudo npm install --unsafe-perm -g clevis@latest
 ```
 
+If you aren't using docker make sure you install ganache-cli:
+```
+npm install -g ganache-cli
+```
+
 [Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
 
 
