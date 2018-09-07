@@ -39,7 +39,7 @@ module.exports = async (params)=>{
   //installing node module locally//
   console.log("Installing clevis (this will take a while to compile)...")
 
-  exec('chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;npm install --g mocha;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull', (err, stdout, stderr) => {
+  exec('chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;npm install --g mocha;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull; git checkout tags/v1.12.0', (err, stdout, stderr) => {
     exec('clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
         console.log(data)
     })
