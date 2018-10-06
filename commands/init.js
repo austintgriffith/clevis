@@ -67,7 +67,8 @@ function cra(DEBUG) {
     if(fs.existsSync("./src")){
       resolve("Skipping CRA, src exists...")
     }else{
-      let reactAction = exec('npx create-react-app .;npm i;rm -rf src;npm install --save dapparatus;npm i mocha;sudo npm link mocha;', (err, stdout, stderr) => {
+      console.log("Installing specific version of CRA...")
+      let reactAction = exec('npx create-react-app@1.5.2 .;npm i;rm -rf src;npm install --save dapparatus;npm i mocha;sudo npm link mocha;', (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           reject(err);

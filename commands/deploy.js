@@ -5,7 +5,9 @@ module.exports = async (params)=>{
   let startSeconds = new Date().getTime() / 1000
   if(DEBUG) console.log("Unlocking account "+accountindex)
   let accounts = await params.web3.eth.getAccounts();
+  console.log("accounts",accounts)
   let balance = await params.web3.eth.getBalance(accounts[accountindex])
+    console.log("balance",balance)
   //if(balance < 10*10**18){
   //  let result = await params.web3.eth.personal.unlockAccount(accounts[1])
   //}
