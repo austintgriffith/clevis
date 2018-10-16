@@ -31,8 +31,8 @@ let copyRecursiveSync = function(src, dest) {
 
 module.exports = async (params)=>{
 
+  let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
   console.log("Creating react app...")
-
   let craResult = await cra(true);
   console.log(craResult)
 
@@ -43,7 +43,6 @@ module.exports = async (params)=>{
     params.fs.writeFileSync(".gitignore",ignore);
   }
 
-  let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
   let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
   let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
   craFolder = craFolder || "./src";
