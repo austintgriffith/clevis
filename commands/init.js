@@ -73,7 +73,8 @@ module.exports = async (params)=>{
 
 
   exec(`chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;cd ${contractsFolder}/..;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity; git pull; git checkout tags/v1.12.0'`, (err, stdout, stderr) => {
-    exec('clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
+    console.log("Installing clevis package and updating...")
+    exec('npm install clevis; clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
         console.log(data)
     })
   }).stdout.on('data', function(data) {
