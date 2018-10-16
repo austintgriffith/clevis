@@ -67,9 +67,12 @@ module.exports = async (params)=>{
     exec('clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
         console.log(data)
     })
-  }).stderr.on('data', function(data) {
+  }).stdout.on('data', function(data) {
       console.log(data);
   });
+  // .stderr.on('data', function(data) {
+  //     console.log(data);
+  // });
 
   console.log("Syncing default tests...")
   if(!fs.existsSync(testsFolder)){
