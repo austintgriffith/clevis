@@ -51,8 +51,6 @@ module.exports = async (params)=>{
   contractsFolder = contractsFolder || "./"
   console.log('Selected folder for react app:', craFolder);
   console.log('Selected testsFolder', testsFolder);
-  let craResult = await cra(true, craFolder);
-  console.log(craResult)
 
   console.log("Creating config file: clevis.json")
   let init = params.fs.readFileSync(__dirname+"/../templates/config.json").toString()
@@ -62,6 +60,7 @@ module.exports = async (params)=>{
     TESTS_FOLDER: testsFolder,
     CONTRACTS_FOLDER: contractsFolder
   });
+  try{params.fs.mkdirSync(contractFolder)}catch(e){}
   params.fs.writeFileSync("clevis.json", JSON.stringify(config));
 
   params.fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
