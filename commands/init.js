@@ -19,14 +19,18 @@ let copyRecursiveSync = function(src, dest) {
 };
 
 module.exports = async (params)=>{
+
+  console.log("Creating react app...")
+
+  let craResult = await cra(true);
+  console.log(craResult)
+
+
   let ignore = params.fs.readFileSync(__dirname+"/../templates/gitignore").toString()
   if(!params.fs.existsSync(".gitignore")) {
     console.log("Adding .gitignore")
     params.fs.writeFileSync(".gitignore",ignore);
   }
-
-  let craResult = await cra(true);
-  console.log(craResult)
 
   console.log("Creating config file: clevis.json")
   let init = params.fs.readFileSync(__dirname+"/../templates/config.json").toString()
@@ -68,7 +72,7 @@ function cra(DEBUG) {
       resolve("Skipping CRA, src exists...")
     }else{
       console.log("Installing specific version of CRA...")
-      let reactAction = exec('npx create-react-app@1.5.2 .;npm i;rm -rf src;npm install --save dapparatus;npm i mocha;sudo npm link mocha;', (err, stdout, stderr) => {
+      let reactAction = exec('npx create-react-app .;npm i;rm -rf src;npm install --save dapparatus;npm i mocha;sudo npm link mocha;', (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           reject(err);
