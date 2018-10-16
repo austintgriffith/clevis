@@ -60,7 +60,8 @@ module.exports = async (params)=>{
     TESTS_FOLDER: testsFolder,
     CONTRACTS_FOLDER: contractsFolder
   });
-  try{params.fs.mkdirSync(contractFolder)}catch(e){}
+  console.log('contractFolder', contractsFolder);
+  try{params.fs.mkdirSync(contractsFolder)}catch(e){}
   params.fs.writeFileSync("clevis.json", JSON.stringify(config));
 
   params.fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
