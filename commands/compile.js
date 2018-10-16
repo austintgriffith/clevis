@@ -20,7 +20,7 @@ module.exports = (params)=>{
       }
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
-    dependencies[contractFolder+"/"+contractname+".sol"] = params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8');
+    dependencies[contractname+".sol"] = params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8');
 
 
     let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
