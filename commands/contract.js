@@ -4,7 +4,7 @@ module.exports = async (params)=>{
   let startSeconds = new Date().getTime() / 1000
   let contractname = params["contractname"];
   let scriptname = params["scriptname"];
-  const contractFolder = ${params.config.CONTRACTS_FOLDER}/${contractname};
+  const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractname}`;
   if(DEBUG) console.log("Loading accounts...")
   let accounts = await params.web3.eth.getAccounts();
 

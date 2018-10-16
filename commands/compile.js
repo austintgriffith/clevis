@@ -4,7 +4,7 @@ module.exports = (params)=>{
   if(DEBUG) console.log(" >>> COMPILE")
   let startSeconds = new Date().getTime() / 1000
   let contractname = params["contractname"];
-  const contractFolder = ${params.config.CONTRACTS_FOLDER}/${contractname};
+  const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractname}`;
   if(DEBUG) console.log("Compiling "+contractname+"/"+contractname+".sol ["+params.solc.version()+"]...")
   const input = params.fs.readFileSync(`${contractFolder}/${contractname}.sol`)
   if(!input){

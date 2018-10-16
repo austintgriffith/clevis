@@ -1,7 +1,7 @@
 const fs = require('fs')
 module.exports = (params)=>{
   const DEBUG = params.config.DEBUG;
-  const contractFolder = ${params.config.CONTRACTS_FOLDER}/${params.contractname};
+  const contractFolder = `${params.config.CONTRACTS_FOLDER}/${params.contractname}`;
   if(DEBUG) console.log(" >>> CREATE")
   let contract = params.fs.readFileSync(__dirname+"/../templates/Contract.sol").toString()
   contract = contract.split("##contract##").join(params.contractname);

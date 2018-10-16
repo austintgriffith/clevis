@@ -7,7 +7,7 @@ const prompts = reader.createInterface(process.stdin, process.stdout);
 
 function readLineAsync(message) {
   return new Promise((resolve, reject) => {
-    rl.question(message, (answer) => {
+    prompts.question(message, (answer) => {
       resolve(answer);
     });
   });
@@ -35,9 +35,9 @@ module.exports = async (params)=>{
     console.log("Adding .gitignore")
     params.fs.writeFileSync(".gitignore",ignore);
   }
-  let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src)");
-  let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests)");
-  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under ./)");
+  let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
+  let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
+  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under ./): ");
   craFolder = craFolder || "./src";
   testsFolder = testsFolder || "tests/"
   contractsFolder = contractsFolder || "./"
@@ -53,7 +53,7 @@ module.exports = async (params)=>{
     TESTS_FOLDER: testsFolder,
     CONTRACTS_FOLDER: contractsFolder
   });
-  params.fs.writeFileSync("clevis.json", JSON.stringify(init));
+  params.fs.writeFileSync("clevis.json", JSON.stringify(config));
 
   params.fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
   params.fs.writeFileSync("attach.sh","#!/bin/bash\ndocker exec -ti clevis bash\n");
@@ -62,15 +62,15 @@ module.exports = async (params)=>{
   //installing node module locally//
   console.log("Installing clevis (this will take a while to compile)...")
 
-  exec('chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;npm install --g mocha;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull', (err, stdout, stderr) => {
+  exec(`chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;cd ${contractsFolder};git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull`, (err, stdout, stderr) => {
     exec('clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
         console.log(data)
     })
   }).stdout.on('data', function(data) {
       console.log(data);
-  })/*.stderr.on('data', function(data) {
+  }).stderr.on('data', function(data) {
       console.log(data);
-  });*/
+  });
 
   console.log("Syncing default tests...")
   if(!fs.existsSync(testsFolder)){
