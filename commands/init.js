@@ -45,14 +45,12 @@ module.exports = async (params)=>{
 
   let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
   let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
-  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under ./): ");
+  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
   craFolder = craFolder || "./src";
-  testsFolder = testsFolder || "tests/"
-  contractsFolder = contractsFolder || "./"
+  testsFolder = testsFolder || "tests"
+  contractsFolder = contractsFolder || "contracts"
   console.log('Selected folder for react app:', craFolder);
   console.log('Selected testsFolder', testsFolder);
-  let craResult = await cra(true, craFolder);
-  console.log(craResult)
 
   console.log("Creating config file: clevis.json")
   let init = params.fs.readFileSync(__dirname+"/../templates/config.json").toString()
@@ -62,6 +60,8 @@ module.exports = async (params)=>{
     TESTS_FOLDER: testsFolder,
     CONTRACTS_FOLDER: contractsFolder
   });
+  console.log('contractFolder', contractsFolder);
+  try{params.fs.mkdirSync(contractsFolder)}catch(e){}
   params.fs.writeFileSync("clevis.json", JSON.stringify(config));
 
   params.fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
