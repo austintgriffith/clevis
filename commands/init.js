@@ -45,10 +45,10 @@ module.exports = async (params)=>{
 
   let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
   let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
-  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under ./): ");
+  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
   craFolder = craFolder || "./src";
   testsFolder = testsFolder || "tests/"
-  contractsFolder = contractsFolder || "./"
+  contractsFolder = contractsFolder || "contracts/"
   console.log('Selected folder for react app:', craFolder);
   console.log('Selected testsFolder', testsFolder);
 
