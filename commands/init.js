@@ -1,6 +1,17 @@
 const fs = require('fs')
 const path = require('path')
 const { exec } = require('child_process')
+const reader = require('readline')
+
+const prompts = reader.createInterface(process.stdin, process.stdout);
+
+function readLineAsync(message) {
+  return new Promise((resolve, reject) => {
+    rl.question(message, (answer) => {
+      resolve(answer);
+    });
+  });
+}
 
 let copyRecursiveSync = function(src, dest) {
   var exists = fs.existsSync(src);
@@ -24,13 +35,25 @@ module.exports = async (params)=>{
     console.log("Adding .gitignore")
     params.fs.writeFileSync(".gitignore",ignore);
   }
-
-  let craResult = await cra(true);
+  let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src)");
+  let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests)");
+  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under ./)");
+  craFolder = craFolder || "./src";
+  testsFolder = testsFolder || "tests/"
+  contractsFolder = contractsFolder || "./"
+  console.log('Selected folder for react app:', craFolder);
+  console.log('Selected testsFolder', testsFolder);
+  let craResult = await cra(true, craFolder);
   console.log(craResult)
 
   console.log("Creating config file: clevis.json")
   let init = params.fs.readFileSync(__dirname+"/../templates/config.json").toString()
-  params.fs.writeFileSync("clevis.json",init);
+  const config = Object.assign(JSON.parse(init), {
+    CRA_FOLDER: craFolder,
+    TESTS_FOLDER: testsFolder,
+    CONTRACTS_FOLDER: contractsFolder
+  });
+  params.fs.writeFileSync("clevis.json", JSON.stringify(init));
 
   params.fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
   params.fs.writeFileSync("attach.sh","#!/bin/bash\ndocker exec -ti clevis bash\n");
@@ -50,8 +73,8 @@ module.exports = async (params)=>{
   });*/
 
   console.log("Syncing default tests...")
-  if(!fs.existsSync("tests")){
-    copyRecursiveSync(__dirname+"/../templates/tests","tests")
+  if(!fs.existsSync(testsFolder)){
+    copyRecursiveSync(__dirname+"/../templates/tests",testsFolder)
   }
 
   console.log("Touching contract list...")
@@ -62,9 +85,9 @@ module.exports = async (params)=>{
   return "Updating Clevis, S3, Mocha, OpenZeppelin, and current gas/eth prices..."
 }
 
-function cra(DEBUG) {
+function cra(DEBUG, craFolder='./src') {
   return new Promise((resolve, reject) => {
-    if(fs.existsSync("./src")){
+    if(fs.existsSync(craFolder)){
       resolve("Skipping CRA, src exists...")
     }else{
       console.log("Installing specific version of CRA...")

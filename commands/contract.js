@@ -4,15 +4,15 @@ module.exports = async (params)=>{
   let startSeconds = new Date().getTime() / 1000
   let contractname = params["contractname"];
   let scriptname = params["scriptname"];
-
+  const contractFolder = ${params.config.CONTRACTS_FOLDER}/${contractname};
   if(DEBUG) console.log("Loading accounts...")
   let accounts = await params.web3.eth.getAccounts();
 
   if(DEBUG) console.log("Loading address, abi, and blockNumber...")
   let nextAddress //ported in from old code that detected previous for linage (TODO)
-  let address = params.fs.readFileSync(process.cwd()+"/"+contractname+"/"+contractname+".address").toString().trim()
-  let abi = JSON.parse(params.fs.readFileSync(process.cwd()+"/"+contractname+"/"+contractname+".abi"));
-  let blockNumber = params.fs.readFileSync(process.cwd()+"/"+contractname+"/"+contractname+".blockNumber").toString().trim()
+  let address = params.fs.readFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".address").toString().trim()
+  let abi = JSON.parse(params.fs.readFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".abi"));
+  let blockNumber = params.fs.readFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".blockNumber").toString().trim()
 
   if(DEBUG) console.log("Running contract interaction script ("+scriptname+") on contract ["+contractname+"]")
   let contract = new params.web3.eth.Contract(abi,address)
@@ -21,7 +21,7 @@ module.exports = async (params)=>{
 
   let scriptFunction
   try{
-    let path = process.cwd()+"/"+contractname+"/.clevis/"+scriptname+".js"
+    let path = process.cwd()+"/"+contractFolder+"/.clevis/"+scriptname+".js"
     if(DEBUG) console.log("LOADING:",path)
     if(params.fs.existsSync(path)){
       if(DEBUG) console.log("looking for script at ",path)
@@ -37,7 +37,7 @@ module.exports = async (params)=>{
       blockNumber:blockNumber,
     }
     //check for previous address to pass along
-    let previousAddressFile = process.cwd()+"/"+contractname+"/"+contractname+".previous.address"
+    let previousAddressFile = process.cwd()+"/"+contractFolder+"/"+contractname+".previous.address"
     if(params.fs.existsSync(previousAddressFile)){
       txparams.previousAddress = params.fs.readFileSync(previousAddressFile).toString()
     }
