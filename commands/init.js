@@ -49,6 +49,7 @@ module.exports = async (params)=>{
   console.log("Creating config file: clevis.json")
   let init = params.fs.readFileSync(__dirname+"/../templates/config.json").toString()
   const config = Object.assign(JSON.parse(init), {
+    ROOT_FOLDER: process.cwd(),
     CRA_FOLDER: craFolder,
     TESTS_FOLDER: testsFolder,
     CONTRACTS_FOLDER: contractsFolder
@@ -62,12 +63,10 @@ module.exports = async (params)=>{
   //installing node module locally//
   console.log("Installing clevis (this will take a while to compile)...")
 
-  exec(`chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;cd ${contractsFolder};git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity git pull`, (err, stdout, stderr) => {
+  exec(`chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;cd ${contractsFolder}/..;git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity; git pull`, (err, stdout, stderr) => {
     exec('clevis update', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
         console.log(data)
     })
-  }).stdout.on('data', function(data) {
-      console.log(data);
   }).stderr.on('data', function(data) {
       console.log(data);
   });

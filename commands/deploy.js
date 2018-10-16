@@ -12,8 +12,10 @@ module.exports = async (params)=>{
   //  let result = await params.web3.eth.personal.unlockAccount(accounts[1])
   //}
   let contractname = params.contractname
-  let bytecode = params.fs.readFileSync(contractname+"/"+contractname+".bytecode").toString()
-  let abi = JSON.parse(params.fs.readFileSync(contractname+"/"+contractname+".abi"));
+  const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractname}`;
+  console.log('contractFolder', contractFolder);
+  let bytecode = params.fs.readFileSync(contractFolder+"/"+contractname+".bytecode").toString()
+  let abi = JSON.parse(params.fs.readFileSync(contractFolder+"/"+contractname+".abi"));
   let etherbalance = params.web3.utils.fromWei(balance,"ether");
   if(DEBUG) console.log(etherbalance+" ($"+(etherbalance*params.config.ethprice)+")")
   if(DEBUG) console.log("Loaded account "+accounts[params.accountindex])
@@ -23,7 +25,7 @@ module.exports = async (params)=>{
 
   let contractarguments = []
   try{
-    let path = process.cwd()+"/"+contractname+"/arguments.js"
+    let path = process.cwd()+"/"+contractFolder+"/arguments.js"
     if(params.fs.existsSync(path)){
       if(DEBUG) console.log("looking for arguments in ",path)
       contractarguments=require(path)
@@ -38,21 +40,21 @@ module.exports = async (params)=>{
   let etherdiff = etherbalance-endetherbalance
   if(DEBUG) console.log("==ETHER COST: "+etherdiff+" $"+(etherdiff*params.config.ethprice))
   if(DEBUG) console.log("Saving contract address:",result.contractAddress)
-  let addressPath = process.cwd()+"/"+contractname+"/"+contractname+".address"
+  let addressPath = process.cwd()+"/"+contractFolder+"/"+contractname+".address"
   if(params.fs.existsSync(addressPath)){
-    params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".previous.address",params.fs.readFileSync(addressPath).toString())
+    params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".previous.address",params.fs.readFileSync(addressPath).toString())
   }
-  let headAddressPath = process.cwd()+"/"+contractname+"/"+contractname+".head.address"
+  let headAddressPath = process.cwd()+"/"+contractFolder+"/"+contractname+".head.address"
   if(!params.fs.existsSync(headAddressPath)){
     params.fs.writeFileSync(headAddressPath,result.contractAddress)
   }
   params.fs.writeFileSync(addressPath,result.contractAddress)
-  params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".blockNumber",result.blockNumber)
+  params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".blockNumber",result.blockNumber)
 
   let endSeconds = new Date().getTime() / 1000;
   let duration = Math.floor((endSeconds-startSeconds))
   if(DEBUG) console.log("deploy time: ",duration)
-  params.fs.appendFileSync(process.cwd()+"/deploy.log",endSeconds+" "+contractname+"/"+contractname+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*params.config.ethprice)+" "+params.config.gaspricegwei+"\n")
+  params.fs.appendFileSync(process.cwd()+"/deploy.log",endSeconds+" "+contractFolder+"/"+contractname+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*params.config.ethprice)+" "+params.config.gaspricegwei+"\n")
 
   return result;
 }

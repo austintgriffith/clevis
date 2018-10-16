@@ -39,7 +39,7 @@ npm install --g mocha
 
 ## docker options
 
-### attach to already running clevis container 
+### attach to already running clevis container
 ```
 docker exec -ti clevis bash
 ```
@@ -79,7 +79,7 @@ docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-direc
 
 ## troubleshooting
 
-Right now the web3 dependencies are not very well supported and installs can fail on certain machines. 
+Right now the web3 dependencies are not very well supported and installs can fail on certain machines.
 
 I would recommend using Docker and the container model because it handles the environment and geth node for you.
 
@@ -273,7 +273,7 @@ uploads static react site to s3 bucket named after url
 ```
 clevis invalidate E3837d00567
 ```
-invalidate cloudfront caching to show fresh content 
+invalidate cloudfront caching to show fresh content
 
 ## demo
 

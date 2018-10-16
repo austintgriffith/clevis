@@ -13,7 +13,7 @@ module.exports = (params)=>{
   params.fs.writeFileSync(contractFolder+"/dependencies.js",deps)
   //args
   let args = params.fs.readFileSync(__dirname+"/../templates/arguments.js").toString()
-  params.fs.writeFileSync(contractFolders+"/arguments.js",args)
+  params.fs.writeFileSync(contractFolder+"/arguments.js",args)
 
   let contracts = []
   try{

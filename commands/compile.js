@@ -12,7 +12,7 @@ module.exports = (params)=>{
   }else{
     let dependencies
     try{
-      let path = process.cwd()+${contractFolder}"/dependencies.js"
+      let path = `process.cwd()+${contractFolder}/dependencies.js`
       if(params.fs.existsSync(path)){
         if(DEBUG) console.log("File exists")
         if(DEBUG) console.log("looking for dependencies at ",path)
@@ -20,11 +20,11 @@ module.exports = (params)=>{
       }
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
-    dependencies[contractFolder"/"+contractname+".sol"] = params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8');
+    dependencies[contractFolder+"/"+contractname+".sol"] = params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8');
 
 
     let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
-    params.fs.writeFileSync(process.cwd()+contractFolder + "/"+contractname+".compiled",finalCode)
+    params.fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractname+".compiled",finalCode)
 
     const output = params.solc.compile({sources: dependencies}, 1);
     if(!output.contracts||!output.contracts[contractFolder+"/"+contractname+".sol:"+contractname]) return output;
