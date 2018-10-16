@@ -30,8 +30,10 @@ let copyRecursiveSync = function(src, dest) {
 };
 
 module.exports = async (params)=>{
-
   let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
+  let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
+  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
+
   console.log("Creating react app...")
   let craResult = await cra(true);
   console.log(craResult)
@@ -43,8 +45,6 @@ module.exports = async (params)=>{
     params.fs.writeFileSync(".gitignore",ignore);
   }
 
-  let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
-  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
   craFolder = craFolder || "./src";
   testsFolder = testsFolder || "tests"
   contractsFolder = contractsFolder || "contracts"
@@ -93,6 +93,8 @@ module.exports = async (params)=>{
     fs.writeFileSync("contracts.clevis","")
   }
 
+  prompts.close();
+  process.stdin.destroy();
   return "Updating Clevis, S3, Mocha, OpenZeppelin, and current gas/eth prices..."
 }
 
