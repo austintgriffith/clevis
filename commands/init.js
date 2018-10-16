@@ -30,11 +30,19 @@ let copyRecursiveSync = function(src, dest) {
 };
 
 module.exports = async (params)=>{
+
+  console.log("Creating react app...")
+
+  let craResult = await cra(true);
+  console.log(craResult)
+
+
   let ignore = params.fs.readFileSync(__dirname+"/../templates/gitignore").toString()
   if(!params.fs.existsSync(".gitignore")) {
     console.log("Adding .gitignore")
     params.fs.writeFileSync(".gitignore",ignore);
   }
+
   let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
   let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
   let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under ./): ");
@@ -93,7 +101,7 @@ function cra(DEBUG, craFolder='./src') {
       resolve("Skipping CRA, src exists...")
     }else{
       console.log("Installing specific version of CRA...")
-      let reactAction = exec('npx create-react-app@1.5.2 .;npm i;rm -rf src;npm install --save dapparatus;npm i mocha;sudo npm link mocha;', (err, stdout, stderr) => {
+      let reactAction = exec('npx create-react-app .;npm i;rm -rf src;npm install --save dapparatus;npm i mocha;sudo npm link mocha;', (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           reject(err);

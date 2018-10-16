@@ -4,6 +4,7 @@ params.fs = require('fs')
 params.commands = {
   "help": [],
   "init": [],
+  "init2": [],
   "version": [],
   "update": [],
   "upgrade": [],//upgrade clevis node_modules
@@ -65,7 +66,7 @@ module.exports = (...args)=>{
 
   if(DEBUG) console.log("🗜️ Clevis ["+command+"]")
 
-  if(command!="init"){
+  if(command!="init" && command!="init2"){
     try{
       params.config = JSON.parse(params.fs.readFileSync("clevis.json").toString())
     }catch(e){
