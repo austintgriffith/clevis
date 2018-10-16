@@ -12,7 +12,7 @@ module.exports = (params)=>{
   }else{
     let dependencies
     try{
-      let path = `process.cwd()+${contractFolder}/dependencies.js`
+      let path = `${process.cwd()}/${contractFolder}/dependencies.js`
       if(params.fs.existsSync(path)){
         if(DEBUG) console.log("File exists")
         if(DEBUG) console.log("looking for dependencies at ",path)
