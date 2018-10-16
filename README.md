@@ -1,6 +1,6 @@
 # 🗜️clevis
 
-Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding. 
+Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding.
 
 ## install
 
@@ -23,9 +23,10 @@ OR try an npm install:
 sudo npm install --unsafe-perm -g clevis@latest
 ```
 
-If you aren't using docker make sure you install ganache-cli:
+If you aren't using docker make sure you install ganache-cli and mocha:
 ```
 npm install -g ganache-cli
+npm install --g mocha
 ```
 
 [Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
@@ -38,7 +39,7 @@ npm install -g ganache-cli
 
 ## docker options
 
-### attach to already running clevis container 
+### attach to already running clevis container
 ```
 docker exec -ti clevis bash
 ```
@@ -78,7 +79,7 @@ docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-direc
 
 ## troubleshooting
 
-Right now the web3 dependencies are not very well supported and installs can fail on certain machines. 
+Right now the web3 dependencies are not very well supported and installs can fail on certain machines.
 
 I would recommend using Docker and the container model because it handles the environment and geth node for you.
 
@@ -272,7 +273,7 @@ uploads static react site to s3 bucket named after url
 ```
 clevis invalidate E3837d00567
 ```
-invalidate cloudfront caching to show fresh content 
+invalidate cloudfront caching to show fresh content
 
 ## demo
 
