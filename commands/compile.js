@@ -21,16 +21,22 @@ module.exports = (params)=>{
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
     dependencies[contractname+".sol"] = params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8');
-
+    console.log("Loaded dependencies...")
 
     let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
     params.fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractname+".compiled",finalCode)
 
+    console.log("Compiling...")
     const output = params.solc.compile({sources: dependencies}, 1);
-    if(!output.contracts||!output.contracts[contractFolder+"/"+contractname+".sol:"+contractname]) return output;
+    if(!output.contracts||!output.contracts[contractname+".sol:"+contractname]) {
+      console.log("ERROR compiling!",output.contracts)
+      return output;
+    }
     if(DEBUG) console.log(output)
-    const bytecode = output.contracts[contractFolder+"/"+contractname+".sol:"+contractname].bytecode;
-    const abi = output.contracts[contractFolder+"/"+contractname+".sol:"+contractname].interface;
+    console.log("Saving output...")
+    const bytecode = output.contracts[contractname+".sol:"+contractname].bytecode;
+    const abi = output.contracts[contractname+".sol:"+contractname].interface;
+    console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractname+".bytecode")
     params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".bytecode",bytecode)
     params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".abi",abi)
     if(DEBUG) console.log("Compiled!")
