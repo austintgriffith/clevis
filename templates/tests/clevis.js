@@ -13,8 +13,8 @@ const web3 = new Web3(
   clevisConfig.USE_INFURA ?
     new HDWalletProvider(
       process.env.mnemonic,
-      params.config.provider) :
-    Web3.providers.HttpProvider(params.config.provider)
+      clevisConfig.provider) :
+    Web3.providers.HttpProvider(clevisConfig.provider)
 );
 
 function localContractAddress(contract){

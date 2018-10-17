@@ -77,7 +77,7 @@ module.exports = (...args)=>{
     let Web3 = require('web3')
     const HDWalletProvider = require("truffle-hdwallet-provider")
     params.web3 = new Web3(
-        clevisConfig.USE_INFURA ?
+        params.config.USE_INFURA ?
         new HDWalletProvider(
           process.env.mnemonic,
           params.config.provider
