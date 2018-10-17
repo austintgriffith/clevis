@@ -82,7 +82,7 @@ module.exports = (...args)=>{
           process.env.mnemonic,
           params.config.provider
         ) :
-        Web3.providers.HttpProvider(params.config.provider)
+        new Web3.providers.HttpProvider(params.config.provider)
     );
     params.config.gaspricegwei = params.web3.utils.toWei(""+Math.round(params.config.gasprice*1000)/1000,'gwei')
   }

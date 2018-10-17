@@ -14,8 +14,10 @@ const web3 = new Web3(
     new HDWalletProvider(
       process.env.mnemonic,
       clevisConfig.provider) :
-    Web3.providers.HttpProvider(clevisConfig.provider)
+    new Web3.providers.HttpProvider(clevisConfig.provider)
 );
+
+console.log('clevisConfig.provider', clevisConfig.provider);
 
 function localContractAddress(contract){
   return fs.readFileSync(clevisConfig.CONTRACTS_FOLDER+"/"+contract+ "/" + contract + ".address").toString().trim()
@@ -96,7 +98,6 @@ module.exports = {
     describe('#deploy() '+contract.magenta, function() {
       it('should deploy '+contract.magenta+' as account '+accountindex, async function() {
         this.timeout(360000)
-        console.log('AAAA');
         const result = await clevis("deploy",contract,accountindex)
         printTxResult(result)
         console.log(tab+"Address: "+result.contractAddress.blue)
