@@ -4,5 +4,10 @@
   "ethprice": 400,
   "deploygas": 5500000,
   "xfergas": 1300000,
-  "DEBUG": true
+  "DEBUG": true,
+  "USE_INFURA": false,
+  "ROOT_FOLDER": "",
+  "CRA_FOLDER": "./src",
+  "TESTS_FOLDER": "tests",
+  "CONTRACTS_FOLDER": "contracts"
 }
