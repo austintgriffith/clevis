@@ -101,11 +101,11 @@ module.exports = {
       it('should inject contract address and abi into web app', async function() {
         this.timeout(120000)
         const fs = require("fs")
-        if(!fs.existsSync("src")){
-          fs.mkdirSync("src");
+        if(!fs.existsSync(clevisConfig.CRA_FOLDER + "src")){
+          fs.mkdirSync(clevisConfig.CRA_FOLDER + "src");
         }
-        if(!fs.existsSync("src/contracts")){
-          fs.mkdirSync("src/contracts");
+        if(!fs.existsSync(clevisConfig.CRA_FOLDER + "src/contracts")){
+          fs.mkdirSync(clevisConfig.CRA_FOLDER + "src/contracts");
         }
         for(let c in module.exports.contracts){
           let thisContract = module.exports.contracts[c]
@@ -117,13 +117,13 @@ module.exports = {
           let blockNumber = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER +"/" + thisContract + "/"+thisContract+".blockNumber").toString().trim()
           console.log(tab,"blockNumber:",blockNumber.blue)
           assert(blockNumber,"No blockNumber!?")
-          fs.writeFileSync(clevisConfig.CRA_FOLDER +thisContract+".blocknumber.js","module.exports = \""+blockNumber+"\"");
+          fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + thisContract+".blocknumber.js","module.exports = \""+blockNumber+"\"");
           let abi = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER +"/" + thisContract +"/"+thisContract+".abi").toString().trim()
-          fs.writeFileSync(clevisConfig.CRA_FOLDER + thisContract+".abi.js","module.exports = "+abi);
+          fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + thisContract+".abi.js","module.exports = "+abi);
           let bytecode = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER + "/" + thisContract +"/"+thisContract+".bytecode").toString().trim()
-          fs.writeFileSync(clevisConfig.CRA_FOLDER + thisContract+".bytecode.js","module.exports = \""+bytecode+"\"");
+          fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + thisContract+".bytecode.js","module.exports = \""+bytecode+"\"");
         }
-        fs.writeFileSync("src/contracts/contracts.js","module.exports = "+JSON.stringify(module.exports.contracts));
+        fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/contracts.js","module.exports = "+JSON.stringify(module.exports.contracts));
         module.exports.reload()
       });
     });
