@@ -34,6 +34,10 @@ module.exports = async (params)=>{
   let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
   let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
 
+
+  prompts.close();
+  process.stdin.destroy();
+
   console.log("Creating react app...")
   let craResult = await cra(true);
   console.log(craResult)
@@ -93,8 +97,6 @@ module.exports = async (params)=>{
     fs.writeFileSync("contracts.clevis","")
   }
 
-  prompts.close();
-  process.stdin.destroy();
   return "Updating Clevis, S3, Mocha, OpenZeppelin, and current gas/eth prices..."
 }
 
