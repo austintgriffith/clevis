@@ -31,6 +31,7 @@
     "scrypt": "^6.0.3",
     "sha3": "^1.2.2",
     "solc": "^0.4.25",
+    "truffle-hdwallet-provider": "0.0.6",
     "web3": "^1.0.0-beta.36"
   }
 }
