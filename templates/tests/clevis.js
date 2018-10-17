@@ -101,11 +101,12 @@ module.exports = {
       it('should inject contract address and abi into web app', async function() {
         this.timeout(120000)
         const fs = require("fs")
-        if(!fs.existsSync(clevisConfig.CRA_FOLDER + "src")){
-          fs.mkdirSync(clevisConfig.CRA_FOLDER + "src");
+        console.log(tab,"Publishing to CRA folder",clevisConfig.CRA_FOLDER)
+        if(!fs.existsSync(clevisConfig.CRA_FOLDER)){
+          fs.mkdirSync(clevisConfig.CRA_FOLDER);
         }
-        if(!fs.existsSync(clevisConfig.CRA_FOLDER + "src/contracts")){
-          fs.mkdirSync(clevisConfig.CRA_FOLDER + "src/contracts");
+        if(!fs.existsSync(clevisConfig.CRA_FOLDER + "/contracts")){
+          fs.mkdirSync(clevisConfig.CRA_FOLDER + "/contracts");
         }
         for(let c in module.exports.contracts){
           let thisContract = module.exports.contracts[c]
