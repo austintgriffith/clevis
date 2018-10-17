@@ -1,13 +1,22 @@
 const clevis = require("clevis")
 const colors = require('colors')
 const chai = require("chai")
+const HDWalletProvider = require("truffle-hdwallet-provider")
 const assert = chai.assert
 const expect = chai.expect;
 const should = chai.should();
+
 const fs = require('fs')
 const Web3 = require('web3')
 const clevisConfig = JSON.parse(fs.readFileSync("clevis.json").toString().trim())
-web3 = new Web3(new Web3.providers.HttpProvider(clevisConfig.provider))
+const web3 = new Web3(
+  clevisConfig.USE_INFURA ?
+    new HDWalletProvider(
+      process.env.mnemonic,
+      params.config.provider) :
+    Web3.providers.HttpProvider(params.config.provider)
+);
+
 function localContractAddress(contract){
   return fs.readFileSync(clevisConfig.CONTRACTS_FOLDER+"/"+contract+ "/" + contract + ".address").toString().trim()
 }

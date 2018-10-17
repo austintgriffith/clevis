@@ -75,7 +75,15 @@ module.exports = (...args)=>{
     }
     if(DEBUG) console.log("Connecting to "+params.config.provider)
     let Web3 = require('web3')
-    params.web3 = new Web3(new Web3.providers.HttpProvider(params.config.provider));
+    const HDWalletProvider = require("truffle-hdwallet-provider")
+    params.web3 = new Web3(
+        clevisConfig.USE_INFURA ?
+        new HDWalletProvider(
+          process.env.mnemonic,
+          params.config.provider
+        ) :
+        Web3.providers.HttpProvider(params.config.provider)
+    );
     params.config.gaspricegwei = params.web3.utils.toWei(""+Math.round(params.config.gasprice*1000)/1000,'gwei')
   }
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
