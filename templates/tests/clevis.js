@@ -1,13 +1,24 @@
 const clevis = require("clevis")
 const colors = require('colors')
 const chai = require("chai")
+const HDWalletProvider = require("truffle-hdwallet-provider")
 const assert = chai.assert
 const expect = chai.expect;
 const should = chai.should();
+
 const fs = require('fs')
 const Web3 = require('web3')
 const clevisConfig = JSON.parse(fs.readFileSync("clevis.json").toString().trim())
-web3 = new Web3(new Web3.providers.HttpProvider(clevisConfig.provider))
+const web3 = new Web3(
+  clevisConfig.USE_INFURA ?
+    new HDWalletProvider(
+      process.env.mnemonic,
+      clevisConfig.provider) :
+    new Web3.providers.HttpProvider(clevisConfig.provider)
+);
+
+console.log('clevisConfig.provider', clevisConfig.provider);
+
 function localContractAddress(contract){
   return fs.readFileSync(clevisConfig.CONTRACTS_FOLDER+"/"+contract+ "/" + contract + ".address").toString().trim()
 }
@@ -87,7 +98,6 @@ module.exports = {
     describe('#deploy() '+contract.magenta, function() {
       it('should deploy '+contract.magenta+' as account '+accountindex, async function() {
         this.timeout(360000)
-        console.log('AAAA');
         const result = await clevis("deploy",contract,accountindex)
         printTxResult(result)
         console.log(tab+"Address: "+result.contractAddress.blue)
