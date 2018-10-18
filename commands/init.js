@@ -35,19 +35,22 @@ module.exports = async (params)=>{
   let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
 
 
+
   prompts.close();
   process.stdin.destroy();
-
-  console.log("Creating react app...")
-  let craResult = await cra(true);
-  console.log(craResult)
-
 
   let ignore = params.fs.readFileSync(__dirname+"/../templates/gitignore").toString()
   if(!params.fs.existsSync(".gitignore")) {
     console.log("Adding .gitignore")
     params.fs.writeFileSync(".gitignore",ignore);
   }
+
+
+  console.log("Creating react app...")
+  let craResult = await cra(true);
+  console.log(craResult)
+
+
 
   craFolder = craFolder || "./src";
   testsFolder = testsFolder || "tests"
