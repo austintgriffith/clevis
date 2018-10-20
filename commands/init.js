@@ -30,11 +30,25 @@ let copyRecursiveSync = function(src, dest) {
 };
 
 module.exports = async (params)=>{
-  let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under ./src): ");
-  let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under tests): ");
-  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under contracts): ");
 
+  let DEFAULT_craFolder = "./src"
+  let DEFAULT_testsFolder = "tests"
+  let DEFAULT_contractsFolder = "contracts"
 
+  let existingConf
+  try{
+    existingConf = fs.readFileSync("clevis.json")
+    let existing = JSON.parse(existingConf)
+    if(existing.CRA_FOLDER){DEFAULT_craFolder=existing.CRA_FOLDER}
+    if(existing.TESTS_FOLDER){DEFAULT_testsFolder=existing.TESTS_FOLDER}
+    if(existing.CONTRACTS_FOLDER){DEFAULT_contractsFolder=existing.CONTRACTS_FOLDER}
+  }catch(e){
+    //do nothing, this is fine
+  }
+
+  let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under "+DEFAULT_craFolder+"): ");
+  let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under "+DEFAULT_testsFolder+"): ");
+  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under "+DEFAULT_contractsFolder+"): ");
 
   prompts.close();
   process.stdin.destroy();
@@ -53,11 +67,9 @@ module.exports = async (params)=>{
   let craResult = await cra(true);
   console.log(craResult)
 
-
-
-  craFolder = craFolder || "./src";
-  testsFolder = testsFolder || "tests"
-  contractsFolder = contractsFolder || "contracts"
+  craFolder = craFolder || DEFAULT_craFolder;
+  testsFolder = testsFolder || DEFAULT_testsFolder
+  contractsFolder = contractsFolder || DEFAULT_contractsFolder
   console.log('Selected folder for react app:', craFolder);
   console.log('Selected testsFolder', testsFolder);
 
