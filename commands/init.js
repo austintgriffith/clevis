@@ -92,10 +92,8 @@ module.exports = async (params)=>{
   console.log("Installing clevis (this will take a while to compile)...")
 
 
-  //
-
   console.log("Installing OpenZeppelin...")
-  exec(`git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity; git pull; git checkout tags/v1.12.0`, (err, stdout, stderr) => {
+  exec(`git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity; git pull; git checkout tags/v2.0.0-rc.3`, (err, stdout, stderr) => {
     console.log("OZ:",err, stdout, stderr)
     exec(`chmod +x *.sh;npm install --save clevis@latest;npm install --save s3`, (err, stdout, stderr) => {
       console.log("Installing clevis package and updating...")
@@ -132,7 +130,6 @@ function cra(DEBUG, craFolder='./src') {
     if(fs.existsSync(craFolder)){
       resolve("Skipping CRA, src exists...")
     }else{
-      console.log("Installing specific version of CRA...")
       let reactAction = exec('npx create-react-app .;npm i;rm -rf src;npm install --save dapparatus;npm i mocha;sudo npm link mocha;', (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
