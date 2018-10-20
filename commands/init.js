@@ -45,6 +45,9 @@ module.exports = async (params)=>{
     params.fs.writeFileSync(".gitignore",ignore);
   }
 
+  //patch the env file so it ignores CRA babel issues
+  params.fs.writeFileSync(".env","SKIP_PREFLIGHT_CHECK=true");
+
 
   console.log("Creating react app...")
   let craResult = await cra(true);
