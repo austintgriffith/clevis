@@ -17,7 +17,7 @@ const web3 = new Web3(
     new Web3.providers.HttpProvider(clevisConfig.provider)
 );
 
-console.log('clevisConfig.provider', clevisConfig.provider);
+//console.log('clevisConfig.provider', clevisConfig.provider);
 
 function localContractAddress(contract){
   return fs.readFileSync(clevisConfig.CONTRACTS_FOLDER+"/"+contract+ "/" + contract + ".address").toString().trim()
