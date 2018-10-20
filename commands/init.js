@@ -48,7 +48,7 @@ module.exports = async (params)=>{
 
   let craFolder = await readLineAsync("Enter your react-app folder (Leave empty to create it under "+DEFAULT_craFolder+"): ");
   let testsFolder = await readLineAsync("Enter your tests folder (Leave empty to create it under "+DEFAULT_testsFolder+"): ");
-  let contractsFolder = await readLineAsync("Enter your contracts parent folder (Leave empty to create them under "+DEFAULT_contractsFolder+"): ");
+  let contractsFolder = await readLineAsync("Enter your contracts folder (Leave empty to create them under "+DEFAULT_contractsFolder+"): ");
 
   prompts.close();
   process.stdin.destroy();
