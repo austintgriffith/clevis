@@ -53,15 +53,17 @@ module.exports = async (params)=>{
   prompts.close();
   process.stdin.destroy();
 
-  console.log("Creating react app...")
-  let craResult = await cra(true);
-  console.log(craResult)
-
   let ignore = params.fs.readFileSync(__dirname+"/../templates/gitignore").toString()
   if(!params.fs.existsSync(".gitignore")) {
     console.log("Adding .gitignore")
     params.fs.writeFileSync(".gitignore",ignore);
   }
+
+  console.log("Creating react app...")
+  let craResult = await cra(true);
+  console.log(craResult)
+
+  process.exit()
 
   //patch the env file so it ignores CRA babel issues
   params.fs.writeFileSync(".env","SKIP_PREFLIGHT_CHECK=true");
