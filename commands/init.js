@@ -63,7 +63,6 @@ module.exports = async (params)=>{
   let craResult = await cra(true);
   console.log(craResult)
 
-  process.exit()
 
   //patch the env file so it ignores CRA babel issues
   params.fs.writeFileSync(".env","SKIP_PREFLIGHT_CHECK=true");
