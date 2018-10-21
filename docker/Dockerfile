@@ -23,7 +23,7 @@ RUN npm install -g ganache-cli
 RUN npm install -g npx
 RUN apt-get install git-core -y
 
-RUN echo "Break the cache for version 0.0.92 (do this after committing the package.json to github)"
+RUN echo "Break the cache for version 0.0.93 (do this after committing the package.json to github)"
 
 RUN git clone https://github.com/austintgriffith/clevis.git
 RUN cd clevis && npm install && npm link
