@@ -77,6 +77,22 @@ docker build . -t clevis
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis
 ```
 
+### Using Infura
+
+If you want to use Infura to deploy, you need to make the following changes:
+
+In your `clevis.json` config file, change:
+
+```
+USE_INFURA: true
+```
+
+Create a `.env file` and add your private key under mnemonic:
+
+```
+mnemonic=32h42hj34mysuperprivakeyasdasd2h34hjk234
+```
+
 ## troubleshooting
 
 Right now the web3 dependencies are not very well supported and installs can fail on certain machines.
@@ -214,6 +230,16 @@ you can also read from contracts:
 ```
 clevis contract balanceOf Copper 0x2a906694d15df38f59e76ed3a5735f8aabcce9cb
 ```
+
+### contract event[eventname] [contractname]
+```
+clevis contract eventMyEvent SomeContract
+```
+
+Shows all the logs emitted under eventname.
+
+Please note that there is not blank between event and your event name.
+
 
 ### test [testname]
 ```
