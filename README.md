@@ -247,9 +247,15 @@ clevis test compile
 ```
 run mocha test from tests folder
 
-### wei [amount] [symbol]
+### fromwei [amount] [symbol]
 ```
-clevis wei 0.1 ether
+clevis wei 100000000000 ether
+```
+convert from wei to ether or others like gwei or szabo
+
+### towei [amount] [symbol]
+```
+clevis wei 0.001 ether
 ```
 convert to wei from ether or others like gwei or szabo
 
