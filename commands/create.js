@@ -1,5 +1,13 @@
 const fs = require('fs')
 module.exports = (params)=>{
+  let contracts = []
+  try{
+    contracts = fs.readFileSync("contracts.clevis").toString().trim().split("\n")
+  }catch(e){}
+  if (contracts.find((elem) => elem === params.contractname)) {
+    console.error(`ERROR: Contract with name ${params.contractname} already exists.`);
+    return "Please try with a different name";
+  }
   const DEBUG = params.config.DEBUG;
   const contractFolder = `${params.config.CONTRACTS_FOLDER}/${params.contractname}`;
   if(DEBUG) console.log(" >>> CREATE")
@@ -14,11 +22,6 @@ module.exports = (params)=>{
   //args
   let args = params.fs.readFileSync(__dirname+"/../templates/arguments.js").toString()
   params.fs.writeFileSync(contractFolder+"/arguments.js",args)
-
-  let contracts = []
-  try{
-    contracts = fs.readFileSync("contracts.clevis").toString().trim().split("\n")
-  }catch(e){}
   contracts.push(params.contractname)
   fs.writeFileSync("contracts.clevis",contracts.join("\n"))
 
