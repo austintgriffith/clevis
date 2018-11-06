@@ -105,7 +105,34 @@ rm -rf .node-gyp
 sudo npm install --unsafe-perm -g clevis@latest
 ```
 
+
+-----
+
+Sometimes you might get a "Cannot find module 'web3' error"
+
+```
+clevis test version
+(node:32368) UnhandledPromiseRejectionWarning: Error: Cannot find module 'web3'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:507:25)
+    at Module.require (internal/modules/cjs/loader.js:637:17)
+    at require (internal/modules/cjs/helpers.js:20:18)
+    ...
+(node:32368) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:32368) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+```
+
+The fix for this is to go to wherever you have clevis cloned and run an npm link again:
+(and maybe an npm i)
+
+```
+cd ~/clevis
+npm link 
+```
+
+
 If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
+
 
 
 ## commands/examples
