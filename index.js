@@ -9,7 +9,7 @@ params.commands = {
   "update": [],
   "upgrade": [],//upgrade clevis node_modules
   "accounts": [],
-  "new": ["password"],
+  "new": ["[password]"],
   "unlock": ["accountindex","password"],
   "send":["amount","fromindex","toindex"],
   "sendTo":["amount","fromindex","toaddress"],
@@ -90,5 +90,4 @@ module.exports = (...args)=>{
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
   let path = "./commands/"+command+".js"
   return require(path)(params)
-
 }
