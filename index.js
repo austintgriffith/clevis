@@ -91,6 +91,6 @@ module.exports = (...args)=>{
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
   let path = "./commands/"+command+".js"
   let result = require(path)(params)
-  if(params.web3.currentProvider.engine) params.web3.currentProvider.engine.stop()
+  if(params.web3 && params.web3.currentProvider && params.web3.currentProvider.engine) params.web3.currentProvider.engine.stop()
   return result
 }
