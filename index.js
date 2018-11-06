@@ -77,6 +77,7 @@ module.exports = (...args)=>{
     if(DEBUG) console.log("Connecting to "+params.config.provider)
     let Web3 = require('web3')
     const HDWalletProvider = require("truffle-hdwallet-provider")
+
     params.web3 = new Web3(
         params.config.USE_INFURA ?
         new HDWalletProvider(
@@ -89,5 +90,7 @@ module.exports = (...args)=>{
   }
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
   let path = "./commands/"+command+".js"
-  return require(path)(params)
+  let result = require(path)(params)
+  if(params.web3.currentProvider.engine) params.web3.currentProvider.engine.stop()
+  return result
 }
