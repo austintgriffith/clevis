@@ -132,8 +132,9 @@ npm link
 
 ---------
 
-```
 Another error I run into from time to time due to Create React App with 'npm run build':
+
+```
 .../node_modules/mini-css-extract-plugin/dist/index.js:20
   util: { createHash }
           ^
