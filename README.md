@@ -130,6 +130,21 @@ cd ~/clevis
 npm link 
 ```
 
+---------
+
+```
+Another error I run into from time to time due to Create React App with 'npm run build':
+.../node_modules/mini-css-extract-plugin/dist/index.js:20
+  util: { createHash }
+          ^
+
+TypeError: Cannot destructure property `createHash` of 'undefined' or 'null'.
+```
+To fix it you just need to install webpack locally in your project with:
+```
+npm install --save webpack
+```
+
 
 If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
 
