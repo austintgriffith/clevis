@@ -79,11 +79,11 @@ module.exports = (...args)=>{
     let Web3 = require('web3')
     const HDWalletProvider = require("truffle-hdwallet-provider")
 
-    if(command!="new" && !process.env.mnemonic){
+    if(command!="new" && params.config.USE_INFURA && !process.env.mnemonic){
       console.log("ERROR: No Mnemonic Generated. Run 'clevis new' to create a local account.")
       process.exit(1)
     }
-    
+
     params.web3 = new Web3(
         params.config.USE_INFURA ?
         new HDWalletProvider(
