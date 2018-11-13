@@ -96,7 +96,7 @@ module.exports = async (params)=>{
   console.log("Installing OpenZeppelin...")
   exec(`git clone https://github.com/OpenZeppelin/openzeppelin-solidity.git;cd openzeppelin-solidity; git pull; git checkout tags/v2.0.0-rc.3`, (err, stdout, stderr) => {
     console.log("OZ:",err, stdout, stderr)
-    exec(`chmod +x *.sh;npm install --save clevis@latest;npm install --save s3`, (err, stdout, stderr) => {
+    exec(`chmod +x *.sh;npm install --save clevis@latest;npm install --save s3;npm install -g mocha;npm install --save web3`, (err, stdout, stderr) => {
       console.log("Installing clevis package and updating...")
       exec('npm install clevis; clevis update; chmod +x *.sh', (err, stdout, stderr) => {}).stdout.on('data', function(data) {
           console.log(data)

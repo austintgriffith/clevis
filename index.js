@@ -29,7 +29,8 @@ params.commands = {
   "towei": ["amount","symbol"],
   "tohex": ["textstring"],
   "fromhex": ["hexstring"],
-  "blockNumber": [],
+  "randomhex": ["size"],
+  "blockNumber": [""],
   "block": ["blocknumber"],
   "transaction": ["hash"],
   "build": [],//build react site

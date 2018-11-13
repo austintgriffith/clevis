@@ -7,13 +7,14 @@ echo 'export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}🗜️ 
 
 echo "Launching 🗜️ Clevis with network [ $network ]..."
 
-if [ ! -f /dapp/clevis.json ]; then
+#if [ ! -f /dapp/clevis.json ]; then
   echo "Initializing Clevis..."
   clevis init
-else
-  echo "Updating..."
-  clevis mocha
-fi
+#fi
+echo "Updating..."
+clevis mocha
+echo "NPM installing..."
+npm i
 
 if [ "$network" = "local" ]; then
   echo "Launching ganache-cli..."
