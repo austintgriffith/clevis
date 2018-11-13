@@ -1,18 +1,29 @@
 const clevis = require("clevis")
 const colors = require('colors')
 const chai = require("chai")
+const HDWalletProvider = require("truffle-hdwallet-provider")
 const assert = chai.assert
 const expect = chai.expect;
 const should = chai.should();
+
 const fs = require('fs')
 const Web3 = require('web3')
 const clevisConfig = JSON.parse(fs.readFileSync("clevis.json").toString().trim())
-web3 = new Web3(new Web3.providers.HttpProvider(clevisConfig.provider))
+const web3 = new Web3(
+  clevisConfig.USE_INFURA ?
+    new HDWalletProvider(
+      process.env.mnemonic,
+      clevisConfig.provider) :
+    new Web3.providers.HttpProvider(clevisConfig.provider)
+);
+
+//console.log('clevisConfig.provider', clevisConfig.provider);
+
 function localContractAddress(contract){
-  return fs.readFileSync(contract+"/"+contract+".address").toString().trim()
+  return fs.readFileSync(clevisConfig.CONTRACTS_FOLDER+"/"+contract+ "/" + contract + ".address").toString().trim()
 }
 function localContractAbi(contract){
-  return JSON.parse(fs.readFileSync(contract+"/"+contract+".abi").toString().trim())
+  return JSON.parse(fs.readFileSync(clevisConfig.CONTRACTS_FOLDER+"/"+contract+ "/"+ contract +".abi").toString().trim())
 }
 function printTxResult(result){
   if(!result||!result.transactionHash){
@@ -39,12 +50,12 @@ module.exports = {
 
 
   web3:web3,
-  localContractAddress,localContractAddress,
-  contracts:fs.readFileSync("contracts.clevis").toString().trim().split("\n"),
+  localContractAddress,
+  contracts:fs.readFileSync(clevisConfig.ROOT_FOLDER + "/contracts.clevis").toString().trim().split("\n"),
   reload:()=>{
     describe('#reload() ', function() {
       it('should force browser to reload', async function() {
-        fs.writeFileSync("public/reload.txt",Date.now());
+        fs.writeFileSync(clevisConfig.CRA_FOLDER + "/../public/reload.txt",Date.now());
       });
     });
   },
@@ -100,29 +111,30 @@ module.exports = {
       it('should inject contract address and abi into web app', async function() {
         this.timeout(120000)
         const fs = require("fs")
-        if(!fs.existsSync("src")){
-          fs.mkdirSync("src");
+        console.log(tab,"Publishing to CRA folder",clevisConfig.CRA_FOLDER)
+        if(!fs.existsSync(clevisConfig.CRA_FOLDER)){
+          fs.mkdirSync(clevisConfig.CRA_FOLDER);
         }
-        if(!fs.existsSync("src/contracts")){
-          fs.mkdirSync("src/contracts");
+        if(!fs.existsSync(clevisConfig.CRA_FOLDER + "/contracts")){
+          fs.mkdirSync(clevisConfig.CRA_FOLDER + "/contracts");
         }
         for(let c in module.exports.contracts){
           let thisContract = module.exports.contracts[c]
           console.log(tab,thisContract.magenta)
-          let address = fs.readFileSync(thisContract+"/"+thisContract+".address").toString().trim()
+          let address = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER + "/" + thisContract+"/"+thisContract+".address").toString().trim()
           console.log(tab,"ADDRESS:",address.blue)
           assert(address,"No Address!?")
-          fs.writeFileSync("src/contracts/"+thisContract+".address.js","module.exports = \""+address+"\"");
-          let blockNumber = fs.readFileSync(thisContract+"/"+thisContract+".blockNumber").toString().trim()
+          fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/"+thisContract+".address.js","module.exports = \""+address+"\"");
+          let blockNumber = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER +"/" + thisContract + "/"+thisContract+".blockNumber").toString().trim()
           console.log(tab,"blockNumber:",blockNumber.blue)
           assert(blockNumber,"No blockNumber!?")
-          fs.writeFileSync("src/contracts/"+thisContract+".blocknumber.js","module.exports = \""+blockNumber+"\"");
-          let abi = fs.readFileSync(thisContract+"/"+thisContract+".abi").toString().trim()
-          fs.writeFileSync("src/contracts/"+thisContract+".abi.js","module.exports = "+abi);
-          let bytecode = fs.readFileSync(thisContract+"/"+thisContract+".bytecode").toString().trim()
-          fs.writeFileSync("src/contracts/"+thisContract+".bytecode.js","module.exports = \""+bytecode+"\"");
+          fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + thisContract+".blocknumber.js","module.exports = \""+blockNumber+"\"");
+          let abi = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER +"/" + thisContract +"/"+thisContract+".abi").toString().trim()
+          fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + thisContract+".abi.js","module.exports = "+abi);
+          let bytecode = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER + "/" + thisContract +"/"+thisContract+".bytecode").toString().trim()
+          fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + thisContract+".bytecode.js","module.exports = \""+bytecode+"\"");
         }
-        fs.writeFileSync("src/contracts/contracts.js","module.exports = "+JSON.stringify(module.exports.contracts));
+        fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/contracts.js","module.exports = "+JSON.stringify(module.exports.contracts));
         module.exports.reload()
       });
     });
@@ -141,7 +153,7 @@ module.exports = {
       });
     });
   },
-  
+
 
   ////----------------------------------------------------------------------------///////////////////
 
@@ -157,6 +169,7 @@ module.exports = {
       it('should compile all contracts', async function() {
         this.timeout(6000000)
         const result = await clevis("test","compile")
+        console.log('result', result);
         assert(result==0,"deploy ERRORS")
       });
     });

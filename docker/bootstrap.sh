@@ -3,7 +3,7 @@ if [ -z "$network" ]; then
   network="local"
 fi
 
-echo 'export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}🗜️ \e[0;34mClevis\e[m:\e[0;32m\w\e[m #"' >> ~/.bashrc
+echo 'export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}🗜️ \e[0;34mClevis\e[m:\e[0;32m\w\e[m 🗜️ "' >> ~/.bashrc
 
 echo "Launching 🗜️ Clevis with network [ $network ]..."
 

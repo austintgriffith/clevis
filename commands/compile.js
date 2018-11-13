@@ -4,14 +4,15 @@ module.exports = (params)=>{
   if(DEBUG) console.log(" >>> COMPILE")
   let startSeconds = new Date().getTime() / 1000
   let contractname = params["contractname"];
+  const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractname}`;
   if(DEBUG) console.log("Compiling "+contractname+"/"+contractname+".sol ["+params.solc.version()+"]...")
-  const input = params.fs.readFileSync(contractname+"/"+contractname+'.sol')
+  const input = params.fs.readFileSync(`${contractFolder}/${contractname}.sol`)
   if(!input){
-    console.log("Couldn't load "+contractname+"/"+contractname+".sol")
+    console.log(`${contractFolder}/${contractname}.sol`)
   }else{
     let dependencies
     try{
-      let path = process.cwd()+"/"+contractname+"/dependencies.js"
+      let path = `${process.cwd()}/${contractFolder}/dependencies.js`
       if(params.fs.existsSync(path)){
         if(DEBUG) console.log("File exists")
         if(DEBUG) console.log("looking for dependencies at ",path)
@@ -19,19 +20,25 @@ module.exports = (params)=>{
       }
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
-    dependencies[contractname+"/"+contractname+".sol"] = params.fs.readFileSync(contractname+"/"+contractname+".sol", 'utf8');
-
+    dependencies[contractname+".sol"] = params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8');
+    console.log("Loaded dependencies...")
 
     let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
-    params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".compiled",finalCode)
+    params.fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractname+".compiled",finalCode)
 
+    console.log("Compiling...")
     const output = params.solc.compile({sources: dependencies}, 1);
-    if(!output.contracts||!output.contracts[contractname+"/"+contractname+".sol:"+contractname]) return output;
+    if(!output.contracts||!output.contracts[contractname+".sol:"+contractname]) {
+      console.log("ERROR compiling!",output.contracts)
+      return output;
+    }
     if(DEBUG) console.log(output)
-    const bytecode = output.contracts[contractname+"/"+contractname+".sol:"+contractname].bytecode;
-    const abi = output.contracts[contractname+"/"+contractname+".sol:"+contractname].interface;
-    params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".bytecode",bytecode)
-    params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".abi",abi)
+    console.log("Saving output...")
+    const bytecode = output.contracts[contractname+".sol:"+contractname].bytecode;
+    const abi = output.contracts[contractname+".sol:"+contractname].interface;
+    console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractname+".bytecode")
+    params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".bytecode",bytecode)
+    params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".abi",abi)
     if(DEBUG) console.log("Compiled!")
 
     let abiObject = JSON.parse(abi)
@@ -43,7 +50,7 @@ module.exports = (params)=>{
         eventCode = eventCode.split("##contract##").join(params.contractname);
         eventCode = eventCode.split("##event##").join(abiObject[i].name);
         if(DEBUG) console.log("Adding event ",abiObject[i].name)
-        let dir = process.cwd()+"/"+contractname+"/.clevis/";
+        let dir = process.cwd()+"/"+contractFolder+"/.clevis/";
         if (!params.fs.existsSync(dir)){
           params.fs.mkdirSync(dir);
         }
@@ -73,7 +80,7 @@ module.exports = (params)=>{
           if(DEBUG) console.log("Adding getter ",abiObject[i].name)
           let results = ""
 
-          let dir = process.cwd()+"/"+contractname+"/.clevis/";
+          let dir = process.cwd()+"/"+contractFolder+"/.clevis/";
           if (!params.fs.existsSync(dir)){
             params.fs.mkdirSync(dir);
           }
@@ -117,7 +124,7 @@ module.exports = (params)=>{
           setterCode = setterCode.split("##args##").join(args);
           setterCode = setterCode.split("##argstring##").join(argstring);
           setterCode = setterCode.split("##hintargs##").join(hintargs);
-          let dir = process.cwd()+"/"+contractname+"/.clevis/";
+          let dir = process.cwd()+"/"+contractFolder+"/.clevis/";
           if (!params.fs.existsSync(dir)){
             params.fs.mkdirSync(dir);
           }

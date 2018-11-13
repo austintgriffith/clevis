@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+RUN echo "Break the cache for version 0.0.81"
+
 RUN apt-get update
 RUN apt-get dist-upgrade -y
 RUN apt-get upgrade -y
@@ -21,7 +23,7 @@ RUN npm install -g ganache-cli
 RUN npm install -g npx
 RUN apt-get install git-core -y
 
-RUN echo "Break the cache for version 0.0.77"
+RUN echo "Break the cache for version 0.0.103 (do this after committing the package.json to github)"
 
 RUN git clone https://github.com/austintgriffith/clevis.git
 RUN cd clevis && npm install && npm link

@@ -1,13 +1,13 @@
 # 🗜️clevis
 
-Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding. 
+Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding.
 
 ## install
 
 easiest: use docker (it handles the environment and RPC node for you):
 ```
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
-  -v ~/your-dapp-directory:/dapp austingriffith/clevis
+  -v ~/your-dapp-directory:/dapp austingriffith/clevis:latest
 ```
 
 OR install/link for the source:
@@ -23,6 +23,12 @@ OR try an npm install:
 sudo npm install --unsafe-perm -g clevis@latest
 ```
 
+If you aren't using docker make sure you install ganache-cli and mocha:
+```
+npm install -g ganache-cli
+npm install -g mocha
+```
+
 [Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
 
 
@@ -33,7 +39,7 @@ sudo npm install --unsafe-perm -g clevis@latest
 
 ## docker options
 
-### attach to already running clevis container 
+### attach to already running clevis container
 ```
 docker exec -ti clevis bash
 ```
@@ -71,9 +77,25 @@ docker build . -t clevis
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis
 ```
 
+### Using Infura
+
+If you want to use Infura to deploy, you need to make the following changes:
+
+In your `clevis.json` config file, change:
+
+```
+USE_INFURA: true
+```
+
+Create a `.env file` and add your private key under mnemonic:
+
+```
+mnemonic=32h42hj34mysuperprivakeyasdasd2h34hjk234
+```
+
 ## troubleshooting
 
-Right now the web3 dependencies are not very well supported and installs can fail on certain machines. 
+Right now the web3 dependencies are not very well supported and installs can fail on certain machines.
 
 I would recommend using Docker and the container model because it handles the environment and geth node for you.
 
@@ -83,7 +105,50 @@ rm -rf .node-gyp
 sudo npm install --unsafe-perm -g clevis@latest
 ```
 
+
+-----
+
+Sometimes you might get a "Cannot find module 'web3' error"
+
+```
+clevis test version
+(node:32368) UnhandledPromiseRejectionWarning: Error: Cannot find module 'web3'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:507:25)
+    at Module.require (internal/modules/cjs/loader.js:637:17)
+    at require (internal/modules/cjs/helpers.js:20:18)
+    ...
+(node:32368) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:32368) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+```
+
+The fix for this is to go to wherever you have clevis cloned and run an npm link again:
+(and maybe an npm i)
+
+```
+cd ~/clevis
+npm link 
+```
+
+---------
+
+Another error I run into from time to time due to Create React App with 'npm run build':
+
+```
+.../node_modules/mini-css-extract-plugin/dist/index.js:20
+  util: { createHash }
+          ^
+
+TypeError: Cannot destructure property `createHash` of 'undefined' or 'null'.
+```
+To fix it you just need to install webpack locally in your project with:
+```
+npm install --save webpack
+```
+
+
 If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
+
 
 
 ## commands/examples
@@ -209,15 +274,31 @@ you can also read from contracts:
 clevis contract balanceOf Copper 0x2a906694d15df38f59e76ed3a5735f8aabcce9cb
 ```
 
+### contract event[eventname] [contractname]
+```
+clevis contract eventMyEvent SomeContract
+```
+
+Shows all the logs emitted under eventname.
+
+Please note that there is not blank between event and your event name.
+
+
 ### test [testname]
 ```
 clevis test compile
 ```
 run mocha test from tests folder
 
-### wei [amount] [symbol]
+### fromwei [amount] [symbol]
 ```
-clevis wei 0.1 ether
+clevis wei 100000000000 ether
+```
+convert from wei to ether or others like gwei or szabo
+
+### towei [amount] [symbol]
+```
+clevis wei 0.001 ether
 ```
 convert to wei from ether or others like gwei or szabo
 
@@ -267,7 +348,7 @@ uploads static react site to s3 bucket named after url
 ```
 clevis invalidate E3837d00567
 ```
-invalidate cloudfront caching to show fresh content 
+invalidate cloudfront caching to show fresh content
 
 ## demo
 

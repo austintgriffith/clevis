@@ -1,14 +1,16 @@
 const DEBUG = false
 let params = {}
+require('dotenv').config()
 params.fs = require('fs')
 params.commands = {
   "help": [],
   "init": [],
+  "init2": [],
   "version": [],
   "update": [],
   "upgrade": [],//upgrade clevis node_modules
   "accounts": [],
-  "new": ["password"],
+  "new": ["[password]"],
   "unlock": ["accountindex","password"],
   "send":["amount","fromindex","toindex"],
   "sendTo":["amount","fromindex","toaddress"],
@@ -23,9 +25,10 @@ params.commands = {
   "explain": ["contractname"],
   "contract": ["scriptname","contractname","[accountIndex]","[contractArguments...]"],
   "test": ["testname"],
-  "wei": ["amount","symbol"],
-  "hex": ["asciistring"],
-  "ascii": ["hexstring"],
+  "fromwei": ["amount","symbol"],
+  "towei": ["amount","symbol"],
+  "tohex": ["textstring"],
+  "fromhex": ["hexstring"],
   "blockNumber": [],
   "block": ["blocknumber"],
   "transaction": ["hash"],
@@ -74,11 +77,26 @@ module.exports = (...args)=>{
     }
     if(DEBUG) console.log("Connecting to "+params.config.provider)
     let Web3 = require('web3')
-    params.web3 = new Web3(new Web3.providers.HttpProvider(params.config.provider));
+    const HDWalletProvider = require("truffle-hdwallet-provider")
+
+    if(command!="new" && params.config.USE_INFURA && !process.env.mnemonic){
+      console.log("ERROR: No Mnemonic Generated. Run 'clevis new' to create a local account.")
+      process.exit(1)
+    }
+
+    params.web3 = new Web3(
+        params.config.USE_INFURA ?
+        new HDWalletProvider(
+          process.env.mnemonic,
+          params.config.provider
+        ) :
+        new Web3.providers.HttpProvider(params.config.provider)
+    );
     params.config.gaspricegwei = params.web3.utils.toWei(""+Math.round(params.config.gasprice*1000)/1000,'gwei')
   }
   //let path = process.mainModule.filename.replace("index.js","commands/"+command+".js");
   let path = "./commands/"+command+".js"
-  return require(path)(params)
-
+  let result = require(path)(params)
+  if(params.web3 && params.web3.currentProvider && params.web3.currentProvider.engine) params.web3.currentProvider.engine.stop()
+  return result
 }
