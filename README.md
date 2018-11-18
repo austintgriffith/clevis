@@ -73,7 +73,7 @@ docker run -ti --rm --name clevis --env network="mainnet." \
 ```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
-docker build . -t clevis
+docker build ./docker -t clevis
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis
 ```
 
