@@ -26,7 +26,7 @@ elif [ "$network" = "ropsten" ]; then
   echo "Launching Ropsten Geth..."
   /usr/bin/geth --testnet --syncmode "light" --cache 512 --maxpeers 25 --datadir ".geth-ropsten" --rpc --rpcaddr 0.0.0.0 --rpcapi="db,eth,net,web3,personal" > geth.log 2>&1 &
 elif [ "$network" = "mainnet" ]; then
-  echo "Launching Rinkeby Geth..."
+  echo "Launching Mainnet Geth..."
   /usr/bin/geth --syncmode "light" --cache 512 --maxpeers 25 --datadir ".geth" --rpc --rpcaddr 0.0.0.0 --rpcapi="db,eth,net,web3,personal" > geth.log 2>&1 &
 else
   echo "Using external RPC network: $network"
