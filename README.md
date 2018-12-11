@@ -161,11 +161,9 @@ Don't try to install it manually: your package manager does it automatically.
 However, a different version of babel-eslint was detected higher up in the tree:
 ```
 
-to fix this, remove the node_modules and package-lock.json, then reinstall:
+to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it: 
 ```
-rm -rf node_modules
-rm -rf package-lock.json
-clevis init; npm i
+echo "SKIP_PREFLIGHT_CHECK=true" >> .env
 ```
 
 
