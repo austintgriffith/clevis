@@ -34,6 +34,8 @@ module.exports = async (params)=>{
   let DEFAULT_craFolder = "./src"
   let DEFAULT_testsFolder = "tests"
   let DEFAULT_contractsFolder = "contracts"
+  let DEFAULT_provider = "http://localhost:8545"
+  let DEFAULT_useinfura = false
 
   let existingConf
   try{
@@ -42,6 +44,8 @@ module.exports = async (params)=>{
     if(existing.CRA_FOLDER){DEFAULT_craFolder=existing.CRA_FOLDER}
     if(existing.TESTS_FOLDER){DEFAULT_testsFolder=existing.TESTS_FOLDER}
     if(existing.CONTRACTS_FOLDER){DEFAULT_contractsFolder=existing.CONTRACTS_FOLDER}
+    if(existing.provider){DEFAULT_provider=existing.provider}
+    if(existing.USE_INFURA){DEFAULT_useinfura=existing.USE_INFURA}
   }catch(e){
     //do nothing, this is fine
   }
@@ -63,9 +67,10 @@ module.exports = async (params)=>{
   let craResult = await cra(true);
   console.log(craResult)
 
-
-  //patch the env file so it ignores CRA babel issues
-  params.fs.writeFileSync(".env","SKIP_PREFLIGHT_CHECK=true");
+  if(!params.fs.existsSync(".env")) {
+    //patch the env file so it ignores CRA babel issues
+    params.fs.writeFileSync(".env","SKIP_PREFLIGHT_CHECK=true");
+  }
 
   craFolder = craFolder || DEFAULT_craFolder;
   testsFolder = testsFolder || DEFAULT_testsFolder
@@ -79,7 +84,9 @@ module.exports = async (params)=>{
     ROOT_FOLDER: process.cwd(),
     CRA_FOLDER: craFolder,
     TESTS_FOLDER: testsFolder,
-    CONTRACTS_FOLDER: contractsFolder
+    CONTRACTS_FOLDER: contractsFolder,
+    USE_INFURA: DEFAULT_useinfura,
+    provider: DEFAULT_provider,
   });
   console.log('contractFolder', contractsFolder);
   try{params.fs.mkdirSync(contractsFolder)}catch(e){}
