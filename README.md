@@ -146,6 +146,28 @@ To fix it you just need to install webpack locally in your project with:
 npm install --save webpack
 ```
 
+-------------
+
+Another error I've hit is this one:
+```
+There might be a problem with the project dependency tree.
+It is likely not a bug in Create React App, but something you need to fix locally.
+
+The react-scripts package provided by Create React App requires a dependency:
+
+  "babel-eslint": "9.0.0"
+
+Don't try to install it manually: your package manager does it automatically.
+However, a different version of babel-eslint was detected higher up in the tree:
+```
+
+to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it: 
+```
+echo "SKIP_PREFLIGHT_CHECK=true" >> .env
+```
+
+
+
 
 If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
 
