@@ -118,6 +118,9 @@ module.exports = {
         if(!fs.existsSync(clevisConfig.CRA_FOLDER + "/contracts")){
           fs.mkdirSync(clevisConfig.CRA_FOLDER + "/contracts");
         }
+        if(!fs.existsSync(clevisConfig.CONTRACTS_FOLDER)){
+          fs.mkdirSync(clevisConfig.CONTRACTS_FOLDER);
+        }
         for(let c in module.exports.contracts){
           let thisContract = module.exports.contracts[c]
           console.log(tab,thisContract.magenta)
