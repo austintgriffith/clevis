@@ -218,6 +218,7 @@ function loadInImportsForEtherscan(input,dependencies,broughtInDep){
 
 function cleanImport(thisLine){
   thisLine = thisLine.split("import").join("")
+  thisLine = thisLine.split("\r").join("")
   thisLine = thisLine.split("\"").join("")
   thisLine = thisLine.split("'").join("")
   thisLine = thisLine.split(";").join("")
