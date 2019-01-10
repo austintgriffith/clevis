@@ -1,3 +1,3 @@
-module.exports = async (params)=>{
+module.exports = async (params) => {
   return params.web3.eth.getBlockNumber()
 }

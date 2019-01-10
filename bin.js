@@ -20,7 +20,7 @@ program.command('balance <address> [units]')
 
 program.command('block <blockNumber>').action(standard)
 program.command('blockNumber').action(standard)
-// program.command('build').action(standard)
+program.command('build').action(standard)
 // program.command('compile <contractName>').action(standard)
 // program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments]').action(standard)
 // program.command('create <contractName>').action(standard)
@@ -63,7 +63,8 @@ async function runCmd(name, args) {
   let config = readConfig()
 
   let params = {
-    web3: new Web3(new Web3.providers.HttpProvider(config.provider))
+    config: config,
+    web3: new Web3(new Web3.providers.HttpProvider(config.provider)),
   }
 
   console.log(await require(`./commands/${name}.js`)(...args, params))
