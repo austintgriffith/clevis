@@ -19,7 +19,7 @@ program.command('balance <address> [units]')
   .action(standard)
 
 program.command('block <blockNumber>').action(standard)
-// program.command('blockNumber').action(standard)
+program.command('blockNumber').action(standard)
 // program.command('build').action(standard)
 // program.command('compile <contractName>').action(standard)
 // program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments]').action(standard)
