@@ -11,12 +11,12 @@ program
 
 program.command('fromWei2 <amount> <symbol>').action(standard);
 
-program
-  .command('airdrop')
-  .description('Drop ETH or ERC20 tokens onto many accounts.')
-  .option('-f, --from-index <fromIndex>', "The local clevis account index to send funds from.")
-  .option('-d, --dryrun', 'Prints out what will be done without actually sending transactions.')
-  .action(standard);
+// program
+//   .command('airdrop')
+//   .description('Drop ETH or ERC20 tokens onto many accounts.')
+//   .option('-f, --from-index <fromIndex>', "The local clevis account index to send funds from.")
+//   .option('-d, --dryrun', 'Prints out what will be done without actually sending transactions.')
+//   .action(standard);
 
 program.parse(process.argv)
 
