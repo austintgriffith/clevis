@@ -26,7 +26,13 @@ program.command('build').action(standard)
 //I did a little bit of cleanup of that file, just to work with the named vars and logging.
 program.command('compile <contractName>').action(standard)
 
-// program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments]').action(standard)
+//TODO: Test this after I get deploy working
+//NOTE: This one is a pretty big doozy. We shouldn't be coupling the
+//clevis argument order with the generated scripts in contracts/contractName/.clevis
+//I think I got around this and everythign is still 100% backward compatible
+//But we should change this for sure
+program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments...]').action(standard)
+
 // program.command('create <contractName>').action(standard)
 // program.command('deploy <contractName> <accountIndex>').action(standard)
 // program.command('explain <contractName>').action(standard)
@@ -71,6 +77,7 @@ async function runCmd(name, args) {
     web3: new Web3(new Web3.providers.HttpProvider(config.provider)),
   }
 
+  console.log('args: ', args);
   console.log(await require(`./commands/${name}.js`)(...args, params))
 }
 
