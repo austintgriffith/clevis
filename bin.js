@@ -21,7 +21,11 @@ program.command('balance <address> [units]')
 program.command('block <blockNumber>').action(standard)
 program.command('blockNumber').action(standard)
 program.command('build').action(standard)
-// program.command('compile <contractName>').action(standard)
+
+//NOTE: Austin, please test this in your main projects to make sure it still works.
+//I did a little bit of cleanup of that file, just to work with the named vars and logging.
+program.command('compile <contractName>').action(standard)
+
 // program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments]').action(standard)
 // program.command('create <contractName>').action(standard)
 // program.command('deploy <contractName> <accountIndex>').action(standard)
