@@ -13,10 +13,13 @@ program
   .version('0.1.0')
 
 program.command('accounts').action(standard)
+
 program.command('balance <address> [units]')
-.description('returns account balance in units (defaults to ether)')
-.action(standard)
-// program.command('block <blockNumber>').action(standard)
+  .description('returns account balance in units (defaults to ether)')
+  .action(standard)
+
+program.command('block <blockNumber>').action(standard)
+// program.command('blockNumber').action(standard)
 // program.command('build').action(standard)
 // program.command('compile <contractName>').action(standard)
 // program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments]').action(standard)
