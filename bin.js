@@ -32,8 +32,7 @@ program.command('compile <contractName>').action(standard)
 //I think I got around this and everythign is still 100% backward compatible
 //But we should change this for sure
 program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments...]').action(standard)
-
-// program.command('create <contractName>').action(standard)
+program.command('create <contractName>').action(standard)
 // program.command('deploy <contractName> <accountIndex>').action(standard)
 // program.command('explain <contractName>').action(standard)
 // program.command('fromhex <hexString>').action(standard)
@@ -77,7 +76,6 @@ async function runCmd(name, args) {
     web3: new Web3(new Web3.providers.HttpProvider(config.provider)),
   }
 
-  console.log('args: ', args);
   console.log(await require(`./commands/${name}.js`)(...args, params))
 }
 
