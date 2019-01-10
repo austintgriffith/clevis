@@ -13,7 +13,22 @@ program
   .version('0.1.0')
 
 program.command('accounts').action(standard)
+program.command('balance <address> [units]')
+.description('returns account balance in units (defaults to ether)')
+.action(standard)
+// program.command('block <blockNumber>').action(standard)
+// program.command('build').action(standard)
+// program.command('compile <contractName>').action(standard)
+// program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments]').action(standard)
+// program.command('create <contractName>').action(standard)
+// program.command('deploy <contractName> <accountIndex>').action(standard)
+// program.command('explain <contractName>').action(standard)
+// program.command('fromhex <hexString>').action(standard)
 program.command('fromWei <amount> <symbol>').action(standard)
+
+
+// program ALL
+// program AIRDROP
 
 program.on('command:*', () => {
   console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '))
@@ -22,7 +37,6 @@ program.on('command:*', () => {
 
 program.on('option:debug', () => {
   winston.level = 'debug'
-  winston.debug("Debug level logging set.")
 })
 
 program.parse(process.argv)
@@ -38,8 +52,10 @@ function standard(...args) {
   runCmd(name, args)
 }
 
+//TODO: Handle accounts in a generic way. The way that balance.js used to. It should handle index, 40 char (no 0x) and 42 char)
 async function runCmd(name, args) {
-  winston.debug("🗜️ Clevis ["+name+"]")
+  winston.debug(`🗜️ Clevis [${name}]`)
+  winston.debug(`${name.toUpperCase()}`)
 
   let config = readConfig()
 
@@ -47,8 +63,7 @@ async function runCmd(name, args) {
     web3: new Web3(new Web3.providers.HttpProvider(config.provider))
   }
 
-  let result = await require(`./commands/${name}.js`)(...args, params)
-  console.log(result)
+  console.log(await require(`./commands/${name}.js`)(...args, params))
 }
 
 function readConfig() {
