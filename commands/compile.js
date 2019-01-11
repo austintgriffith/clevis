@@ -20,28 +20,43 @@ module.exports = (params)=>{
       }
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
-    dependencies[contractname+".sol"] = params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8');
+    dependencies[contractname+".sol"] = {content: params.fs.readFileSync(contractFolder+"/"+contractname+".sol", 'utf8')}
     console.log("Loaded dependencies...")
 
     let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
     params.fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractname+".compiled",finalCode)
 
+    var compilerInput = {
+      language: 'Solidity',
+      sources: dependencies,
+      settings: {
+        outputSelection: {
+          '*': {
+            '*': [ '*' ]
+          }
+        }
+      }
+    }
+  
     console.log("Compiling...")
-    const output = params.solc.compile({sources: dependencies}, 1);
-    if(!output.contracts||!output.contracts[contractname+".sol:"+contractname]) {
+    const output = JSON.parse(params.solc.compile(JSON.stringify(compilerInput)))
+    if(!output.contracts||!output["contracts"][contractname+".sol"]) {
       console.log("ERROR compiling!",output.contracts)
       return output;
     }
     if(DEBUG) console.log(output)
     console.log("Saving output...")
-    const bytecode = output.contracts[contractname+".sol:"+contractname].bytecode;
-    const abi = output.contracts[contractname+".sol:"+contractname].interface;
-    console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractname+".bytecode")
+
+    const outputContract = output.contracts[contractname+".sol"]
+    //hack: assuming only one contract per .sol source file
+    const firstCompiledContract = outputContract[Object.keys(outputContract)[0]]
+    const bytecode = firstCompiledContract.evm.bytecode.object
+    const abiObject = firstCompiledContract.abi
+    console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractname+".bytecode    ")
     params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".bytecode",bytecode)
-    params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".abi",abi)
+    params.fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractname+".abi",JSON.stringify(abiObject))
     if(DEBUG) console.log("Compiled!")
 
-    let abiObject = JSON.parse(abi)
     if(DEBUG) console.log("Generating Getters, Setters, and Events...")
     if(DEBUG) console.log(abiObject)
     for(let i in abiObject){
