@@ -1,7 +1,4 @@
-module.exports = async (params)=>{
-  const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> UNLOCK ACCOUNT")
+module.exports = async (accountIndex, password, params)=>{
   let accounts = await params.web3.eth.getAccounts()
-  await params.web3.eth.personal.unlockAccount(accounts[params.accountindex],params.password)
-  return true
+  return params.web3.eth.personal.unlockAccount(accounts[accountIndex], password)
 }
