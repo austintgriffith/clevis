@@ -16,7 +16,7 @@ module.exports = (contractName, params)=>{
       let path = `${process.cwd()}/${contractFolder}/dependencies.js`
       if(fs.existsSync(path)){
         winston.debug("File exists")
-        winston.debug("looking for dependencies at ",path)
+        winston.debug(`looking for dependencies at ${path}`)
         dependencies = require(path)
       }
     }catch(e){console.log(e)}
@@ -50,7 +50,7 @@ module.exports = (contractName, params)=>{
         let eventCode = fs.readFileSync(__dirname+"/../templates/event.js").toString()
         eventCode = eventCode.split("##contract##").join(contractName);
         eventCode = eventCode.split("##event##").join(abiObject[i].name);
-        winston.debug("Adding event ",abiObject[i].name)
+        winston.debug(`Adding event: ${abiObject[i].name}`)
         let dir = process.cwd()+"/"+contractFolder+"/.clevis/";
         if (!fs.existsSync(dir)){
           fs.mkdirSync(dir);
@@ -65,7 +65,7 @@ module.exports = (contractName, params)=>{
           let inputs = ""
           let inputCount = 1
           for(let o in abiObject[i].inputs){
-            winston.debug(" with input ",abiObject[i].inputs[o])
+            winston.debug(` with input ${abiObject[i].inputs[o]}`)
             if(inputs!=""){
               inputs+=","
             }
@@ -78,7 +78,7 @@ module.exports = (contractName, params)=>{
           }
           getterCode = getterCode.split("##inputs##").join(inputs);
 
-          winston.debug("Adding getter ",abiObject[i].name)
+          winston.debug(`Adding getter :${abiObject[i].name}`)
           let results = ""
 
           let dir = process.cwd()+"/"+contractFolder+"/.clevis/";
@@ -99,13 +99,13 @@ module.exports = (contractName, params)=>{
 
           setterCode = setterCode.split("##contract##").join(contractName);
           setterCode = setterCode.split("##method##").join(abiObject[i].name);
-          winston.debug("Adding setter ",abiObject[i].name)
+          winston.debug(`Adding setter: ${abiObject[i].name}`)
 
           let args = ""
           let argstring = ""
           let hintargs = ""
           for(let a in abiObject[i].inputs){
-            winston.debug(" with arg ",abiObject[i].inputs[a])
+            winston.debug(` with arg ${abiObject[i].inputs[a]}`)
             if(args!="") args+=","
             //if(abiObject[i].inputs[a].type=="bytes32"){
             //  args+="params.web3.utils.fromAscii(args["+argCount+"])"

@@ -24,14 +24,14 @@ module.exports = async (scriptName, contractName, accountIndex, contractArgument
   let scriptFunction
   try{
     let path = process.cwd()+"/"+contractFolder+"/.clevis/"+scriptName+".js"
-    winston.debug("LOADING:",path)
+    winston.debug(`LOADING: ${path}`)
     if(fs.existsSync(path)){
-      winston.debug("looking for script at ",path)
+      winston.debug(`looking for script at ${path}`)
       scriptFunction=require(path)
     }
   }catch(e){console.log(e)}
   if(scriptFunction){
-    winston.debug("Loaded script ("+scriptName+"), running...")
+    winston.debug(`Loaded script (${scriptName}), running...`)
     let txparams = {
       gas:params.config.xfergas,
       gasPrice:params.config.gaspricegwei,
@@ -71,7 +71,7 @@ let doContractFunction = (params,scriptName,scriptFunction,contract,txparams, ac
         if(err.toString().indexOf("Transaction was not mined within 50 blocks")>=0){
           winston.debug("IGNORE 'within 50 block' ERROR...")
         } else {
-          winston.debug("CAUGHT",err,"REJECTING")
+          winston.debug(`CAUGHT ${err} REJECTING`)
           reject(err);
         }
       })
