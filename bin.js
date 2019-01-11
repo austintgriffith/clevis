@@ -13,11 +13,7 @@ program
   .version('0.1.0')
 
 program.command('accounts').action(standard)
-
-program.command('balance <address> [units]')
-  .description('returns account balance in units (defaults to ether)')
-  .action(standard)
-
+program.command('balance <address> [units]').action(standard)
 program.command('block <blockNumber>').action(standard)
 program.command('blockNumber').action(standard)
 program.command('build').action(standard)
@@ -40,7 +36,7 @@ program.command('fromwei <amount> <symbol>').action(standard)
 //TODO: This one will require a custom function
 // program.command('init').action(standard)
 
-//NOTE: Can't test this one because I don't have a aws.json file.
+//TODO: Cant test this one due to lack of aws credentials
 program.command('invalidate <target>').action(standard)
 program.command('new [password]').action(standard)
 program.command('randomhex <size>').action(standard)
@@ -55,15 +51,9 @@ program.command('towei <amount> <symbol>').action(standard)
 program.command('transaction <hash>').action(standard)
 program.command('unlock <accountIndex> <password>').action(standard)
 program.command('update').action(standard)
-program.command('upload <target>').action(standard)
+//TODO: Cant test this one due to lack of aws credentials
+program.command('upload <site>').action(standard)
 program.command('version').action(standard)
-
-
-
-
-
-// program ALL
-// program AIRDROP
 
 program.on('command:*', () => {
   console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '))
