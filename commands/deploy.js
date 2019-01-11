@@ -1,5 +1,7 @@
+const checkForReceipt = require('../utils').checkForReceipt
 const fs = require('fs')
 const winston = require('winston')
+
 
 module.exports = async (contractName, accountIndex, params)=>{
   let startSeconds = new Date().getTime() / 1000
@@ -76,18 +78,5 @@ function deploy(params,accounts,contractarguments,bytecode,abi, accountIndex) {
       winston.debug(`CALLBACK: ${error}\n${transactionHash}`)
       checkForReceipt(2,params,transactionHash,resolve)
     })
-  })
-}
-
-function checkForReceipt(backoffMs,params,transactionHash,resolve){
-  params.web3.eth.getTransactionReceipt(transactionHash,(error,result)=>{
-    if(result&&result.transactionHash){
-      winston.debug(result)
-      resolve(result)
-    }else{
-      if(winston.level === 'debug') process.stdout.write(".")
-      backoffMs=Math.min(backoffMs*2,1000)
-      setTimeout(checkForReceipt.bind(this,backoffMs,params,transactionHash,resolve),backoffMs)
-    }
   })
 }

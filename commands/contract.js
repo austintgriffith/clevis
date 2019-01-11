@@ -1,6 +1,6 @@
+const checkForReceipt = require('../utils').checkForReceipt
 const fs = require('fs')
 const winston = require('winston')
-const checkForReceipt = require('../utils').checkForReceipt
 
 //TODO: Needs a cleanup
 module.exports = async (scriptName, contractName, accountIndex, contractArguments, params)=>{
