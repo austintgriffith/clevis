@@ -52,6 +52,7 @@ program.command('start').action(standard)
 program.command('test <testName>').action(standard)
 program.command('tohex <textString>').action(standard)
 program.command('towei <amount> <symbol>').action(standard)
+program.command('transaction <hash>').action(standard)
 
 
 
