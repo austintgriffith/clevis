@@ -38,6 +38,12 @@ program.command('explain <contractName>').action(standard)
 program.command('fromhex <hexString>').action(standard)
 program.command('fromWei <amount> <symbol>').action(standard)
 
+//TODO: This one will require a custom function
+// program.command('init').action(standard)
+
+//NOTE: Can't test this one because I don't have a aws.json file. 
+program.command('invalidate <target>').action(standard)
+
 
 program.command('tohex <textString>').action(standard)
 
