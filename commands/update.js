@@ -1,26 +1,45 @@
 let axios = require('axios')
 let fs = require('fs')
-//usage: clevis update
-module.exports = async (params)=>{
-  const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> UPDATE")
-  return await update(params)
+const winston = require('winston')
+
+module.exports = (params) => {
+  let clevis = JSON.parse(fs.readFileSync("clevis.json").toString())
+
+  let data = [getGasPrice(), getEthPrice()]
+
+  return Promise.all(data)
+  .then(function([gas, eth]) {
+    winston.debug(`New gas price: ${gas}`)
+    winston.debug(`New eth price: ${eth}`)
+
+    clevis.gasprice = gas
+    clevis.ethprice = eth
+
+    fs.writeFileSync('clevis.json', JSON.stringify(clevis, null, 2))
+    
+    return clevis
+  })
 }
-function update(params) {
-  const DEBUG = params.config.DEBUG;
-  return new Promise((resolve, reject) => {
-     axios.get("https://ethgasstation.info/json/ethgasAPI.json")
-   	.then((response)=>{
-       let newgas = Math.round(response.data.average*1000)/10000+0.1;
-       let clevis = JSON.parse(fs.readFileSync("clevis.json").toString())
-       clevis.gasprice = newgas
-       axios.get("https://api.coinmarketcap.com/v2/ticker/1027/")
-       .then((response)=>{
-         clevis.ethprice = response.data.data.quotes.USD.price
-         let result = JSON.stringify(clevis,null, 2)
-         fs.writeFileSync("clevis.json",result)
-         resolve(result)
-       })
-   	})
+
+//This function is way more verbose than needed on purpose
+//The logic is not easy to understand when done as a one-liner
+function getGasPrice() {
+  return axios.get("https://ethgasstation.info/json/ethgasAPI.json").then(response => {
+    //ethgasstation returns 10x the actual average for some odd reason
+    let actualAverage = response.data.average / 10
+
+    //We want to just add a bit more than average to be speedy
+    let safeAmount = actualAverage + 0.1
+
+    //We want to round to the tenthousandth precision
+    let rounded = Math.round(safeAmount * 10000) / 10000
+
+    return rounded
+  })
+}
+
+function getEthPrice() {
+  return axios.get("https://api.coinmarketcap.com/v2/ticker/1027/").then(response => {
+    return response.data.data.quotes.USD.price
   })
 }
