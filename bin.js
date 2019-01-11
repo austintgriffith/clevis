@@ -46,7 +46,7 @@ program.command('invalidate <target>').action(standard)
 program.command('new [password]').action(standard)
 program.command('randomhex <size>').action(standard)
 program.command('recover <string> <signature>').action(standard)
-program.command('send <amount> <fromIndex> <toIndex>').action(standard)
+program.command('send <amount> <fromIndex> <toIndex> [data]').action(standard)
 
 
 program.command('tohex <textString>').action(standard)

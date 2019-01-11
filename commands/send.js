@@ -1,7 +1,7 @@
 const checkForReceipt = require('../utils').checkForReceipt
 const winston = require('winston')
 
-module.exports = async (amount, fromIndex, toIndex, params) => {
+module.exports = async (amount, fromIndex, toIndex, data, params) => {
   let accounts = await params.web3.eth.getAccounts()
 
   verifyAccountIndex(accounts, fromIndex)
@@ -15,7 +15,11 @@ module.exports = async (amount, fromIndex, toIndex, params) => {
     gasPrice: params.config.gaspricegwei
   }
 
-  winston.debug(accounts)
+  if(data !== undefined) {
+    winston.debug(`Adding data to payload: ${data}`)
+    txparams['data'] = data
+  }
+
   winston.debug(txparams)
 
   return await send(params,txparams)
