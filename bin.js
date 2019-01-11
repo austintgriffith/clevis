@@ -55,6 +55,9 @@ program.command('towei <amount> <symbol>').action(standard)
 program.command('transaction <hash>').action(standard)
 program.command('unlock <accountIndex> <password>').action(standard)
 program.command('update').action(standard)
+program.command('upload <target>').action(standard)
+program.command('version').action(standard)
+
 
 
 
