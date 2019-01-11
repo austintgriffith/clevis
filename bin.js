@@ -49,6 +49,7 @@ program.command('recover <string> <signature>').action(standard)
 program.command('send <amount> <fromIndex> <toIndex> [data]').action(standard)
 program.command('sha3 <string>').action(standard)
 program.command('sign <string> <accountIndex> <password>').action(standard)
+program.command('start').action(standard)
 
 
 program.command('tohex <textString>').action(standard)
