@@ -44,6 +44,7 @@ program.command('fromWei <amount> <symbol>').action(standard)
 //NOTE: Can't test this one because I don't have a aws.json file.
 program.command('invalidate <target>').action(standard)
 program.command('new [password]').action(standard)
+program.command('randomhex <size>').action(standard)
 
 
 program.command('tohex <textString>').action(standard)
