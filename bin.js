@@ -45,6 +45,8 @@ program.command('fromWei <amount> <symbol>').action(standard)
 program.command('invalidate <target>').action(standard)
 program.command('new [password]').action(standard)
 program.command('randomhex <size>').action(standard)
+program.command('recover <string> <signature>').action(standard)
+
 
 
 program.command('tohex <textString>').action(standard)
@@ -88,7 +90,11 @@ async function runCmd(name, args) {
     web3: new Web3(new Web3.providers.HttpProvider(config.provider)),
   }
 
-  console.log(await require(`./commands/${name}.js`)(...args, params))
+  require(`./commands/${name}.js`)(...args, params).then(ret => {
+    console.log(ret)
+  }).catch(e => {
+    winston.error(e)
+  })
 }
 
 function readConfig() {
