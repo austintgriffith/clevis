@@ -26,7 +26,6 @@ program.command('build').action(standard)
 //I did a little bit of cleanup of that file, just to work with the named vars and logging.
 program.command('compile <contractName>').action(standard)
 
-//TODO: Test this after I get deploy working
 //NOTE: This one is a pretty big doozy. We shouldn't be coupling the
 //clevis argument order with the generated scripts in contracts/contractName/.clevis
 //I think I got around this and everythign is still 100% backward compatible
@@ -50,6 +49,7 @@ program.command('send <amount> <fromIndex> <toIndex> [data]').action(standard)
 program.command('sha3 <string>').action(standard)
 program.command('sign <string> <accountIndex> <password>').action(standard)
 program.command('start').action(standard)
+program.command('test <testName>').action(standard)
 
 
 program.command('tohex <textString>').action(standard)
@@ -82,6 +82,10 @@ function standard(...args) {
 }
 
 //TODO: Handle accounts in a generic way. The way that balance.js used to. It should handle index, 40 char (no 0x) and 42 char)
+//TODO: Port logic when command!=new and checks if an account is in scope //Maybe
+//TODO: Port logic of using infura if specified
+//TODO: Port logic which sets gaspricewei each time. //Maybe
+//TODO: Port logic which stops the engine //Maybe
 async function runCmd(name, args) {
   winston.debug(`🗜️ Clevis [${name}]`)
   winston.debug(`${name.toUpperCase()}`)
@@ -93,11 +97,11 @@ async function runCmd(name, args) {
     web3: new Web3(new Web3.providers.HttpProvider(config.provider)),
   }
 
-  require(`./commands/${name}.js`)(...args, params).then(ret => {
-    console.log(ret)
-  }).catch(e => {
+  try {
+    console.log(await require(`./commands/${name}.js`)(...args, params))
+  } catch(e) {
     winston.error(e)
-  })
+  }
 }
 
 function readConfig() {
