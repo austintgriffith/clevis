@@ -35,7 +35,7 @@ program.command('create <contractName>').action(standard)
 program.command('deploy <contractName> <accountIndex>').action(standard)
 program.command('explain <contractName>').action(standard)
 program.command('fromhex <hexString>').action(standard)
-program.command('fromWei <amount> <symbol>').action(standard)
+program.command('fromwei <amount> <symbol>').action(standard)
 
 //TODO: This one will require a custom function
 // program.command('init').action(standard)
@@ -50,9 +50,9 @@ program.command('sha3 <string>').action(standard)
 program.command('sign <string> <accountIndex> <password>').action(standard)
 program.command('start').action(standard)
 program.command('test <testName>').action(standard)
-
-
 program.command('tohex <textString>').action(standard)
+program.command('towei <amount> <symbol>').action(standard)
+
 
 
 
