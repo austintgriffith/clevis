@@ -12,7 +12,7 @@ module.exports = async (amount, fromIndex, toIndex, data, params) => {
     to: accounts[toIndex],
     value: params.web3.utils.toWei(amount, "ether"),
     gas: params.config.xfergas,
-    gasPrice: params.config.gaspricegwei
+    gasPrice: params.config.gasprice
   }
 
   if(data !== undefined) {

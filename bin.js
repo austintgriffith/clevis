@@ -4,6 +4,7 @@ const program = require('commander')
 const Web3 = require('web3')
 const winston = require('winston')
 require('./initLogger')()
+require('dotenv').config()
 
 program
   .option('--debug', 'Turns on Debugging output')
@@ -78,25 +79,40 @@ function standard(...args) {
 }
 
 //TODO: Handle accounts in a generic way. The way that balance.js used to. It should handle index, 40 char (no 0x) and 42 char)
-//TODO: Port logic when command!=new and checks if an account is in scope //Maybe
-//TODO: Port logic of using infura if specified
-//TODO: Port logic which sets gaspricewei each time. //Maybe
 //TODO: Port logic which stops the engine //Maybe
 async function runCmd(name, args) {
   winston.debug(`🗜️ Clevis [${name}]`)
   winston.debug(`${name.toUpperCase()}`)
 
   let config = readConfig()
+  let provider = getWeb3Provider(name, config)
+  let web3 = new Web3(provider)
 
   let params = {
     config: config,
-    web3: new Web3(new Web3.providers.HttpProvider(config.provider)),
+    web3: web3
   }
 
   try {
     console.log(await require(`./commands/${name}.js`)(...args, params))
   } catch(e) {
     winston.error(e)
+  }
+}
+
+function getWeb3Provider(name, config) {
+  //If the user is using infura, they need to have a mnemonic defined
+  if(name !== 'new' && config.USE_INFURA && !process.env.mnemonic) {
+    throw("ERROR: No Mnemonic Generated. In order to use Infura, you need one. Run 'clevis new' to create a local account.")
+  }
+
+  if(config.USE_INFURA) {
+    return new HDWalletProvider(
+      process.env.mnemonic,
+      config.provider
+    )
+  } else {
+    return new Web3.providers.HttpProvider(config.provider)
   }
 }
 

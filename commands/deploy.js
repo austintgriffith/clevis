@@ -24,7 +24,9 @@ module.exports = async (contractName, accountIndex, params)=>{
   winston.debug(`Loaded account: ${accounts[accountIndex]}`)
   winston.debug("Deploying...")
   let contract = new params.web3.eth.Contract(abi)
-  winston.debug("paying a max of "+params.config.deploygas+" gas @ the price of "+params.config.gasprice+" gwei ("+params.config.gaspricegwei+")")
+
+  winston.debug(`Paying a max of: ${params.config.deploygas} gas`)
+  winston.debug(`With the gas price of: ${params.config.gasprice}`)
 
   let contractarguments = []
   try{
@@ -57,7 +59,7 @@ module.exports = async (contractName, accountIndex, params)=>{
   let endSeconds = new Date().getTime() / 1000;
   let duration = Math.floor((endSeconds-startSeconds))
   winston.debug(`deploy time: ${duration}`)
-  fs.appendFileSync(process.cwd()+"/deploy.log",endSeconds+" "+contractFolder+"/"+contractName+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*params.config.ethprice)+" "+params.config.gaspricegwei+"\n")
+  fs.appendFileSync(process.cwd()+"/deploy.log",endSeconds+" "+contractFolder+"/"+contractName+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*params.config.ethprice)+" "+params.config.gasprice+"\n")
 
   return result;
 }
@@ -73,7 +75,7 @@ function deploy(params,accounts,contractarguments,bytecode,abi, accountIndex) {
     }).send({
       from: accounts[accountIndex],
       gas: params.config.deploygas,
-      gasPrice: params.config.gaspricegwei
+      gasPrice: params.config.gasprice
     }, function(error, transactionHash){
       winston.debug(`CALLBACK: ${error}\n${transactionHash}`)
       checkForReceipt(2,params,transactionHash,resolve)

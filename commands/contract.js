@@ -20,7 +20,8 @@ module.exports = async (scriptName, contractName, accountIndex, contractArgument
   winston.debug("Running contract interaction script ("+scriptName+") on contract ["+contractName+"]")
   let contract = new params.web3.eth.Contract(abi,address)
 
-  winston.debug("paying a max of "+params.config.xfergas+" gas @ the price of "+params.config.gasprice+" gwei ("+params.config.gaspricegwei+")")
+  winston.debug(`Paying a max of: ${params.config.xfergas} gas`)
+  winston.debug(`With the gas price of: ${params.config.gasprice}`)
 
   let scriptFunction
   try{
@@ -35,7 +36,7 @@ module.exports = async (scriptName, contractName, accountIndex, contractArgument
     winston.debug(`Loaded script (${scriptName}), running...`)
     let txparams = {
       gas:params.config.xfergas,
-      gasPrice:params.config.gaspricegwei,
+      gasPrice:params.config.gasprice,
       accounts:accounts,
       blockNumber:blockNumber,
     }

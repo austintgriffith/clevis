@@ -76,6 +76,7 @@ module.exports = (...args)=>{
       console.log("Error loading clevis.json, run 'clevis init'")
       process.exit(1);
     }
+
     if(DEBUG) console.log("Connecting to "+params.config.provider)
     let Web3 = require('web3')
     const HDWalletProvider = require("truffle-hdwallet-provider")
