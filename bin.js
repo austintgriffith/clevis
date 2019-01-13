@@ -98,15 +98,21 @@ async function runCmd(name, args) {
   } catch(e) {
     winston.error(e)
   }
+
+  if(web3.currentProvider.engine) {
+    params.web3.currentProvider.engine.stop()
+  }
 }
 
 function getWeb3Provider(name, config) {
   //If the user is using infura, they need to have a mnemonic defined
   if(name !== 'new' && config.USE_INFURA && !process.env.mnemonic) {
-    throw("ERROR: No Mnemonic Generated. In order to use Infura, you need one. Run 'clevis new' to create a local account.")
+    winston.error("ERROR: No Mnemonic Generated. In order to use Infura, you need one. Run 'clevis new' to create a local account.")
+    process.exit(1)
   }
 
   if(config.USE_INFURA) {
+    const HDWalletProvider = require("truffle-hdwallet-provider")
     return new HDWalletProvider(
       process.env.mnemonic,
       config.provider

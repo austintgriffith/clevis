@@ -39,35 +39,35 @@ params.commands = {
   "invalidate": ["[target]"],//invalidate cloudfront
   "mocha": [],//install/update mocha
 }
-module.exports = (...args)=>{
-  params.args=args
-  let command = "help"
-  if(args[0]){ command=args[0]}
-  if(!params.commands[command]){
-    console.log("Unknown command: "+command)
-    return
-  }
-  let reqargArray = []
-  let reqargs = params.commands[command]
-  //count required args
-  for(let a in reqargs){
-    if(reqargs[a].indexOf("[")==0){
-      //this is not required don't add it to the list
-    }else{
-      reqargArray.push(reqargs[a])
-    }
-    params[reqargs[a].replace("[","").replace("]","")]=args[1+parseInt(a)];
-  }
+// module.exports = (...args)=>{
+//   params.args=args
+//   let command = "help"
+//   if(args[0]){ command=args[0]}
+//   if(!params.commands[command]){
+//     console.log("Unknown command: "+command)
+//     return
+//   }
+//   let reqargArray = []
+//   let reqargs = params.commands[command]
+//   //count required args
+//   for(let a in reqargs){
+//     if(reqargs[a].indexOf("[")==0){
+//       //this is not required don't add it to the list
+//     }else{
+//       reqargArray.push(reqargs[a])
+//     }
+//     params[reqargs[a].replace("[","").replace("]","")]=args[1+parseInt(a)];
+//   }
 //  console.log("reqargs",reqargs)
 //  console.log("reqargArray",reqargArray)
   //console.log("params.args",params.args)
 
-  if(typeof args[parseInt(reqargArray.length)] == "undefined"){
-    console.log("Missing argument "+(reqargArray.length)+" \""+reqargArray[reqargArray.length-1]+"\"")
-    return
-  }
-
-  if(DEBUG) console.log("🗜️ Clevis ["+command+"]")
+  // if(typeof args[parseInt(reqargArray.length)] == "undefined"){
+  //   console.log("Missing argument "+(reqargArray.length)+" \""+reqargArray[reqargArray.length-1]+"\"")
+  //   return
+  // }
+  //
+  // if(DEBUG) console.log("🗜️ Clevis ["+command+"]")
 
   if(command!="init"){
     try{
