@@ -69,12 +69,18 @@ docker run -ti --rm --name clevis --env network="mainnet." \
   -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp austingriffith/clevis
 ```
 
-### Docker build from Clevis Repo
+### Docker build from official Clevis Repo
 ```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
 docker build ./docker -t clevis
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis
+```
+
+### Docker build from local repo
+```
+docker build -t clevis-local -f docker/DockerfileLocal .
+docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis-local
 ```
 
 ### Using Infura
