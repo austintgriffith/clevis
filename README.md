@@ -77,7 +77,7 @@ docker build ./docker -t clevis
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis
 ```
 
-### Docker build from local repo
+### Docker build from local checked-out repo
 ```
 docker build -t clevis-local -f docker/DockerfileLocal .
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis-local
