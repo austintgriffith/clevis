@@ -34,8 +34,7 @@ program.command('explain <contractName>').action(standard)
 program.command('fromhex <hexString>').action(standard)
 program.command('fromwei <amount> <symbol>').action(standard)
 
-//TODO: This one will require a custom function
-// program.command('init').action(standard)
+program.command('init').action(init)
 
 //TODO: Cant test this one due to lack of aws credentials
 program.command('invalidate <target>').action(standard)
@@ -79,7 +78,6 @@ function standard(...args) {
 }
 
 //TODO: Handle accounts in a generic way. The way that balance.js used to. It should handle index, 40 char (no 0x) and 42 char)
-//TODO: Port logic which stops the engine //Maybe
 async function runCmd(name, args) {
   winston.debug(`🗜️ Clevis [${name}]`)
   winston.debug(`${name.toUpperCase()}`)
@@ -124,4 +122,8 @@ function getWeb3Provider(name, config) {
 
 function readConfig() {
   return JSON.parse(fs.readFileSync("clevis.json").toString())
+}
+
+async function init() {
+  console.log(await require(`./commands/init.js`)())
 }
