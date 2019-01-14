@@ -1,15 +1,16 @@
-const checkForReceipt = require('../utils').checkForReceipt
+const { checkForReceipt, normalizeAddress } = require('../utils')
 const winston = require('winston')
 
-module.exports = async (amount, fromIndex, toIndex, data, params) => {
-  let accounts = await params.web3.eth.getAccounts()
+module.exports = async (amount, fromAddress, toAddress, data, params) => {
+  let from = await normalizeAddress(fromAddress, params.web3)
+  winston.debug(`Normalized from address: ${from}`)
 
-  verifyAccountIndex(accounts, fromIndex)
-  verifyAccountIndex(accounts, toIndex)
+  let to = await normalizeAddress(toAddress, params.web3)
+  winston.debug(`Normalized to address: ${to}`)
 
   let txparams = {
-    from: accounts[fromIndex],
-    to: accounts[toIndex],
+    from: from,
+    to: to,
     value: params.web3.utils.toWei(amount, "ether"),
     gas: params.config.xfergas,
     gasPrice: params.config.gasprice
@@ -32,13 +33,4 @@ function send(params,txparams) {
       checkForReceipt(2, params, transactionHash, resolve)
     })
   })
-}
-
-function verifyAccountIndex(accounts, index) {
-  if(accounts[index] === undefined) {
-    if(accounts.length === 0) {
-      throw(`index: ${index} not valid. There are no accounts.`)
-    }
-    throw(`Account index: ${index} not valid. Please select an index between 0 and ${accounts.length - 1}`)
-  }
 }

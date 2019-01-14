@@ -13,6 +13,20 @@ function checkForReceipt(backoffMs, params, transactionHash, resolve) {
   })
 }
 
+async function normalizeAddress(addr, web3) {
+  if(web3.utils.isAddress(addr)) {
+    return web3.utils.toChecksumAddress(addr)
+  } else {
+    let accounts = await web3.eth.getAccounts()
+    if(accounts[addr] !== undefined) {
+      return accounts[addr]
+    } else {
+      throw(`Could not normalize address: ${addr}`)
+    }
+  }
+}
+
 module.exports = {
-  checkForReceipt
+  checkForReceipt,
+  normalizeAddress
 }
