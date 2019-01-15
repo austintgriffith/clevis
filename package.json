@@ -1,6 +1,6 @@
 {
   "name": "clevis",
-  "version": "0.0.106",
+  "version": "0.1.0",
   "description": "",
   "main": "bin.js",
   "scripts": {
