@@ -83,8 +83,16 @@ function runCmd(name, ...args) {
     web3: web3
   }
 
+  let fn = require(`./commands/${name}.js`)
+
+  //TODO: This is not great, it doesn't take advantage of the benefits of commander.js stuff
+  //Pads lacking args with undefined's to handle optional args when being called from within code
+  for(let i = args.length; i < fn.length - 1; i++) {
+    args.push(undefined)
+  }
+
   try {
-    return require(`./commands/${name}.js`)(...args, params)
+    return fn(...args, params)
   } catch(e) {
     winston.error(e)
   }
