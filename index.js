@@ -9,7 +9,7 @@ async function clevis(...args) {
       if(e) {
         reject(e)
       } else {
-        resolve(out)
+        resolve(out.trim())
       }
     })
   })
