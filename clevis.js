@@ -10,7 +10,6 @@ function setupProgram() {
 
   program
   .option('--debug', 'Turns on Debugging output')
-  .option('--config', 'Use a different configuration file')
 
   program
     .version('0.1.0')
@@ -69,16 +68,9 @@ function setupProgram() {
   return program
 }
 
-//Default handler when no extra logic is required
-function standard(...args) {
-  let cmdr = args.pop()
-  let name = cmdr.name()
-
-  runCmd(name, args)
-}
-
-//TODO: Handle accounts in a generic way. The way that balance.js used to. It should handle index, 40 char (no 0x) and 42 char)
-async function runCmd(name, args) {
+//Can be called from node as well.
+//Doesn't require any commander.js stuff
+function runCmd(name, ...args) {
   winston.debug(`🗜️ Clevis [${name}]`)
   winston.debug(`${name.toUpperCase()}`)
 
@@ -92,7 +84,7 @@ async function runCmd(name, args) {
   }
 
   try {
-    console.log(await require(`./commands/${name}.js`)(...args, params))
+    return require(`./commands/${name}.js`)(...args, params)
   } catch(e) {
     winston.error(e)
   }
@@ -100,6 +92,15 @@ async function runCmd(name, args) {
   if(web3.currentProvider.engine) {
     params.web3.currentProvider.engine.stop()
   }
+}
+
+//Default commander.js handler
+//Delegate to runCmd
+async function standard(...args) {
+  let cmdr = args.pop()
+  let name = cmdr.name()
+
+  console.log(await runCmd(name, ...args))
 }
 
 function getWeb3Provider(name, config) {
@@ -128,14 +129,7 @@ async function init() {
   console.log(await require(`./commands/init.js`)())
 }
 
-function runClevis(...args) {
-  let program = setupProgram()
-
-  program.parse(args)
-
-  if(program.args.length == 0) {
-    program.help()
-  }
+module.exports = {
+  setupProgram,
+  runCmd
 }
-
-module.exports = runClevis
