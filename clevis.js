@@ -58,6 +58,7 @@ async function init() {
 }
 
 
+//Usage: new Runner().runCommand(process.argv)
 class Runner {
   constructor() {
     this.program = this.setupProgram()

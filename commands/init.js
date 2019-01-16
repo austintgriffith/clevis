@@ -91,7 +91,9 @@ function cra(craFolder='./src') {
     if(fs.existsSync(craFolder)){
       resolve("Skipping CRA, src exists...")
     }else{
-      let reactAction = exec('npx create-react-app .;rm -rf src;npm install --save dapparatus;', (err, stdout, stderr) => {
+      // let reactAction = exec(`npx create-react-app ${craFolder};rm -rf src;npm install --save dapparatus;`, (err, stdout, stderr) => {
+      //TODO: CHANGE CLEVIS HERE TO MASTER ONCE WE MERGE IN
+      let reactAction = exec(`npx create-react-app ${craFolder};npm install --save dapparatus;npm install --save-dev austintgriffith/clevis#0.1.0;rm -rf ${craFolder}`, (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command
           reject(err);
