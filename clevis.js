@@ -71,6 +71,10 @@ class Runner {
 
     this.program.parse(args)
 
+    if(this.program.args.length == 0) {
+      this.program.help()
+    }
+
     return p
   }
 
