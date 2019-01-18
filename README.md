@@ -4,27 +4,43 @@ Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding.
 
 ## Getting Started
 
-Start a new project with clevis:
+### Requirements
+You need a local Ethereum blockchain to develop against.
+
+If you don't already have a preferred method, we suggest using [Ganache](https://truffleframework.com/ganache) from Truffle.
+
+You can just use their cli version by typing:
+```
+npm install -g ganache-cli
+```
+And then run it by typing:
+```
+ganache-cli
+```
+
+### Start a new project with Clevis
+From within an empty project directory:
 ```
 npx clevis init
 ```
 
-If you aren't using docker make sure you install ganache-cli:
-```
-npm install -g ganache-cli
-```
+This will ask you a few questions and create a new Clevis-powered project in your current directory.
+
+## (Optional) Docker Setup
+If the instructions above don't work for you. You can use Docker to pull in a repeatable environment.
 
 ```
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
   -v ~/your-dapp-directory:/dapp austingriffith/clevis:latest
 ```
 
-[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
-
-
 ## demo
 
+[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
+
 [![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
+
+[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
 
 
 ## docker options
@@ -33,7 +49,6 @@ docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
 ```
 docker exec -ti clevis bash
 ```
-
 
 ### external RPC
 ```
@@ -358,8 +373,4 @@ uploads static react site to s3 bucket named after url
 ```
 clevis invalidate E3837d00567
 ```
-invalidate cloudfront caching to show fresh content
-
-## demo
-
-[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
+invalidate Cloudfront caching to show fresh content
