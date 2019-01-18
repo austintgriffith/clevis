@@ -26,6 +26,30 @@ npx clevis init
 
 This will ask you a few questions and create a new Clevis-powered project in your current directory.
 
+### Using Clevis
+The above setup does not install clevis globally. The clevis command line command is located at node_modules/clevis/bin.js. For convineience, we suggest adding an alias to your ~/.profile or ~/.bashrc file.
+
+```
+alias c='./node_modules/clevis/bin.js'
+```
+
+Going forward, you can just call clevis using "c". Example:
+```
+c randomhex 100
+```
+
+Another option is to add clevis as an npm script in your package.json file. For instance:
+```
+"scripts": {
+  "clevis": "clevis"
+}
+```
+
+Then, you can use:
+```
+npm run clevis randomhex 100
+```
+
 ## (Optional) Docker Setup
 If the instructions above don't work for you. You can use Docker to pull in a repeatable environment.
 
@@ -179,6 +203,7 @@ If you have other errors or problems, let's get this list populated. Shoot me an
 
 
 ## commands/examples
+See above section about the lack of global install of clevis. Replace 'clevis' here with however you decided to run the command. (From node_modules, as an alias, or as an npm script)
 
 ### help
 ```

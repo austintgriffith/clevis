@@ -1,5 +1,7 @@
 # Potentially read for merge. See checklist at bottom for some sanity checks
+
 # TODO: Delete this file from the repo
+# TODO: Change any references to austintgriffith/clevis#0.1.0 back to the master branch.
 
 ## Structural
 - Added commander.js to make the cli tool more extensible and maintainable
@@ -74,8 +76,11 @@ function getGasPrice(toWei) {
 - Verify commands which use aws (upload, invalidate)
 
 ## TLDR Austin Checklist
-- [ ] Bump to version 0.1.0
+- [ ] Try your regular project creation flow and poke around. Use README instructions for installation to see if they are clear.
 - [ ] Test out commands requiring aws creds (Update and invalidate)
-- [ ] Update any documentation/blog posts/tutorials which reference Clevis to either specify  to use the old version, or with updated instructions with the new API.
-- [ ] Make sure that any projects depending on the new version of Clevis work with the new system of not installing npm modules globally or downloading openzeppelin files and gitignoring them.
-- [ ] Change any clevis commands in existing projects which use the sendTo or sendData commands. They are deleted and the functionality is all rolled into send.
+- [ ] Test with new BurnerWallet code on dbe's repo and clevis-update branch. To test it:
+```
+git clone -b update-clevis git@github.com:dbe/burner-wallet.git
+cd burner-wallet
+npm i && ./node_modules/clevis/bin.js init
+```
