@@ -9,7 +9,7 @@ echo "Launching 🗜️ Clevis with network [ $network ]..."
 
 #if [ ! -f /dapp/clevis.json ]; then
   echo "Initializing Clevis..."
-  npx clevis init
+  npx austintgriffith/clevis#0.1.0 init
 #fi
 echo "NPM installing..."
 npm i

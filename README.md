@@ -14,7 +14,6 @@ If you aren't using docker make sure you install ganache-cli:
 npm install -g ganache-cli
 ```
 
-
 ```
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
   -v ~/your-dapp-directory:/dapp austingriffith/clevis:latest
