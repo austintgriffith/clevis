@@ -2,31 +2,22 @@
 
 Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding.
 
-## install
+## Getting Started
 
-easiest: use docker (it handles the environment and RPC node for you):
+Start a new project with clevis:
+```
+npx clevis init
+```
+
+If you aren't using docker make sure you install ganache-cli:
+```
+npm install -g ganache-cli
+```
+
+
 ```
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
   -v ~/your-dapp-directory:/dapp austingriffith/clevis:latest
-```
-
-OR install/link for the source:
-```
-git clone https://github.com/austintgriffith/clevis.git
-cd clevis
-npm install
-sudo npm link
-```
-
-OR try an npm install:
-```
-sudo npm install --unsafe-perm -g clevis@latest
-```
-
-If you aren't using docker make sure you install ganache-cli and mocha:
-```
-npm install -g ganache-cli
-npm install -g mocha
 ```
 
 [Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
@@ -127,7 +118,7 @@ The fix for this is to go to wherever you have clevis cloned and run an npm link
 
 ```
 cd ~/clevis
-npm link 
+npm link
 ```
 
 ---------
@@ -161,7 +152,7 @@ Don't try to install it manually: your package manager does it automatically.
 However, a different version of babel-eslint was detected higher up in the tree:
 ```
 
-to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it: 
+to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it:
 ```
 echo "SKIP_PREFLIGHT_CHECK=true" >> .env
 ```
@@ -177,7 +168,7 @@ If you have other errors or problems, let's get this list populated. Shoot me an
 
 ### help
 ```
-clevis help
+clevis --help
 ```
 lists available commands and usage
 
@@ -217,17 +208,15 @@ clevis unlock 0 ""
 ```
 unlocks account
 
-### send [amount] [fromindex] [toindex]
+### send [amount] <fromAddress> <toAddress> [data]
 ```
 clevis send 0.1 0 1
+clevis send 0 0x6FC8152A3C0E0aC8e61faf233915e1334b58fC77 1 0xbeefbeef
 ```
-send ether from one local account to another by index
+send ether from one account to another
 
-### sendTo [amount] [fromindex] [toaddress]
-```
-clevis sendTo 0.1 0 0x6FC8152A3C0E0aC8e61faf233915e1334b58fC77
-```
-send ether from local account to any address
+### <del> sendTo [amount] [fromindex] [toaddress]</del>
+Removed in Clevis 0.1.0
 
 ### balance [address]
 ```
