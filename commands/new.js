@@ -2,15 +2,11 @@ const fs = require("fs")
 const winston = require('winston')
 
 module.exports = async (password = "", params) => {
-  let account = await generateViaRpc(password, params)
-
-  if(account === false) {
-    winston.warn("Method not found natively in RPC, generate a mnemonic locally...")
-    account = generateViaMnemonic()
+  if(params.config.USE_INFURA) {
+    return generateViaMnemonic()
+  } else {
+    return generateViaRpc(password, params)
   }
-
-  winston.debug(`Account created: ${account}`)
-  return account
 }
 
 async function generateViaRpc(password, params) {
@@ -29,7 +25,8 @@ function generateViaMnemonic() {
   let currentEnv = fs.readFileSync(".env")
 
   if(currentEnv.indexOf("mnemonic") >= 0) {
-    throw("ERROR, '.env' mnemonic already exists - Try setting 'USE_INFURA: true' in clevis.json")
+    winston.error("ERROR, '.env' mnemonic already exists. Will not overwrite")
+    return false
   } else {
     let result = require("bip39").generateMnemonic()
 
@@ -41,6 +38,8 @@ function generateViaMnemonic() {
 
     fs.writeFileSync(".env", currentEnv)
 
-    winston.info("mnemonic created! Set 'USE_INFURA: true' in clevis.json to start using it.")
+    winston.debug("mnemonic created in .env!")
+
+    return true
   }
 }

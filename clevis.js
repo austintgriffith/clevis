@@ -21,14 +21,17 @@ function runCmd(name, ...args) {
   let fn = require(`./commands/${name}.js`)
 
   try {
-    return fn(...args, params)
+    let result = fn(...args, params)
+
+    if(web3.currentProvider.engine) {
+      params.web3.currentProvider.engine.stop()
+    }
+
+    return result
   } catch(e) {
     winston.error(e)
   }
 
-  if(web3.currentProvider.engine) {
-    params.web3.currentProvider.engine.stop()
-  }
 }
 
 function getWeb3Provider(name, config) {
