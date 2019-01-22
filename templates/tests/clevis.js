@@ -49,7 +49,7 @@ const tab = "\t\t";
 
 function readContracts() {
   let contents = fs.readFileSync(clevisConfig.ROOT_FOLDER + "/contracts.clevis").toString().trim()
-  
+
   if(contents === '') {
     return []
   } else {
