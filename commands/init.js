@@ -51,6 +51,7 @@ module.exports = async () => {
   contractsFolder = contractsFolder || DEFAULT_contractsFolder
   console.log('Selected folder for react app:', craFolder);
   console.log('Selected testsFolder', testsFolder);
+  console.log('contractFolder', contractsFolder);
 
   console.log("Creating config file: clevis.json")
   let init = fs.readFileSync(__dirname+"/../templates/config.json").toString()
@@ -62,16 +63,15 @@ module.exports = async () => {
     USE_INFURA: DEFAULT_useinfura,
     provider: DEFAULT_provider,
   });
-  console.log('contractFolder', contractsFolder);
-  try{fs.mkdirSync(contractsFolder)}catch(e){}
   fs.writeFileSync("clevis.json", JSON.stringify(config,null,2));
 
+  console.log("Writing docker scripts...")
   fs.writeFileSync("run.sh","#!/bin/bash\ndocker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ${PWD}:/dapp austingriffith/clevis\n");
   fs.writeFileSync("attach.sh","#!/bin/bash\ndocker exec -ti clevis bash\n");
   fs.writeFileSync("stop.sh","#!/bin/bash\ndocker stop clevis\n");
 
-  //installing node module locally//
-  console.log("Installing clevis (this will take a while to compile)...")
+  console.log("Creating contracts folder...")
+  try{fs.mkdirSync(contractsFolder)}catch(e){}
 
   console.log("Syncing default tests...")
   if(!fs.existsSync(testsFolder)){
@@ -90,15 +90,14 @@ function cra(craFolder='./src') {
   return new Promise((resolve, reject) => {
     if(fs.existsSync(craFolder)){
       resolve("Skipping CRA, src exists...")
-    }else{
-      // let reactAction = exec(`npx create-react-app ${craFolder};rm -rf src;npm install --save dapparatus;`, (err, stdout, stderr) => {
+    } else {
       //TODO: CHANGE CLEVIS HERE TO MASTER ONCE WE MERGE IN
-      let reactAction = exec(`npx create-react-app ${craFolder};npm install --save dapparatus;npm install --save-dev austintgriffith/clevis#0.1.0;rm -rf ${craFolder}`, (err, stdout, stderr) => {
+      console.log("Installing clevis (this will take a while to compile)...")
+      let reactAction = exec(`npx create-react-app . && rm -rf src && npm install --save dapparatus && npm install --save-dev austintgriffith/clevis#0.1.0`, (err, stdout, stderr) => {
         if (err) {
-          // node couldn't execute the command
-          reject(err);
-          return;
+          return reject(err);
         }
+
         copyRecursiveSync(__dirname+"/../templates/src","src")
         resolve(`${stdout}`);
       })
@@ -131,7 +130,6 @@ let copyRecursiveSync = function(src, dest) {
                         path.join(dest, childItemName));
     });
   } else {
-    //fs.copySync(src, dest);
     fs.createReadStream(src).pipe(fs.createWriteStream(dest));
   }
 };
