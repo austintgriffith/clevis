@@ -2,39 +2,69 @@
 
 Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding.
 
-## install
+## Getting Started
 
-easiest: use docker (it handles the environment and RPC node for you):
+### Requirements
+You need a local Ethereum blockchain to develop against.
+
+If you don't already have a preferred method, we suggest using [Ganache](https://truffleframework.com/ganache) from Truffle.
+
+You can just use their cli version by typing:
+```
+npm install -g ganache-cli
+```
+And then run it by typing:
+```
+ganache-cli
+```
+
+### Start a new project with Clevis
+From within an empty project directory:
+```
+npx clevis init
+```
+
+This will ask you a few questions and create a new Clevis-powered project in your current directory.
+
+### Using Clevis
+The above setup does not install clevis globally. The clevis command line command is located at node_modules/clevis/bin.js. For convineience, we suggest adding an alias to your ~/.profile or ~/.bashrc file.
+
+```
+alias c='./node_modules/clevis/bin.js'
+```
+
+Going forward, you can just call clevis using "c". Example:
+```
+c randomhex 100
+```
+
+Another option is to add clevis as an npm script in your package.json file. For instance:
+```
+"scripts": {
+  "clevis": "clevis"
+}
+```
+
+Then, you can use:
+```
+npm run clevis randomhex 100
+```
+
+## (Optional) Docker Setup
+If the instructions above don't work for you. You can use Docker to pull in a repeatable environment.
+
 ```
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
   -v ~/your-dapp-directory:/dapp austingriffith/clevis:latest
 ```
 
-OR install/link for the source:
-```
-git clone https://github.com/austintgriffith/clevis.git
-cd clevis
-npm install
-sudo npm link
-```
-
-OR try an npm install:
-```
-sudo npm install --unsafe-perm -g clevis@latest
-```
-
-If you aren't using docker make sure you install ganache-cli and mocha:
-```
-npm install -g ganache-cli
-npm install -g mocha
-```
+## demo
 
 [Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
 
-
-## demo
-
 [![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
+
+[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
 
 
 ## docker options
@@ -43,7 +73,6 @@ npm install -g mocha
 ```
 docker exec -ti clevis bash
 ```
-
 
 ### external RPC
 ```
@@ -127,7 +156,7 @@ The fix for this is to go to wherever you have clevis cloned and run an npm link
 
 ```
 cd ~/clevis
-npm link 
+npm link
 ```
 
 ---------
@@ -161,7 +190,7 @@ Don't try to install it manually: your package manager does it automatically.
 However, a different version of babel-eslint was detected higher up in the tree:
 ```
 
-to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it: 
+to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it:
 ```
 echo "SKIP_PREFLIGHT_CHECK=true" >> .env
 ```
@@ -174,10 +203,11 @@ If you have other errors or problems, let's get this list populated. Shoot me an
 
 
 ## commands/examples
+See above section about the lack of global install of clevis. Replace 'clevis' here with however you decided to run the command. (From node_modules, as an alias, or as an npm script)
 
 ### help
 ```
-clevis help
+clevis --help
 ```
 lists available commands and usage
 
@@ -217,17 +247,15 @@ clevis unlock 0 ""
 ```
 unlocks account
 
-### send [amount] [fromindex] [toindex]
+### send [amount] <fromAddress> <toAddress> [data]
 ```
 clevis send 0.1 0 1
+clevis send 0 0x6FC8152A3C0E0aC8e61faf233915e1334b58fC77 1 0xbeefbeef
 ```
-send ether from one local account to another by index
+send ether from one account to another
 
-### sendTo [amount] [fromindex] [toaddress]
-```
-clevis sendTo 0.1 0 0x6FC8152A3C0E0aC8e61faf233915e1334b58fC77
-```
-send ether from local account to any address
+### <del> sendTo [amount] [fromindex] [toaddress]</del>
+Removed in Clevis 0.1.0
 
 ### balance [address]
 ```
@@ -370,8 +398,4 @@ uploads static react site to s3 bucket named after url
 ```
 clevis invalidate E3837d00567
 ```
-invalidate cloudfront caching to show fresh content
-
-## demo
-
-[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
+invalidate Cloudfront caching to show fresh content

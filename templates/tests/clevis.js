@@ -46,25 +46,25 @@ function getPaddedHexFromNumber(num,digits){
   return hexIs
 }
 const tab = "\t\t";
+
+function readContracts() {
+  let contents = fs.readFileSync(clevisConfig.ROOT_FOLDER + "/contracts.clevis").toString().trim()
+
+  if(contents === '') {
+    return []
+  } else {
+    return contents.split("\n")
+  }
+}
+
 module.exports = {
-
-
   web3:web3,
   localContractAddress,
-  contracts:fs.readFileSync(clevisConfig.ROOT_FOLDER + "/contracts.clevis").toString().trim().split("\n"),
+  contracts:readContracts(),
   reload:()=>{
     describe('#reload() ', function() {
       it('should force browser to reload', async function() {
         fs.writeFileSync(clevisConfig.CRA_FOLDER + "/../public/reload.txt",Date.now());
-      });
-    });
-  },
-  version:()=>{
-    describe('#version() ', function() {
-      it('should get version', async function() {
-        this.timeout(90000)
-        const result = await clevis("version")
-        console.log(result)
       });
     });
   },
@@ -146,9 +146,9 @@ module.exports = {
     describe('#transfer() ', function() {
       it('should give metamask account some ether or tokens to test', async function() {
         this.timeout(600000)
-        let result = await clevis("sendTo","0.1","0","0x2a906694D15Df38F59e76ED3a5735f8AAbccE9cb")///<<<-------- change this to your metamask accounts
+        let result = await clevis("send","0.1","0","0x2a906694D15Df38F59e76ED3a5735f8AAbccE9cb")///<<<-------- change this to your metamask accounts
         printTxResult(result)
-        result = await clevis("sendTo","0.1","0","0x9319bbb4e2652411be15bb74f339b7f6218b2508")///<<<-------- change this to your metamask accounts
+        result = await clevis("send","0.1","0","0x9319bbb4e2652411be15bb74f339b7f6218b2508")///<<<-------- change this to your metamask accounts
         printTxResult(result)
         //here is an example of running a funtion from within this object:
         //module.exports.mintTo("Greens",0,"0x2a906694d15df38f59e76ed3a5735f8aabcce9cb",20)
