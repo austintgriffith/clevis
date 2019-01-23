@@ -91,9 +91,8 @@ function cra(craFolder='./src') {
     if(fs.existsSync(craFolder)){
       resolve("Skipping CRA, src exists...")
     } else {
-      //TODO: CHANGE CLEVIS HERE TO MASTER ONCE WE MERGE IN
       console.log("Installing clevis (this will take a while to compile)...")
-      let reactAction = exec(`npx create-react-app . && rm -rf src && npm install --save dapparatus && npm install --save-dev austintgriffith/clevis#0.1.0`, (err, stdout, stderr) => {
+      let reactAction = exec(`npx create-react-app . && rm -rf src && npm install --save dapparatus && npm install --save-dev clevis`, (err, stdout, stderr) => {
         if (err) {
           return reject(err);
         }

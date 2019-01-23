@@ -21,7 +21,7 @@ ganache-cli
 ### Start a new project with Clevis
 From within an empty project directory:
 ```
-npx austintgriffith/clevis#0.1.0 init
+npx clevis init
 ```
 
 This will ask you a few questions and create a new Clevis-powered project in your current directory.

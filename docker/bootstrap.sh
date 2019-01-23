@@ -7,10 +7,10 @@ echo 'export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}🗜️ 
 
 echo "Launching 🗜️ Clevis with network [ $network ]..."
 
-#if [ ! -f /dapp/clevis.json ]; then
+if [ ! -f /dapp/clevis.json ]; then
   echo "Initializing Clevis..."
-  npx austintgriffith/clevis#0.1.0 init
-#fi
+  npx clevis init
+fi
 echo "NPM installing..."
 npm i
 

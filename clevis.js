@@ -105,25 +105,14 @@ class Runner {
     program.command('block <blockNumber>').action(standard)
     program.command('blockNumber').action(standard)
     program.command('build').action(standard)
-
-    //NOTE: Austin, please test this in your main projects to make sure it still works.
-    //I did a little bit of cleanup of that file, just to work with the named vars and logging.
     program.command('compile <contractName>').action(standard)
-
-    //NOTE: This one is a pretty big doozy. We shouldn't be coupling the
-    //clevis argument order with the generated scripts in contracts/contractName/.clevis
-    //I think I got around this and everythign is still 100% backward compatible
-    //But we should change this for sure
     program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments...]').action(standard)
     program.command('create <contractName>').action(standard)
     program.command('deploy <contractName> <accountIndex>').action(standard)
     program.command('explain <contractName>').action(standard)
     program.command('fromhex <hexString>').action(standard)
     program.command('fromwei <amount> <symbol>').action(standard)
-
     program.command('init').action(init)
-
-    //TODO: Cant test this one due to lack of aws credentials
     program.command('invalidate <target>').action(standard)
     program.command('new [password]').action(standard)
     program.command('randomhex <size>').action(standard)
@@ -138,7 +127,6 @@ class Runner {
     program.command('transaction <hash>').action(standard)
     program.command('unlock <accountIndex> <password>').action(standard)
     program.command('update').action(standard)
-    //TODO: Cant test this one due to lack of aws credentials
     program.command('upload <site>').action(standard)
     program.command('version').action(standard)
 
