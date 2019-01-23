@@ -75,7 +75,7 @@ function deploy(params,accounts,contractarguments,bytecode,abi, accountIndex) {
     }).send({
       from: accounts[accountIndex],
       gas: params.config.deploygas,
-      gasPrice: params.config.gasprice*1000000000
+      gasPrice: params.config.gasprice
     }, function(error, transactionHash){
       winston.debug(`CALLBACK: ${error}\n${transactionHash}`)
       checkForReceipt(2,params,transactionHash,resolve)
