@@ -36,7 +36,7 @@ module.exports = async (scriptName, contractName, accountIndex, contractArgument
     winston.debug(`Loaded script (${scriptName}), running...`)
     let txparams = {
       gas:params.config.xfergas,
-      gasPrice:params.config.gasprice,
+      gasPrice:params.config.gasprice*1000000000,
       accounts:accounts,
       blockNumber:blockNumber,
     }
