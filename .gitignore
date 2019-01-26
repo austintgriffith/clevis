@@ -5,3 +5,4 @@ hugo
 docker/dapp
 build
 .tar.gz
+package-lock.json

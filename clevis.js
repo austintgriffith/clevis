@@ -5,7 +5,7 @@ const winston = require('winston')
 require('./initLogger')()
 require('dotenv').config()
 
-function runCmd(name, ...args) {
+async function execute(name, ...args) {
   winston.debug(`🗜️ Clevis [${name}]`)
   winston.debug(`${name.toUpperCase()}`)
 
@@ -86,7 +86,11 @@ class Runner {
     let cmdr = args.pop()
     let name = cmdr.name()
 
-    this.resolve(await runCmd(name, ...args))
+    execute(name, ...args).then(result => {
+      this.resolve(result)
+    }).catch(e => {
+      this.reject(e)
+    })
   }
 
   setupProgram() {
