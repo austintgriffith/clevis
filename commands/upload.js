@@ -4,12 +4,6 @@ const awsCreds = JSON.parse(fs.readFileSync("aws.json").toString().trim())
 const s3 = require('s3');
 const winston = require('winston')
 
-//NOTE: Austin, I'm almost 100% sure this isn't needed. Can you verify and delete
-String.prototype.replaceAll = function(search, replacement) {
-  var target = this;
-  return target.replace(new RegExp(search, 'g'), replacement);
-};
-
 module.exports = async (site, params) => {
   winston.debug(" ]]] ]]] UPLOADING to "+site+"...")
 
@@ -48,22 +42,22 @@ function uploadToS3(site) {
       console.log("progress", uploader.progressAmount, uploader.progressTotal);
     });
     uploader.on('end', function() {
-      console.log("done uploading "+target);
+      console.log("done uploading "+site);
     });
   })
 }
 
 function buildS3Params(site) {
-  let target = site.toLowerCase()
+  site = site.toLowerCase()
 
-  if(target.indexOf(".") <0){
-    target = target + ".io"
+  if(site.indexOf(".") <0){
+    site = site + ".io"
   }
 
   var uploadParams = {
     localDir: "build",
     s3Params: {
-      Bucket: target,
+      Bucket: site,
       Prefix: "",
       ACL: "public-read"
     }
