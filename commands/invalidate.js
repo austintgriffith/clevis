@@ -9,7 +9,7 @@ module.exports = async (target, params) => {
     winston.debug(` ]]] ]]] INVALIDATING ${target}...`)
     var cloudfront = new AWS.CloudFront(new AWS.Config(awsCreds));
     var cfparams = {
-      DistributionId: params.target,
+      DistributionId: target,
       InvalidationBatch: {
         CallerReference: ''+(new Date()),
         Paths: {
