@@ -4,7 +4,7 @@ const winston = require('winston')
 
 //TODO: Needs a cleanup
 module.exports = async (scriptName, contractName, accountIndex, contractArguments, params)=>{
-  console.log('contractArguments: ', contractArguments);
+  winston.debug(`contractArguments: ${contractArguments}`);
   winston.debug(" >>> CONTRACT")
   let startSeconds = new Date().getTime() / 1000
   const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractName}`;
@@ -62,7 +62,7 @@ let doContractFunction = (params,scriptName,scriptFunction,contract,txparams, ac
     //And the rest as function args
     //We should decouple the way clevis generates these "scripts" so this is not the case.
     let hackyContractArgs = [null, null, null, accountIndex, ...contractArguments]
-    console.log('hackyContractArgs: ', hackyContractArgs);
+    winston.debug(`hackyContractArgs: ${hackyContractArgs}`);
     let scriptPromise = scriptFunction(contract,txparams,hackyContractArgs)
 
     if(!scriptPromise || typeof scriptPromise.once != "function"){
