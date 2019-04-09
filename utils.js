@@ -1,7 +1,10 @@
 const winston = require('winston')
 
-function checkForReceipt(backoffMs, params, transactionHash, resolve) {
+function checkForReceipt(backoffMs, params, transactionHash, resolve, reject) {
   params.web3.eth.getTransactionReceipt(transactionHash,(error,result) => {
+    if (error) {
+        reject(error)
+    }
     if(result && result.transactionHash){
       winston.debug(result)
       resolve(result)
