@@ -116,10 +116,10 @@ In your `clevis.json` config file, change:
 USE_INFURA: true
 ```
 
-Create a `.env file` and add your private key under mnemonic:
+Create a `.env file` and add your mnemonic:
 
 ```
-mnemonic=32h42hj34mysuperprivakeyasdasd2h34hjk234
+mnemonic="help help help help help help help help help help help help"
 ```
 
 ## troubleshooting
