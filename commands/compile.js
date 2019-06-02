@@ -43,7 +43,7 @@ module.exports = (contractName, params)=>{
     const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
     console.log("OUTPUT:",output)
     if(!output.contracts||!output.contracts[contractName+".sol"]) {
-      console.log("ERROR compiling!",output.contracts)
+      console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR compiling!")
       return output;
     }
     winston.debug(output)
@@ -151,6 +151,7 @@ module.exports = (contractName, params)=>{
         }
       }
     }
+    console.log("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅")
     winston.debug("Compile Contract: "+contractName)
     return output;
   }
@@ -190,7 +191,7 @@ function loadInImportsForEtherscan(input,dependencies,broughtInDep){
         }
       }
       if(!found){
-        console.log("ERROR, failed to load in dependency for ",thisLine);
+        console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR, failed to load in dependency for ",thisLine);
         process.exit(1);
       }
     }else{
