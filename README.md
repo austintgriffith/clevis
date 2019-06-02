@@ -30,12 +30,12 @@ This will ask you a few questions and create a new Clevis-powered project in you
 The above setup does not install clevis globally. The clevis command line command is located at node_modules/clevis/bin.js. For convineience, we suggest adding an alias to your ~/.profile or ~/.bashrc file.
 
 ```
-alias c='./node_modules/clevis/bin.js'
+alias clevis='./node_modules/clevis/bin.js'
 ```
 
 Going forward, you can just call clevis using "c". Example:
 ```
-c randomhex 100
+clevis randomhex 100
 ```
 
 Another option is to add clevis as an npm script in your package.json file. For instance:
