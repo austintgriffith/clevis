@@ -40,7 +40,7 @@ module.exports = (contractName, params)=>{
       }
     }
     //console.log("solcObject",solcObject)
-    const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
+    const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject),1));
     console.log("OUTPUT:",output)
     if(!output.contracts||!output.contracts[contractName+".sol"]) {
       console.log("ERROR compiling!",output.contracts)
