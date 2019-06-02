@@ -21,22 +21,40 @@ module.exports = (contractName, params)=>{
       }
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
-    dependencies[contractName+".sol"] = fs.readFileSync(contractFolder+"/"+contractName+".sol", 'utf8');
+    dependencies[contractName+".sol"] = {content: fs.readFileSync(contractFolder+"/"+contractName+".sol", 'utf8')};
     console.log("Loaded dependencies...")
 
     let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
     fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractName+".compiled",finalCode)
 
     console.log("Compiling...")
-    const output = params.solc.compile({sources: dependencies}, 1);
-    if(!output.contracts||!output.contracts[contractName+".sol:"+contractName]) {
+    let solcObject = {
+      language: 'Solidity',
+      sources: dependencies,
+      settings: {
+      outputSelection: {
+              '*': {
+                  '*': [ '*' ]
+              }
+          }
+      }
+    }
+    //console.log("solcObject",solcObject)
+    const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
+    console.log("OUTPUT:",output)
+    if(!output.contracts||!output.contracts[contractName+".sol"]) {
       console.log("ERROR compiling!",output.contracts)
       return output;
     }
     winston.debug(output)
     console.log("Saving output...")
-    const bytecode = output.contracts[contractName+".sol:"+contractName].bytecode;
-    const abi = output.contracts[contractName+".sol:"+contractName].interface;
+
+    let compiledContractObject = output.contracts[contractName+".sol"][contractName]
+
+    //console.log("compiledContractObject",compiledContractObject)
+
+    const bytecode = compiledContractObject.evm.bytecode.object;
+    const abi = JSON.stringify(compiledContractObject.abi);
     console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode")
     fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode",bytecode)
     fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".abi",abi)
@@ -167,7 +185,7 @@ function loadInImportsForEtherscan(input,dependencies,broughtInDep){
           //finalCode+=loadInImportsForEtherscan(dependencies[d],dependencies)+"\n";
           if(!broughtInDep[d]){
             broughtInDep[d]=true;
-            finalCode+=dependencies[d]+"\n";
+            finalCode+=dependencies[d].content+"\n";
           }
         }
       }
