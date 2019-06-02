@@ -85,10 +85,12 @@ module.exports = {
         console.log(result)
         assert(Object.keys(result.contracts).length>0, "No compiled contacts found.")
         let count = 0
+
         for(let c in result.contracts){
-          console.log("\t\t"+"contract "+c.blue+": ",result.contracts[c].bytecode.length)
           if(count++==0){
-              assert(result.contracts[c].bytecode.length > 1, "No bytecode for contract "+c)
+            let bytecode = result.contracts[c][contract].evm.bytecode.object
+            console.log("\t\t"+"contract "+c.blue+": ",bytecode.length)
+            assert(bytecode.length > 1, "No bytecode for contract "+c)
           }
         }
       });
