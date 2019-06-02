@@ -32,15 +32,15 @@ module.exports = (contractName, params)=>{
       language: 'Solidity',
       sources: dependencies,
       settings: {
-      outputSelection: {
+        outputSelection: {
               '*': {
                   '*': [ '*' ]
               }
-          }
+        },
       }
     }
     //console.log("solcObject",solcObject)
-    const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject),1));
+    const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
     console.log("OUTPUT:",output)
     if(!output.contracts||!output.contracts[contractName+".sol"]) {
       console.log("ERROR compiling!",output.contracts)
