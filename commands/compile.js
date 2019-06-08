@@ -22,12 +22,12 @@ module.exports = (contractName, params)=>{
     }catch(e){console.log(e)}
     if(!dependencies) dependencies={}
     dependencies[contractName+".sol"] = {content: fs.readFileSync(contractFolder+"/"+contractName+".sol", 'utf8')};
-    console.log("Loaded dependencies...")
+    console.log(" 📦 Loaded dependencies...")
 
     let finalCode = loadInImportsForEtherscan(input,simplifyDeps(dependencies),{});
     fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractName+".compiled",finalCode)
 
-    console.log("Compiling...")
+    console.log(" 🛠️  Compiling...")
     let solcObject = {
       language: 'Solidity',
       sources: dependencies,
@@ -41,13 +41,14 @@ module.exports = (contractName, params)=>{
     }
     //console.log("solcObject",solcObject)
     const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
-    console.log("OUTPUT:",output)
+    //console.log("OUTPUT:",output)
     if(!output.contracts||!output.contracts[contractName+".sol"]) {
-      console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR compiling!")
-      return output;
+      //console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR compiling!")
+      reportOutput(output)
+      return false;
     }
     winston.debug(output)
-    console.log("Saving output...")
+    console.log(" 💾 Saving output...")
 
     let compiledContractObject = output.contracts[contractName+".sol"][contractName]
 
@@ -55,7 +56,7 @@ module.exports = (contractName, params)=>{
 
     const bytecode = compiledContractObject.evm.bytecode.object;
     const abi = JSON.stringify(compiledContractObject.abi);
-    console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode")
+    //console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode")
     fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode",bytecode)
     fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".abi",abi)
     winston.debug("Compiled!")
@@ -151,9 +152,26 @@ module.exports = (contractName, params)=>{
         }
       }
     }
-    console.log("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅")
+    //console.log("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅")
+
+    reportOutput(output)
     winston.debug("Compile Contract: "+contractName)
-    return output;
+    return true;
+  }
+}
+
+function reportOutput(output){
+  for(let c in output.contracts){
+    console.log(" ✅ ",c)
+  }
+  for(let e in output.errors){
+    if(output.errors[e].severity == "warning"){
+      console.log(" ⚠️ ",output.errors[e].formattedMessage)
+    }else if(output.errors[e].severity == "error"){
+      console.log(" 🛑 ",output.errors[e].formattedMessage)
+    }else{
+      console.log(output.errors[e])
+    }
   }
 }
 
