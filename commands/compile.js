@@ -1,5 +1,6 @@
 const fs = require('fs')
 const winston = require('winston')
+const { exec } = require('child_process');
 
 //TODO: Needs a cleanup
 module.exports = (contractName, params)=>{
@@ -44,7 +45,7 @@ module.exports = (contractName, params)=>{
     //console.log("OUTPUT:",output)
     if(!output.contracts||!output.contracts[contractName+".sol"]) {
       //console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR compiling!")
-      reportOutput(output)
+      reportOutput(output,params)
       return false;
     }
     winston.debug(output)
@@ -154,13 +155,13 @@ module.exports = (contractName, params)=>{
     }
     //console.log("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅")
 
-    reportOutput(output)
+    reportOutput(output,params)
     winston.debug("Compile Contract: "+contractName)
     return true;
   }
 }
 
-function reportOutput(output){
+function reportOutput(output,params){
   for(let c in output.contracts){
     console.log(" ✅ ",c)
   }
@@ -169,6 +170,14 @@ function reportOutput(output){
       console.log(" ⚠️ ",output.errors[e].formattedMessage)
     }else if(output.errors[e].severity == "error"){
       console.log(" 🛑 ",output.errors[e].formattedMessage)
+      if(params.config.editor){
+        let fileAndLink = output.errors[e].formattedMessage.substring(0,output.errors[e].formattedMessage.indexOf(":",output.errors[e].formattedMessage.indexOf(":")+1))
+        let folder = fileAndLink.substring(0,fileAndLink.indexOf(".sol"))
+        let contractAt = params.config.CONTRACTS_FOLDER+"/"+folder+"/"+fileAndLink
+        let cmd = params.config.editor+" "+contractAt
+        exec(cmd)
+      }
+
     }else{
       console.log(output.errors[e])
     }
