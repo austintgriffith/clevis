@@ -169,9 +169,10 @@ function reportOutput(output,params){
     if(output.errors[e].severity == "warning"){
       console.log(" ⚠️ ",output.errors[e].formattedMessage)
     }else if(output.errors[e].severity == "error"){
-      console.log(" 🛑 ",output.errors[e].formattedMessage)
+      console.log(" 🛑",output.errors[e].formattedMessage)
       if(params.config.editor){
-        let fileAndLink = output.errors[e].formattedMessage.substring(0,output.errors[e].formattedMessage.indexOf(":",output.errors[e].formattedMessage.indexOf(":")+1))
+        let fileAndLink = output.errors[e].formattedMessage.substring(0,output.errors[e].formattedMessage.indexOf(" ")-1)
+        console.log(" ✏️  Editing "+fileAndLink)
         let folder = fileAndLink.substring(0,fileAndLink.indexOf(".sol"))
         let contractAt = params.config.CONTRACTS_FOLDER+"/"+folder+"/"+fileAndLink
         let cmd = params.config.editor+" "+contractAt
