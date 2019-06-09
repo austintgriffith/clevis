@@ -43,7 +43,7 @@ module.exports = (contractName, params)=>{
     //console.log("solcObject",solcObject)
     const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
     //console.log("OUTPUT:",output)
-    if(!output.contracts||!output.contracts[contractName+".sol"]|| (output.errors&&output.errors[0]&&output.errors[0].severity=="error") ) {
+    if(!output.contracts||!output.contracts[contractName+".sol"]|| (output.errors&&output.errors[0]&&output.errors[0].severity=="error")  ) {
       //console.log(output)
       //console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR compiling!")
       reportOutput(output,params)
@@ -55,6 +55,13 @@ module.exports = (contractName, params)=>{
     let compiledContractObject = output.contracts[contractName+".sol"][contractName]
 
     //console.log("compiledContractObject",compiledContractObject)
+
+    if(!compiledContractObject || !compiledContractObject.evm ) {
+      //console.log(output)
+      //console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR compiling!")
+      console.log(" 🛑 Missing Contract "+contractName+"")
+      return false;
+    }
 
     const bytecode = compiledContractObject.evm.bytecode.object;
     const abi = JSON.stringify(compiledContractObject.abi);
