@@ -170,6 +170,7 @@ module.exports = (contractName, params)=>{
 }
 
 function reportOutput(output,params){
+  let edited = false
   for(let c in output.contracts){
     console.log(" ✅ ",c)
   }
@@ -178,7 +179,8 @@ function reportOutput(output,params){
       console.log(" ⚠️ ",output.errors[e].formattedMessage)
     }else if(output.errors[e].severity == "error"){
       console.log(" 🛑",output.errors[e].formattedMessage)
-      if(params.config.editor){
+      if(params.config.editor&&!edited){
+        edited=true;
         let fileAndLink = output.errors[e].formattedMessage.substring(0,output.errors[e].formattedMessage.indexOf(" ")-1)
         console.log(" ✏️  Editing "+fileAndLink)
         let folder = fileAndLink.substring(0,fileAndLink.indexOf(".sol"))
