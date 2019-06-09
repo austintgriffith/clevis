@@ -43,7 +43,8 @@ module.exports = (contractName, params)=>{
     //console.log("solcObject",solcObject)
     const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
     //console.log("OUTPUT:",output)
-    if(!output.contracts||!output.contracts[contractName+".sol"]) {
+    if(!output.contracts||!output.contracts[contractName+".sol"]|| (output.errors&&output.errors[0]&&output.errors[0].severity=="error") ) {
+      //console.log(output)
       //console.log("⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️ ERROR compiling!")
       reportOutput(output,params)
       return false;
