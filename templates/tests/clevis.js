@@ -97,6 +97,25 @@ module.exports = {
       });
     });
   },
+  deployCustom:(contract,accountindex,name,deployArguments)=>{
+    describe('#deploy() '+contract.magenta, function() {
+      it('should deploy '+contract.magenta+' customized as '+name.green+' as account '+accountindex, async function() {
+        this.timeout(360000)
+        console.log("\t\tdeployArguments",deployArguments)
+        const result = await clevis("deploy",contract,accountindex,...deployArguments)
+        printTxResult(result)
+        console.log(tab+"Address: "+result.contractAddress.blue)
+        assert(result.contractAddress)
+        fs.writeFileSync(clevisConfig.CONTRACTS_FOLDER + "/"+name+".address",result.contractAddress);
+        fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/"+name+".address.js","module.exports = \""+result.contractAddress+"\"");
+        console.log(tab,"blockNumber:",(""+result.blockNumber).blue)
+        assert(result.blockNumber,"No blockNumber!?")
+        fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + name+".blocknumber.js","module.exports = \""+result.blockNumber+"\"");
+        let abi = fs.readFileSync(clevisConfig.CONTRACTS_FOLDER +"/" + contract +"/"+contract+".abi").toString().trim()
+        fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/" + name+".abi.js","module.exports = "+abi);
+      });
+    });
+  },
 
   publish:()=>{
     describe('#publish() ', function() {
