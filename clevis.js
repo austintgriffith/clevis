@@ -112,7 +112,7 @@ class Runner {
     program.command('compile <contractName>').action(standard)
     program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments...]').action(standard)
     program.command('create <contractName>').action(standard)
-    program.command('deploy <contractName> <accountIndex>').action(standard)
+    program.command('deploy <contractName> <accountIndex> [deployArguments...]').action(standard)
     program.command('explain <contractName>').action(standard)
     program.command('fromhex <hexString>').action(standard)
     program.command('fromwei <amount> <symbol>').action(standard)

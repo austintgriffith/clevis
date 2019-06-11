@@ -3,7 +3,9 @@ const fs = require('fs')
 const winston = require('winston')
 
 
-module.exports = async (contractName, accountIndex, params)=>{
+module.exports = async (contractName, accountIndex, deployArguments, params)=>{
+
+  winston.debug("deployArguments: ",deployArguments)
   let startSeconds = new Date().getTime() / 1000
   winston.debug(`Unlocking account: ${accountIndex}`)
   let accounts = await params.web3.eth.getAccounts();
@@ -29,13 +31,17 @@ module.exports = async (contractName, accountIndex, params)=>{
   winston.debug(`With the gas price of: ${params.config.gasprice}`)
 
   let contractarguments = []
-  try{
-    let path = process.cwd()+"/"+contractFolder+"/arguments.js"
-    if(fs.existsSync(path)){
-      winston.debug(`looking for arguments in ${path}`)
-      contractarguments=require(path)
-    }
-  }catch(e){console.log(e)}
+  if(deployArguments.length>0){
+    contractarguments = deployArguments
+  }else{
+    try{
+      let path = process.cwd()+"/"+contractFolder+"/arguments.js"
+      if(fs.existsSync(path)){
+        winston.debug(`looking for arguments in ${path}`)
+        contractarguments=require(path)
+      }
+    }catch(e){console.log(e)}
+  }
 
   winston.debug(`Arguments: ${contractarguments}`)
   let result = await deploy(params,accounts,contractarguments,bytecode,abi, accountIndex)
