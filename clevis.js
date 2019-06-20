@@ -30,6 +30,7 @@ async function execute(name, ...args) {
     return result
   } catch(e) {
     winston.error(e)
+    return e
   }
 
 }
