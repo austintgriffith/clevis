@@ -84,6 +84,9 @@ function deploy(params,accounts,contractarguments,bytecode,abi, accountIndex) {
       gasPrice: params.config.gasprice
     }, function(error, transactionHash){
       winston.debug(`CALLBACK: ${error}\n${transactionHash}`)
+      if(error){
+        console.log(" 🛑 "+error+"")
+      }
       checkForReceipt(2,params,transactionHash,resolve)
     })
   })
