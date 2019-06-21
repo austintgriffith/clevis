@@ -122,6 +122,53 @@ Create a `.env file` and add your private key under mnemonic:
 mnemonic=32h42hj34mysuperprivakeyasdasd2h34hjk234
 ```
 
+### Using xDai
+
+Your `clevis.json` file should look something like:
+```
+{
+  "provider": "https://dai.poa.network",
+  "gasprice": 1000000000,
+  "ethprice": 1,
+  "deploygas": 5500000,
+  "xfergas": 1300000,
+  "USE_INFURA": true,
+  "ROOT_FOLDER": "/Users/austingriffith/rawclevistest",
+  "CRA_FOLDER": "./src",
+  "TESTS_FOLDER": "tests",
+  "CONTRACTS_FOLDER": "contracts"
+}
+```
+
+Create an account:
+```
+clevis new
+```
+(a mnemonic will be automatically created in your .env file and can be imported as a seed phrase into a burner if you want)
+
+View your account:
+```
+clevis accounts
+```
+
+Check your balance:
+```
+clevis balance 0
+```
+
+Send a dime from your account (0) to me:
+```
+clevis send 0.1 0 0x34aa3f359a9d614239015126635ce7732c18fdf3
+```
+
+Create, Compile, and Deploy a contract on xDai from your account:
+```
+clevis create Test
+clevis compile Test
+clevis deploy Test 0
+```
+
+
 ## troubleshooting
 
 Right now the web3 dependencies are not very well supported and installs can fail on certain machines.
