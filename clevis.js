@@ -109,7 +109,7 @@ class Runner {
     program.command('block <blockNumber>').action(standard)
     program.command('blockNumber').action(standard)
     program.command('build').action(standard)
-    program.command('compile <contractName>').action(standard)
+    program.command('compile <contractName> [proxyContractName]').action(standard) //proxyContractName lets you add to the abi for proxy patterns 
     program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments...]').action(standard)
     program.command('create <contractName>').action(standard)
     program.command('deploy <contractName> <accountIndex> [deployArguments...]').action(standard)

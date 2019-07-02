@@ -3,7 +3,8 @@ const winston = require('winston')
 const { exec } = require('child_process');
 
 //TODO: Needs a cleanup
-module.exports = (contractName, params)=>{
+module.exports = (contractName, proxyContractName, params)=>{
+  //console.log("params",params)
   params.solc = require('solc')
   let startSeconds = new Date().getTime() / 1000
   const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractName}`;
@@ -64,11 +65,33 @@ module.exports = (contractName, params)=>{
     }
 
     const bytecode = compiledContractObject.evm.bytecode.object;
-    const abi = JSON.stringify(compiledContractObject.abi);
+    let abi = JSON.stringify(compiledContractObject.abi);
+
     //console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode")
     fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode",bytecode)
+
+
+    if(proxyContractName){
+      console.log(" 📑 Adding Proxy Contract "+proxyContractName.blue+" abi...")
+      winston.debug("Loading current abi...")
+      let currentAbi = JSON.parse(abi)
+      winston.debug("Loading proxy abi...")
+      let proxyContract = JSON.parse(fs.readFileSync(process.cwd()+"/"+contractFolder+"/../"+proxyContractName+"/"+proxyContractName+".abi").toString())
+      for(let i in proxyContract){
+        if(proxyContract[i].type=="function"){
+          winston.debug("Adding function "+proxyContract[i].name+" to this abi so proxy calls will work...")
+          currentAbi.push(proxyContract[i])
+        }
+      }
+      abi = JSON.stringify(currentAbi)
+    }
+
+
+
     fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".abi",abi)
     winston.debug("Compiled!")
+
+
 
     let abiObject = JSON.parse(abi)
     winston.debug("Generating Getters, Setters, and Events...")

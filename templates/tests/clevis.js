@@ -77,11 +77,11 @@ module.exports = {
       });
     });
   },
-  compile:(contract)=>{
+  compile:(contract,proxyContractName)=>{
     describe('#compile() '+contract.magenta, function() {
       it('should compile '+contract.magenta+' contract to bytecode', async function() {
         this.timeout(90000)
-        const result = await clevis("compile",contract)
+        const result = await clevis("compile",contract,proxyContractName)
         assert(result, "Failed to compile contacts.")
       });
     });
