@@ -6,6 +6,7 @@ const { exec } = require('child_process');
 module.exports = (contractName, proxyContractName, params)=>{
   //console.log("params",params)
   params.solc = require('solc')
+  params.linker = require('solc/linker')
   let startSeconds = new Date().getTime() / 1000
   const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractName}`;
   winston.debug("Compiling "+contractName+"/"+contractName+".sol ["+params.solc.version()+"]...")
@@ -41,8 +42,26 @@ module.exports = (contractName, proxyContractName, params)=>{
         },
       }
     }
+
+    let libraries = {}
+    for(let s in solcObject.sources){
+      if(s!=contractName+".sol"){
+        let lines = solcObject.sources[s].content.split("\n")
+        for(let l in lines){
+          let libraryName = s.replace(".sol","")
+          if(lines[l].indexOf("library "+libraryName)==0){
+            console.log(" 📚 Adding library "+libraryName+"...")
+            libraries[libraryName+'.sol:'+libraryName] = fs.readFileSync(process.cwd()+"/"+contractFolder+"/../"+libraryName+"/"+libraryName+".address").toString()
+          }
+        }
+      }
+    }
+
     //console.log("solcObject",solcObject)
     const output = JSON.parse(params.solc.compile(JSON.stringify(solcObject)));
+
+    //console.log("output",output)
+
     //console.log("OUTPUT:",output)
     if(!output.contracts||!output.contracts[contractName+".sol"]|| (output.errors&&output.errors[0]&&output.errors[0].severity=="error")  ) {
       //console.log(output)
@@ -64,8 +83,13 @@ module.exports = (contractName, proxyContractName, params)=>{
       return false;
     }
 
-    const bytecode = compiledContractObject.evm.bytecode.object;
+    let bytecode = compiledContractObject.evm.bytecode.object;
     let abi = JSON.stringify(compiledContractObject.abi);
+
+    //console.log("libraryReplacementAddresses",libraryReplacementAddresses)
+    bytecode = params.linker.linkBytecode( bytecode , libraries)
+
+    //console.log("bytecode after linker",bytecode)
 
     //console.log("Writing bytecode to ",process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode")
     fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".bytecode",bytecode)
@@ -208,9 +232,9 @@ function reportOutput(output,params){
         console.log(" ✏️  Editing "+fileAndLink)
         let folder = fileAndLink.substring(0,fileAndLink.indexOf(".sol"))
         let contractAt = params.config.CONTRACTS_FOLDER+"/"+folder+"/"+fileAndLink
-        if (!fs.existsSync(contractAt)) {
-          contractAt = params.config.CONTRACTS_FOLDER+"/"+fileAndLink
-        }
+        //if (!fs.existsSync(contractAt)) {
+        //  contractAt = params.config.CONTRACTS_FOLDER+"/"+fileAndLink
+        //}
         let cmd = params.config.editor+" "+contractAt
         exec(cmd)
       }
