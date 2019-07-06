@@ -81,7 +81,7 @@ module.exports = {
     describe('#compile() '+contract.magenta, function() {
       it('should compile '+contract.magenta+' contract to bytecode', async function() {
         this.timeout(90000)
-        const result = await clevis("compile",contract,proxyContractName)
+        const result = await clevis("compile",contract,proxyContractName?proxyContractName:false)
         assert(result, "Failed to compile contacts.")
       });
     });
