@@ -109,7 +109,7 @@ class Runner {
     program.command('block <blockNumber>').action(standard)
     program.command('blockNumber').action(standard)
     program.command('build').action(standard)
-    program.command('compile <contractName> [proxyContractName]').action(standard) //proxyContractName lets you add to the abi for proxy patterns 
+    program.command('compile <contractName> [proxyContractName]').action(standard) //proxyContractName lets you add to the abi for proxy patterns
     program.command('contract <scriptName> <contractName> [accountIndex] [contractArguments...]').action(standard)
     program.command('create <contractName>').action(standard)
     program.command('deploy <contractName> <accountIndex> [deployArguments...]').action(standard)
@@ -132,6 +132,7 @@ class Runner {
     program.command('unlock <accountIndex> <password>').action(standard)
     program.command('update').action(standard)
     program.command('upload <site>').action(standard)
+    program.command('mnemonic').action(standard)
     program.command('version').action(standard)
 
     program.on('command:*', () => {

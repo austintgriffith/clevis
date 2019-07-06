@@ -208,6 +208,9 @@ function reportOutput(output,params){
         console.log(" ✏️  Editing "+fileAndLink)
         let folder = fileAndLink.substring(0,fileAndLink.indexOf(".sol"))
         let contractAt = params.config.CONTRACTS_FOLDER+"/"+folder+"/"+fileAndLink
+        if (!fs.existsSync(contractAt)) {
+          contractAt = params.config.CONTRACTS_FOLDER+"/"+fileAndLink
+        }
         let cmd = params.config.editor+" "+contractAt
         exec(cmd)
       }
