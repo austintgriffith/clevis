@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Metamask, Gas, ContractLoader, Transactions, Events, Scaler, Blockie, Address, Button } from "dapparatus"
+import { Dapparatus, Gas, ContractLoader, Transactions, Events, Scaler, Blockie, Address, Button } from "dapparatus"
 import Web3 from 'web3';
+
+const FALLBACK_WEB3_PROVIDER = "http://localhost:8545"
+const METATX = false
 
 class App extends Component {
   constructor(props) {
@@ -109,14 +112,21 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <Metamask
-          config={{requiredNetwork:['Unknown','Rinkeby']}}
+        <Dapparatus
+          config={{
+            DEBUG:false,
+            metatxAccountGenerator:false,
+            requiredNetwork:['Unknown','Mainnet'],
+            hide:false
+          }}
+          metatx={METATX}
+          fallbackWeb3Provider={new Web3.providers.HttpProvider(FALLBACK_WEB3_PROVIDER)}
           onUpdate={(state)=>{
-           console.log("metamask state update:",state)
-           if(state.web3Provider) {
-             state.web3 = new Web3(state.web3Provider)
-             this.setState(state)
-           }
+            console.log("metamask state update:",state)
+            if(state.web3Provider) {
+              state.web3 = new Web3(state.web3Provider)
+              this.setState(state)
+            }
           }}
         />
         {connectedDisplay}
