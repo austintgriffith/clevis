@@ -62,6 +62,7 @@ class App extends Component {
           block={block}
           avgBlockTime={avgBlockTime}
           etherscan={etherscan}
+          metaAccount={metaAccount}
           onReady={(state)=>{
             console.log("Transactions component is ready:",state)
             this.setState(state)
