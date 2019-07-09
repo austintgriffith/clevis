@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Dapparatus, Gas, ContractLoader, Transactions, Events, Scaler, Blockie, Address, Button } from "dapparatus"
+import { Dapparatus, Gas, ContractLoader, Transactions, Events, Scaler, Blockie, Address, Button, PrivateKeyCatcher } from "dapparatus"
 import Web3 from 'web3';
 
 const FALLBACK_WEB3_PROVIDER = "http://localhost:8545"
@@ -112,6 +112,9 @@ class App extends Component {
     }
     return (
       <div className="App">
+        <PrivateKeyCatcher newPrivateKey={(pk)=>{
+          this.setState({newPrivateKey:pk})
+        }}/>
         <Dapparatus
           config={{
             DEBUG:false,
@@ -120,6 +123,7 @@ class App extends Component {
             hide:false
           }}
           metatx={METATX}
+          newPrivateKey={this.state.newPrivateKey}
           fallbackWeb3Provider={new Web3.providers.HttpProvider(FALLBACK_WEB3_PROVIDER)}
           onUpdate={(state)=>{
             console.log("metamask state update:",state)
