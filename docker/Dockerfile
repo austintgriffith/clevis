@@ -22,7 +22,7 @@ RUN npm config set unsafe-perm true
 RUN npm install -g ganache-cli
 RUN npm install -g npx
 
-RUN echo "Break the cache for version 0.2.23 (do this after committing the package.json to github) +1 new bootstrap"
+RUN echo "Break the cache for version 0.2.24 (do this after committing the package.json to github)"
 
 RUN mkdir dapp
 WORKDIR dapp
