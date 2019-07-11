@@ -35,6 +35,8 @@ fi
 
 ./node_modules/clevis/bin.js --help
 
+./node_modules/clevis/bin.js update
+
 ./node_modules/clevis/bin.js version
 
 bash
