@@ -75,6 +75,8 @@ function deploy(params,accounts,contractarguments,bytecode,abi, accountIndex) {
     winston.debug(`Creating contract from abi: ${abi}`)
     let contract = new params.web3.eth.Contract(abi)
     winston.debug(`Deploying contract with bytecode: ${bytecode}`)
+    winston.debug(`contractarguments:`,contractarguments)
+    winston.debug(`config:`,params.config)
     let deployed = contract.deploy({
       data: "0x"+bytecode,
       arguments: contractarguments

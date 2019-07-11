@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-RUN echo "Break the cache for version 0.0.81"
+RUN echo "Break the cache for version 0.2.23"
 
 RUN apt-get update
 RUN apt-get dist-upgrade -y
@@ -22,12 +22,15 @@ RUN npm config set unsafe-perm true
 RUN npm install -g ganache-cli
 RUN npm install -g npx
 
-RUN echo "Break the cache for version 0.2.23 (do this after committing the package.json to github)"
+RUN echo "Break the cache for version 0.2.23 (do this after committing the package.json to github) +1 new bootstrap"
 
 RUN mkdir dapp
 WORKDIR dapp
 
 ADD bootstrap.sh /bootstrap.sh
 RUN chmod +x /bootstrap.sh
+
+ADD bash_aliases /root/.bash_aliases
+RUN chmod +x /root/.bash_aliases
 
 CMD ../bootstrap.sh
