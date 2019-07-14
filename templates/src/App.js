@@ -120,7 +120,7 @@ class App extends Component {
           config={{
             DEBUG:false,
             metatxAccountGenerator:false,
-            requiredNetwork:['Unknown','Rinkeby'],
+            requiredNetwork:['Unknown','Private','Rinkeby'],
             hide:false
           }}
           metatx={METATX}

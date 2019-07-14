@@ -2,7 +2,7 @@
   "provider": "http://localhost:8545",
   "gasprice": 4100000000,
   "ethprice": 400,
-  "deploygas": 5500000,
+  "deploygas": 6700000,
   "xfergas": 1300000,
   "USE_INFURA": false,
   "ROOT_FOLDER": "",

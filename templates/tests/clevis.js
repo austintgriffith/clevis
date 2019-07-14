@@ -107,6 +107,9 @@ module.exports = {
         console.log(tab+"Address: "+result.contractAddress.blue)
         assert(result.contractAddress)
         fs.writeFileSync(clevisConfig.CONTRACTS_FOLDER + "/"+name+".address",result.contractAddress);
+        try{
+          fs.mkdirSync(clevisConfig.CRA_FOLDER + "/contracts/")
+        }catch(e){}
         fs.writeFileSync(clevisConfig.CRA_FOLDER + "/contracts/"+name+".address.js","module.exports = \""+result.contractAddress+"\"");
         console.log(tab,"blockNumber:",(""+result.blockNumber).blue)
         assert(result.blockNumber,"No blockNumber!?")
