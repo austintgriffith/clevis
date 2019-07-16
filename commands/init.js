@@ -90,14 +90,15 @@ function cra(craFolder='./src') {
   return new Promise((resolve, reject) => {
     if(fs.existsSync(craFolder)){
       resolve("Skipping CRA, src exists...")
+      try{fs.mkdirSync(craFolder+"/contracts")}catch(e){console.log(e)}
     } else {
       console.log("Installing clevis (this will take a while to compile)...")
       let reactAction = exec(`npx create-react-app . && rm -rf src && npm install --save dapparatus && npm install --save-dev clevis`, (err, stdout, stderr) => {
         if (err) {
           return reject(err);
         }
-
         copyRecursiveSync(__dirname+"/../templates/src","src")
+        try{fs.mkdirSync(craFolder+"/contracts")}catch(e){console.log(e)}
         resolve(`${stdout}`);
       })
       reactAction.stdout.on('data', function(data) {
