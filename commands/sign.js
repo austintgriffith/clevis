@@ -4,9 +4,7 @@ module.exports = async (string, accountIndex, password, params)=>{
   if(address === undefined) {
     throw(`accountIndex: ${accountIndex} is undefined`)
   }
-  console.log("password is ",password)
-  if(typeof password == "undefined"){
-    console.log("using personal sign")
+  if(typeof password != "undefined"){
     return params.web3.eth.personal.sign(string, address, password)
   }else{
     return params.web3.eth.sign(string, address)
