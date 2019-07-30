@@ -123,7 +123,7 @@ class Runner {
     program.command('recover <string> <signature>').action(standard)
     program.command('send <amount> <fromAddress> <toAddress> [data]').action(standard)
     program.command('sha3 <string>').action(standard)
-    program.command('sign <string> <accountIndex> <password>').action(standard)
+    program.command('sign <string> <accountIndex>').action(standard)
     program.command('start').action(standard)
     program.command('test <testName>').action(standard)
     program.command('tohex <textString>').action(standard)
