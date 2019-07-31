@@ -22,7 +22,7 @@ class App extends Component {
     this.setState(update)
   }
   render() {
-    let {web3,account,contracts,tx,gwei,block,avgBlockTime,etherscan} = this.state
+    let {web3,account,contracts,tx,gwei,block,avgBlockTime,etherscan,metaAccount} = this.state
     let connectedDisplay = []
     let contractsDisplay = []
     if(web3){
