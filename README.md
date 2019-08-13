@@ -27,7 +27,7 @@ npx clevis init
 This will ask you a few questions and create a new Clevis-powered project in your current directory.
 
 ### Using Clevis
-The above setup does not install clevis globally. The clevis command line command is located at node_modules/clevis/bin.js. For convineience, we suggest adding an alias to your ~/.profile or ~/.bashrc file.
+The above setup does not install clevis globally. You can do that with `npm install -g clevis` if you want. If not, the clevis command line command is located at node_modules/clevis/bin.js. For convineience, we suggest adding an alias to your ~/.profile or ~/.bashrc file.
 
 ```
 alias clevis='./node_modules/clevis/bin.js'
