@@ -20,8 +20,8 @@ module.exports = async (amount, fromAddress, toAddress, data, params) => {
     winston.debug(`Adding data to payload: ${data}`)
     txparams['data'] = data
   }
-
-  winston.debug(txparams)
+  winston.debug((txparams.gasPrice/1000000000)+" gwei")
+  winston.debug(JSON.stringify(txparams,null,2))
 
   return await send(params,txparams)
 }
