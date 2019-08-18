@@ -254,6 +254,7 @@ to fix this you need to install node v10:
 brew install node@10
 brew link --force --overwrite node@10
 ```
+(you will probably have to remove the node_modules and package-lock.json and do the whole `npx clevis init; npm i` dance.)
 
 If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
 
