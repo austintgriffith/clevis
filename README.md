@@ -242,8 +242,18 @@ to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it:
 echo "SKIP_PREFLIGHT_CHECK=true" >> .env
 ```
 
-
-
+a classic scrypt + non-LTS node error:
+```
+Error: The module '...scrypt/build/Release/scrypt.node'
+was compiled against a different Node.js version using
+NODE_MODULE_VERSION 67. This version of Node.js requires
+NODE_MODULE_VERSION 72. Please try re-compiling or re-installing
+```
+to fix this you need to install node v10:
+```
+brew install node@10
+brew link --force --overwrite node@10
+```
 
 If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
 
