@@ -31,6 +31,7 @@ module.exports = (contractName, proxyContractName, params)=>{
     fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractName+".compiled",finalCode)
 
     console.log(" 🛠️  Compiling...")
+    winston.debug("Sources:"+JSON.stringify(dependencies))
     let solcObject = {
       language: 'Solidity',
       sources: dependencies,
@@ -46,12 +47,18 @@ module.exports = (contractName, proxyContractName, params)=>{
     let libraries = {}
     for(let s in solcObject.sources){
       if(s!=contractName+".sol"){
-        let lines = solcObject.sources[s].content.split("\n")
-        for(let l in lines){
-          let libraryName = s.replace(".sol","")
-          if(lines[l].indexOf("library "+libraryName)==0){
-            console.log(" 📚 Adding library "+libraryName+"...")
-            libraries[libraryName+'.sol:'+libraryName] = fs.readFileSync(process.cwd()+"/"+contractFolder+"/../"+libraryName+"/"+libraryName+".address").toString()
+        if(!solcObject.sources[s]){
+          console.log(" ⛔️  Missing Source "+s)
+        }else if(!solcObject.sources[s].content){
+          console.log(" ⛔️  Missing Content for Source "+s)
+        }else{
+          let lines = solcObject.sources[s].content.split("\n")
+          for(let l in lines){
+            let libraryName = s.replace(".sol","")
+            if(lines[l].indexOf("library "+libraryName)==0){
+              console.log(" 📚 Adding library "+libraryName+"...")
+              libraries[libraryName+'.sol:'+libraryName] = fs.readFileSync(process.cwd()+"/"+contractFolder+"/../"+libraryName+"/"+libraryName+".address").toString()
+            }
           }
         }
       }
