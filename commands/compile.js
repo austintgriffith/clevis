@@ -31,7 +31,7 @@ module.exports = (contractName, proxyContractName, params)=>{
     fs.writeFileSync(process.cwd()+ "/" +contractFolder + "/"+contractName+".compiled",finalCode)
 
     console.log(" 🛠️  Compiling...")
-    winston.debug("Sources:"+JSON.stringify(dependencies))
+    //winston.debug("Sources:"+JSON.stringify(dependencies))
     let solcObject = {
       language: 'Solidity',
       sources: dependencies,
