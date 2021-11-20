@@ -1,89 +1,95 @@
-module.exports = async (params)=>{
-  const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> DEPLOY")
-  let accountindex = params.accountindex
+const checkForReceipt = require('../utils').checkForReceipt
+const fs = require('fs')
+const winston = require('winston')
+
+
+module.exports = async (contractName, accountIndex, deployArguments, params)=>{
+
+  winston.debug("deployArguments: ",deployArguments)
   let startSeconds = new Date().getTime() / 1000
-  if(DEBUG) console.log("Unlocking account "+accountindex)
+  winston.debug(`Unlocking account: ${accountIndex}`)
   let accounts = await params.web3.eth.getAccounts();
-  let balance = await params.web3.eth.getBalance(accounts[accountindex])
+  winston.debug(`accounts: ${accounts}`)
+  let balance = await params.web3.eth.getBalance(accounts[accountIndex])
+  winston.debug(`balance: ${balance}`)
+
   //if(balance < 10*10**18){
   //  let result = await params.web3.eth.personal.unlockAccount(accounts[1])
   //}
-  let contractname = params.contractname
-  let bytecode = params.fs.readFileSync(contractname+"/"+contractname+".bytecode").toString()
-  let abi = JSON.parse(params.fs.readFileSync(contractname+"/"+contractname+".abi"));
+
+  const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractName}`;
+  winston.debug(`contractFolder: ${contractFolder}`);
+  let bytecode = fs.readFileSync(contractFolder+"/"+contractName+".bytecode").toString()
+  let abi = JSON.parse(fs.readFileSync(contractFolder+"/"+contractName+".abi"));
   let etherbalance = params.web3.utils.fromWei(balance,"ether");
-  if(DEBUG) console.log(etherbalance+" ($"+(etherbalance*params.config.ethprice)+")")
-  if(DEBUG) console.log("Loaded account "+accounts[params.accountindex])
-  if(DEBUG) console.log("Deploying...")
+  winston.debug(etherbalance+" ($"+(etherbalance*params.config.ethprice)+")")
+  winston.debug(`Loaded account: ${accounts[accountIndex]}`)
+  winston.debug("Deploying...")
   let contract = new params.web3.eth.Contract(abi)
-  if(DEBUG) console.log("paying a max of "+params.config.deploygas+" gas @ the price of "+params.config.gasprice+" gwei ("+params.config.gaspricegwei+")")
+
+  winston.debug(`Paying a max of: ${params.config.deploygas} gas`)
+  winston.debug(`With the gas price of: ${params.config.gasprice}`)
 
   let contractarguments = []
-  try{
-    let path = process.cwd()+"/"+contractname+"/arguments.js"
-    if(params.fs.existsSync(path)){
-      if(DEBUG) console.log("looking for arguments in ",path)
-      contractarguments=require(path)
-    }
-  }catch(e){console.log(e)}
+  if(deployArguments.length>0){
+    contractarguments = deployArguments
+  }else{
+    try{
+      let path = process.cwd()+"/"+contractFolder+"/arguments.js"
+      if(fs.existsSync(path)){
+        winston.debug(`looking for arguments in ${path}`)
+        contractarguments=require(path)
+      }
+    }catch(e){console.log(e)}
+  }
 
-  if(DEBUG) console.log("Arguments: ",contractarguments)
-  let result = await deploy(params,accounts,contractarguments,bytecode,abi)
+  winston.debug(`Arguments: ${contractarguments}`)
+  let result = await deploy(params,accounts,contractarguments,bytecode,abi, accountIndex)
 
-  let newbalance = await params.web3.eth.getBalance(accounts[params.accountindex])
+  let newbalance = await params.web3.eth.getBalance(accounts[accountIndex])
   let endetherbalance = params.web3.utils.fromWei(newbalance,"ether");
   let etherdiff = etherbalance-endetherbalance
-  if(DEBUG) console.log("==ETHER COST: "+etherdiff+" $"+(etherdiff*params.config.ethprice))
-  if(DEBUG) console.log("Saving contract address:",result.contractAddress)
-  let addressPath = process.cwd()+"/"+contractname+"/"+contractname+".address"
-  if(params.fs.existsSync(addressPath)){
-    params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".previous.address",params.fs.readFileSync(addressPath).toString())
+  winston.debug(`==ETHER COST: ${etherdiff} $${(etherdiff * params.config.ethprice)}`)
+  winston.debug(`Saving contract address: ${result.contractAddress}`)
+  let addressPath = process.cwd()+"/"+contractFolder+"/"+contractName+".address"
+  if(fs.existsSync(addressPath)){
+    fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".previous.address",fs.readFileSync(addressPath).toString())
   }
-  let headAddressPath = process.cwd()+"/"+contractname+"/"+contractname+".head.address"
-  if(!params.fs.existsSync(headAddressPath)){
-    params.fs.writeFileSync(headAddressPath,result.contractAddress)
+  let headAddressPath = process.cwd()+"/"+contractFolder+"/"+contractName+".head.address"
+  if(!fs.existsSync(headAddressPath)){
+    fs.writeFileSync(headAddressPath,result.contractAddress)
   }
-  params.fs.writeFileSync(addressPath,result.contractAddress)
-  params.fs.writeFileSync(process.cwd()+"/"+contractname+"/"+contractname+".blockNumber",result.blockNumber)
+  fs.writeFileSync(addressPath,result.contractAddress)
+  fs.writeFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".blockNumber",result.blockNumber)
 
   let endSeconds = new Date().getTime() / 1000;
   let duration = Math.floor((endSeconds-startSeconds))
-  if(DEBUG) console.log("deploy time: ",duration)
-  params.fs.appendFileSync(process.cwd()+"/deploy.log",endSeconds+" "+contractname+"/"+contractname+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*params.config.ethprice)+" "+params.config.gaspricegwei+"\n")
+  winston.debug(`deploy time: ${duration}`)
+  fs.appendFileSync(process.cwd()+"/deploy.log",endSeconds+" "+contractFolder+"/"+contractName+" "+result.contractAddress+" "+duration+" "+etherdiff+" $"+(etherdiff*params.config.ethprice)+" "+params.config.gasprice+"\n")
 
   return result;
 }
 
-function deploy(params,accounts,contractarguments,bytecode,abi) {
-  const DEBUG = params.config.DEBUG;
+function deploy(params,accounts,contractarguments,bytecode,abi, accountIndex) {
   return new Promise((resolve, reject) => {
-    if(DEBUG) console.log("Creating contract from abi: ",abi)
+    winston.debug(`Creating contract from abi: ${abi}`)
     let contract = new params.web3.eth.Contract(abi)
-    if(DEBUG) console.log("Deploying contract with bytecode: ",bytecode)
+    winston.debug(`Deploying contract with bytecode: ${bytecode}`)
+    winston.debug(`contractarguments:`,contractarguments)
+    winston.debug(`config:`,params.config)
     let deployed = contract.deploy({
       data: "0x"+bytecode,
       arguments: contractarguments
     }).send({
-      from: accounts[params.accountindex],
+      from: accounts[accountIndex],
       gas: params.config.deploygas,
-      gasPrice: params.config.gaspricegwei
+      gasPrice: params.config.gasprice
     }, function(error, transactionHash){
-      if(DEBUG) console.log("CALLBACK",error, transactionHash)
-      checkForReceipt(2,DEBUG,params,transactionHash,resolve)
+      winston.debug(`CALLBACK: ${error}\n${transactionHash}`)
+      if(error){
+        console.log(" 🛑 "+error+"")
+      }
+      checkForReceipt(2,params,transactionHash,resolve)
     })
-  })
-}
-
-function checkForReceipt(backoffMs,DEBUG,params,transactionHash,resolve){
-  params.web3.eth.getTransactionReceipt(transactionHash,(error,result)=>{
-    if(result&&result.transactionHash){
-      if(DEBUG) console.log(result)
-      resolve(result)
-    }else{
-      if(DEBUG) process.stdout.write(".")
-      backoffMs=Math.min(backoffMs*2,1000)
-      setTimeout(checkForReceipt.bind(this,backoffMs,DEBUG,params,transactionHash,resolve),backoffMs)
-    }
   })
 }

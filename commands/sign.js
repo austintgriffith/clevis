@@ -1,7 +1,13 @@
-
-module.exports = async (params)=>{
-  const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> SIGN")
+module.exports = async (string, accountIndex, password, params)=>{
   let accounts = await params.web3.eth.getAccounts()
-  return params.web3.eth.personal.sign(params.string,accounts[params.accountindex],params.password)
+  let address = accounts[accountIndex]
+  if(address === undefined) {
+    throw(`accountIndex: ${accountIndex} is undefined`)
+  }
+  if(typeof password != "undefined"){
+    return params.web3.eth.personal.sign(string, address, password)
+  }else{
+    return params.web3.eth.sign(string, address)
+  }
+
 }

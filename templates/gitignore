@@ -4,8 +4,6 @@ aws.json
 backend/redisdata
 accounts.json
 **.DS_*
-openzeppelin-solidity
-zeppelin-solidity
 package-lock.json
 *.log
 *.ens
@@ -27,3 +25,16 @@ package-lock.json
 */node_modules
 /node_modules
 public/reload.txt
+
+**/*.blockNumber
+**/*.head.address
+**/*.previous.address
+**/*.compiled
+**/*.bytecode
+**/*.abi
+**/*.address
+src/contracts
+deploy.log
+public/reload.txt
+geth.log
+react.log

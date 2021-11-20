@@ -1,6 +1,4 @@
-
-module.exports = async (params)=>{
-  const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> RECOVER")
-  return params.web3.eth.personal.ecRecover(params.string,params.signature)
+module.exports = async (string, signature, params)=>{
+  console.log("recovering...")
+  return params.web3.eth.accounts.recover(string, signature)
 }

@@ -1,21 +1,15 @@
 const { exec } = require('child_process')
 const fs = require("fs")
-const awsCreds = JSON.parse(fs.readFileSync("aws.json").toString().trim())
 const AWS = require('aws-sdk')
+const awsCreds = JSON.parse(fs.readFileSync("aws.json").toString().trim())
+const winston = require('winston')
 
-module.exports = async (params)=>{
-  const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> INVALIDATE")
-  return await invalidateSite(params)
-}
-
-function invalidateSite(params) {
-  const DEBUG = params.config.DEBUG;
-  return new Promise((resolve, reject) => {
-    if(DEBUG) console.log(" ]]] ]]] INVALIDATING "+params.target+"...")
+module.exports = async (target, params) => {
+  return await new Promise((resolve, reject) => {
+    winston.debug(` ]]] ]]] INVALIDATING ${target}...`)
     var cloudfront = new AWS.CloudFront(new AWS.Config(awsCreds));
     var cfparams = {
-      DistributionId: params.target,
+      DistributionId: target,
       InvalidationBatch: {
         CallerReference: ''+(new Date()),
         Paths: {

@@ -1,43 +1,78 @@
 # 🗜️clevis
 
-Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding. 
+Ethereum blockchain orchestration, testing, CLI, and Dapp scaffolding.
 
-## install
+## Getting Started
 
-easiest: use docker (it handles the environment and RPC node for you):
+### Requirements
+You need a local Ethereum blockchain to develop against.
+
+If you don't already have a preferred method, we suggest using [Ganache](https://truffleframework.com/ganache) from Truffle.
+
+You can just use their cli version by typing:
+```
+npm install -g ganache-cli
+```
+And then run it by typing:
+```
+ganache-cli
+```
+
+### Start a new project with Clevis
+From within an empty project directory:
+```
+npx clevis init
+```
+
+This will ask you a few questions and create a new Clevis-powered project in your current directory.
+
+### Using Clevis
+The above setup does not install clevis globally. You can do that with `npm install -g clevis` if you want. If not, the clevis command line command is located at node_modules/clevis/bin.js. For convineience, we suggest adding an alias to your ~/.profile or ~/.bashrc file.
+
+```
+alias clevis='./node_modules/clevis/bin.js'
+```
+
+Going forward, you can just call clevis using "c". Example:
+```
+clevis randomhex 100
+```
+
+Another option is to add clevis as an npm script in your package.json file. For instance:
+```
+"scripts": {
+  "clevis": "clevis"
+}
+```
+
+Then, you can use:
+```
+npm run clevis randomhex 100
+```
+
+## (Optional) Docker Setup
+If the instructions above don't work for you. You can use Docker to pull in a repeatable environment.
+
 ```
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 \
-  -v ~/your-dapp-directory:/dapp austingriffith/clevis
+  -v ~/your-dapp-directory:/dapp austingriffith/clevis:latest
 ```
-
-OR install/link for the source:
-```
-git clone https://github.com/austintgriffith/clevis.git
-cd clevis
-npm install
-sudo npm link
-```
-
-OR try an npm install:
-```
-sudo npm install --unsafe-perm -g clevis@latest
-```
-
-[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
-
 
 ## demo
 
+[Read full article and watch screencast here!](https://medium.com/@austin_48503/%EF%B8%8Fclevis-blockchain-orchestration-682d2396aeef)
+
 [![Clevis Demo Video](https://user-images.githubusercontent.com/2653167/44128017-a7caa1d2-9ffd-11e8-999c-ceabc3287647.png)](https://www.youtube.com/watch?v=lekFaRzma8U)
+
+[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
 
 
 ## docker options
 
-### attach to already running clevis container 
+### attach to already running clevis container
 ```
 docker exec -ti clevis bash
 ```
-
 
 ### external RPC
 ```
@@ -67,13 +102,76 @@ docker run -ti --rm --name clevis --env network="mainnet." \
 ```
 git clone https://github.com/austintgriffith/clevis.git
 cd clevis
-docker build . -t clevis
+docker build ./docker -t clevis
 docker run -ti --rm --name clevis -p 3000:3000 -p 8545:8545 -v ~/your-dapp-directory:/dapp clevis
 ```
 
+### Using Infura
+
+If you want to use Infura to deploy, you need to make the following changes:
+
+In your `clevis.json` config file, change:
+
+```
+USE_INFURA: true
+```
+
+Create a `.env file` and add your private key under mnemonic:
+
+```
+mnemonic=32h42hj34mysuperprivakeyasdasd2h34hjk234
+```
+
+### Using xDai
+
+Your `clevis.json` file should look something like:
+```
+{
+  "provider": "https://dai.poa.network",
+  "gasprice": 1000000000,
+  "ethprice": 1,
+  "deploygas": 5500000,
+  "xfergas": 1300000,
+  "USE_INFURA": true,
+  "ROOT_FOLDER": "/Users/austingriffith/rawclevistest",
+  "CRA_FOLDER": "./src",
+  "TESTS_FOLDER": "tests",
+  "CONTRACTS_FOLDER": "contracts"
+}
+```
+
+Create an account:
+```
+clevis new
+```
+(a mnemonic will be automatically created in your .env file and can be imported as a seed phrase into a burner if you want)
+
+View your account:
+```
+clevis accounts
+```
+
+Check your balance:
+```
+clevis balance 0
+```
+
+Send a dime from your account (0) to me:
+```
+clevis send 0.1 0 0x34aa3f359a9d614239015126635ce7732c18fdf3
+```
+
+Create, Compile, and Deploy a contract on xDai from your account:
+```
+clevis create Test
+clevis compile Test
+clevis deploy Test 0
+```
+
+
 ## troubleshooting
 
-Right now the web3 dependencies are not very well supported and installs can fail on certain machines. 
+Right now the web3 dependencies are not very well supported and installs can fail on certain machines.
 
 I would recommend using Docker and the container model because it handles the environment and geth node for you.
 
@@ -83,14 +181,91 @@ rm -rf .node-gyp
 sudo npm install --unsafe-perm -g clevis@latest
 ```
 
+
+-----
+
+Sometimes you might get a "Cannot find module 'web3' error"
+
+```
+clevis test version
+(node:32368) UnhandledPromiseRejectionWarning: Error: Cannot find module 'web3'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:507:25)
+    at Module.require (internal/modules/cjs/loader.js:637:17)
+    at require (internal/modules/cjs/helpers.js:20:18)
+    ...
+(node:32368) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:32368) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+```
+
+The fix for this is to go to wherever you have clevis cloned and run an npm link again:
+(and maybe an npm i)
+
+```
+cd ~/clevis
+npm link
+```
+
+---------
+
+Another error I run into from time to time due to Create React App with 'npm run build':
+
+```
+.../node_modules/mini-css-extract-plugin/dist/index.js:20
+  util: { createHash }
+          ^
+
+TypeError: Cannot destructure property `createHash` of 'undefined' or 'null'.
+```
+To fix it you just need to install webpack locally in your project with:
+```
+npm install --save webpack
+```
+
+-------------
+
+Another error I've hit is this one:
+```
+There might be a problem with the project dependency tree.
+It is likely not a bug in Create React App, but something you need to fix locally.
+
+The react-scripts package provided by Create React App requires a dependency:
+
+  "babel-eslint": "9.0.0"
+
+Don't try to install it manually: your package manager does it automatically.
+However, a different version of babel-eslint was detected higher up in the tree:
+```
+
+to fix this, add a .env file with "SKIP_PREFLIGHT_CHECK=true" in it:
+```
+echo "SKIP_PREFLIGHT_CHECK=true" >> .env
+```
+
+a classic scrypt + non-LTS node error:
+```
+Error: The module '...scrypt/build/Release/scrypt.node'
+was compiled against a different Node.js version using
+NODE_MODULE_VERSION 67. This version of Node.js requires
+NODE_MODULE_VERSION 72. Please try re-compiling or re-installing
+```
+to fix this you need to install node v10:
+```
+brew install node@10
+brew link --force --overwrite node@10
+```
+(you will probably have to remove the node_modules and package-lock.json and do the whole `npx clevis init; npm i` dance.)
+
 If you have other errors or problems, let's get this list populated. Shoot me an email and let's debug: austin@concurrence.io
 
 
+
 ## commands/examples
+See above section about the lack of global install of clevis. Replace 'clevis' here with however you decided to run the command. (From node_modules, as an alias, or as an npm script)
 
 ### help
 ```
-clevis help
+clevis --help
 ```
 lists available commands and usage
 
@@ -130,17 +305,15 @@ clevis unlock 0 ""
 ```
 unlocks account
 
-### send [amount] [fromindex] [toindex]
+### send [amount] <fromAddress> <toAddress> [data]
 ```
 clevis send 0.1 0 1
+clevis send 0 0x6FC8152A3C0E0aC8e61faf233915e1334b58fC77 1 0xbeefbeef
 ```
-send ether from one local account to another by index
+send ether from one account to another
 
-### sendTo [amount] [fromindex] [toaddress]
-```
-clevis sendTo 0.1 0 0x6FC8152A3C0E0aC8e61faf233915e1334b58fC77
-```
-send ether from local account to any address
+### <del> sendTo [amount] [fromindex] [toaddress]</del>
+Removed in Clevis 0.1.0
 
 ### balance [address]
 ```
@@ -209,15 +382,31 @@ you can also read from contracts:
 clevis contract balanceOf Copper 0x2a906694d15df38f59e76ed3a5735f8aabcce9cb
 ```
 
+### contract event[eventname] [contractname]
+```
+clevis contract eventMyEvent SomeContract
+```
+
+Shows all the logs emitted under eventname.
+
+Please note that there is not blank between event and your event name.
+
+
 ### test [testname]
 ```
 clevis test compile
 ```
 run mocha test from tests folder
 
-### wei [amount] [symbol]
+### fromwei [amount] [symbol]
 ```
-clevis wei 0.1 ether
+clevis wei 100000000000 ether
+```
+convert from wei to ether or others like gwei or szabo
+
+### towei [amount] [symbol]
+```
+clevis wei 0.001 ether
 ```
 convert to wei from ether or others like gwei or szabo
 
@@ -267,8 +456,4 @@ uploads static react site to s3 bucket named after url
 ```
 clevis invalidate E3837d00567
 ```
-invalidate cloudfront caching to show fresh content 
-
-## demo
-
-[![cleviscast](http://s3.amazonaws.com/atgpub/clevispreview2.png)](http://s3.amazonaws.com/atgpub/clevis.mp4)
+invalidate Cloudfront caching to show fresh content

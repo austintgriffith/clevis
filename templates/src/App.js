@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Metamask, Gas, ContractLoader, Transactions, Events, Scaler, Blockie, Address, Button } from "dapparatus"
+import { Dapparatus, Gas, ContractLoader, Transactions, Events, Scaler, Blockie, Address, Button, PrivateKeyCatcher } from "dapparatus"
 import Web3 from 'web3';
+
+const FALLBACK_WEB3_PROVIDER = "http://localhost:8545"
+const METATX = false
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +22,7 @@ class App extends Component {
     this.setState(update)
   }
   render() {
-    let {web3,account,contracts,tx,gwei,block,avgBlockTime,etherscan} = this.state
+    let {web3,account,contracts,tx,gwei,block,avgBlockTime,etherscan,metaAccount} = this.state
     let connectedDisplay = []
     let contractsDisplay = []
     if(web3){
@@ -59,6 +62,7 @@ class App extends Component {
           block={block}
           avgBlockTime={avgBlockTime}
           etherscan={etherscan}
+          metaAccount={metaAccount}
           onReady={(state)=>{
             console.log("Transactions component is ready:",state)
             this.setState(state)
@@ -109,14 +113,25 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <Metamask
-          config={{requiredNetwork:['Unknown','Rinkeby']}}
+        <PrivateKeyCatcher newPrivateKey={(pk)=>{
+          this.setState({newPrivateKey:pk})
+        }}/>
+        <Dapparatus
+          config={{
+            DEBUG:false,
+            metatxAccountGenerator:false,
+            requiredNetwork:['Unknown','Private','Rinkeby'],
+            hide:false
+          }}
+          metatx={METATX}
+          newPrivateKey={this.state.newPrivateKey}
+          fallbackWeb3Provider={new Web3.providers.HttpProvider(FALLBACK_WEB3_PROVIDER)}
           onUpdate={(state)=>{
-           console.log("metamask state update:",state)
-           if(state.web3Provider) {
-             state.web3 = new Web3(state.web3Provider)
-             this.setState(state)
-           }
+            console.log("metamask state update:",state)
+            if(state.web3Provider) {
+              state.web3 = new Web3(state.web3Provider)
+              this.setState(state)
+            }
           }}
         />
         {connectedDisplay}

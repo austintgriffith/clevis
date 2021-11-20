@@ -1,7 +1,8 @@
-module.exports = (params)=>{
-  const DEBUG = params.config.DEBUG;
-  if(DEBUG) console.log(" >>> EXPLAIN "+  params.contractname)
-  let readAbi = JSON.parse(params.fs.readFileSync(process.cwd()+"/"+params.contractname+"/"+params.contractname+".abi").toString().trim())
+const fs = require('fs')
+
+module.exports = (contractName, params)=>{
+  const contractFolder = `${params.config.CONTRACTS_FOLDER}/${contractName}`;
+  let readAbi = JSON.parse(fs.readFileSync(process.cwd()+"/"+contractFolder+"/"+contractName+".abi").toString().trim())
   let output = ""
   for(let i in readAbi){
     let payable = ""
